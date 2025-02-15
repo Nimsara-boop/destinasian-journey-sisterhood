@@ -49,11 +49,13 @@ const Community = () => {
       <div className="container mx-auto pt-24 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row gap-4 items-center mb-8">
-            <Input
-              placeholder="Search chat rooms or travelers..."
-              className="max-w-md"
-              prefix={<Search className="w-4 h-4 text-muted-foreground" />}
-            />
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Search chat rooms or travelers..."
+                className="pl-9"
+              />
+            </div>
             <Button>
               <MessageSquare className="w-4 h-4 mr-2" />
               Create Chat Room
