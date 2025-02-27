@@ -28,10 +28,12 @@ export default {
         primary: {
           DEFAULT: "#C2A87D",
           foreground: "#ffffff",
+          feminine: "#E8819E",
         },
         secondary: {
           DEFAULT: "#E8D3D1",
           foreground: "#1A1A1A",
+          feminine: "#F7D0E0",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -40,10 +42,12 @@ export default {
         muted: {
           DEFAULT: "#F5F0EC",
           foreground: "#1A1A1A",
+          feminine: "#FFEDF5",
         },
         accent: {
           DEFAULT: "#E8D3D1",
           foreground: "#1A1A1A",
+          feminine: "#FFC0D6",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -53,6 +57,9 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      fontFamily: {
+        serif: ['Playfair Display', 'serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -17,6 +17,29 @@
     --radius: 1rem;
   }
 
+  /* Feminine Theme Colors */
+  .female-theme {
+    --background: 0 0% 100%;
+    --foreground: 340 40% 30%;
+    --card: 0 0% 100%;
+    --card-foreground: 340 40% 30%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 40% 30%;
+    --primary: 340 80% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 340 30% 90%;
+    --secondary-foreground: 340 50% 40%;
+    --muted: 340 20% 95%;
+    --muted-foreground: 340 30% 50%;
+    --accent: 340 30% 90%;
+    --accent-foreground: 340 50% 40%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 340 20% 90%;
+    --input: 340 20% 90%;
+    --ring: 340 80% 65%;
+  }
+
   * {
     @apply border-border;
   }
@@ -35,3 +58,40 @@
   @apply bg-white/80 backdrop-blur-md border border-white/20;
 }
 
+/* Female Experience Specific Styles */
+.female-experience-mode {
+  @apply transition-all duration-300;
+}
+
+.female-experience-mode h1, 
+.female-experience-mode h2, 
+.female-experience-mode h3 {
+  @apply font-serif;
+}
+
+.female-experience-mode .btn-primary {
+  @apply bg-primary text-white;
+}
+
+.female-experience-mode .podcast-player {
+  @apply bg-secondary/50 rounded-xl p-4;
+}
+
+.female-experience-mode .location-advice {
+  @apply bg-muted rounded-xl p-6;
+}
+
+/* Interactive Elements */
+.female-experience-mode .interactive-slide {
+  @apply transition-all duration-300 hover:shadow-lg hover:scale-[1.02] cursor-pointer;
+}
+
+/* Animations */
+@keyframes soft-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.female-experience-mode .animate-soft-bounce {
+  animation: soft-bounce 3s infinite ease-in-out;
+}

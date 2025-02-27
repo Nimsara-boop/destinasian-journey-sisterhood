@@ -20,6 +20,17 @@ const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
     setIsLoggedIn(loggedIn);
     setIsFemaleExperience(femaleExperience);
     setLoading(false);
+
+    // Apply feminine theme if female experience is enabled
+    if (femaleExperience) {
+      document.documentElement.classList.add('female-theme');
+    } else {
+      document.documentElement.classList.remove('female-theme');
+    }
+
+    return () => {
+      document.documentElement.classList.remove('female-theme');
+    };
   }, []);
 
   if (loading) {
@@ -30,8 +41,6 @@ const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  // If the user has selected the female experience, we would show different content here
-  // For now, we're just adding a className to the wrapper for demonstration
   return (
     <div className={isFemaleExperience ? "female-experience-mode" : ""}>
       {children}
