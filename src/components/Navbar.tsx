@@ -1,20 +1,50 @@
 
 import { useState, useEffect } from "react";
-import { Menu, X, Calendar, Users, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Menu, X, Calendar, Users, User, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
+    // Check login status
+    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+    const storedUsername = localStorage.getItem("username") || "";
+    
+    setIsLoggedIn(loggedInStatus);
+    setUsername(storedUsername);
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+    localStorage.removeItem("gender");
+    localStorage.removeItem("femaleExperience");
+    
+    setIsLoggedIn(false);
+    
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out",
+    });
+    
+    navigate("/login");
+  };
 
   const navItems = [
     { label: "Events", href: "/events", icon: Calendar },
@@ -38,7 +68,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => {
+            {isLoggedIn && navItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link
@@ -51,6 +81,18 @@ const Navbar = () => {
                 </Link>
               );
             })}
+            
+            {isLoggedIn ? (
+              <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2">
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            ) : (
+              <Button onClick={() => navigate("/login")} className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                Login
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -68,7 +110,7 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 animate-fade-in">
-              {navItems.map((item) => {
+              {isLoggedIn && navItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
@@ -82,6 +124,28 @@ const Navbar = () => {
                   </Link>
                 );
               })}
+              
+              {isLoggedIn ? (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex items-center gap-2 px-3 py-2 w-full text-left text-gray-800 hover:text-primary transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center gap-2 px-3 py-2 text-gray-800 hover:text-primary transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="w-4 h-4" />
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         )}
