@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Newsletter from "@/components/Newsletter";
+import EmergencyContact from "@/components/EmergencyContact";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { ArrowRight, MapPin, Headphones, Play, Pause, Globe, Heart, Shield } from "lucide-react";
@@ -135,6 +136,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
+      <EmergencyContact />
       
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">

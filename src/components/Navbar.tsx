@@ -84,11 +84,11 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img 
-                src="/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png" 
-                alt="DestinAsian.travel" 
-                className="h-8"
-              />
+              <span className="text-2xl font-bold">
+                <span className="text-cyan-600">Destin</span>
+                <span className="text-pink-500">Asian</span>
+                <span className="text-cyan-600">.travel</span>
+              </span>
             </Link>
           </div>
 
@@ -102,8 +102,8 @@ const Navbar = () => {
                   to={item.href}
                   className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors 
                     ${femaleExperience 
-                      ? 'bg-primary-feminine hover:bg-primary-feminine/90 text-white' 
-                      : 'bg-primary hover:bg-primary/90 text-white'}`}
+                      ? 'bg-primary-feminine/20 hover:bg-primary-feminine/40 text-primary-feminine' 
+                      : 'bg-primary/20 hover:bg-primary/40 text-primary'}`}
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
@@ -160,8 +160,8 @@ const Navbar = () => {
                     to={item.href}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md w-full
                       ${femaleExperience 
-                        ? 'bg-primary-feminine hover:bg-primary-feminine/90 text-white' 
-                        : 'bg-primary hover:bg-primary/90 text-white'}`}
+                        ? 'bg-primary-feminine/20 hover:bg-primary-feminine/40 text-primary-feminine' 
+                        : 'bg-primary/20 hover:bg-primary/40 text-primary'}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Icon className="w-4 h-4" />
