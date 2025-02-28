@@ -136,3 +136,12 @@
   @apply px-4 py-2 rounded-full text-white font-medium flex items-center gap-2;
   background-color: #E8819E;
 }
+
+/* Text shadow for luminous effect */
+.text-shadow-glow {
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.text-shadow-sm {
+  text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+}

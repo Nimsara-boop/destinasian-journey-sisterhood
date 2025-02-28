@@ -83,7 +83,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <Link to="/" className="text-2xl font-semibold">
+            <Link to="/" className="text-2xl font-semibold text-shadow-glow text-violet-600 hover:text-violet-500 transition-colors">
               DestinAsian
             </Link>
           </div>
@@ -96,7 +96,7 @@ const Navbar = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="flex items-center gap-2 text-gray-800 hover:text-primary transition-colors"
+                  className="flex items-center gap-2 text-indigo-600 hover:text-indigo-400 font-medium text-shadow-sm transition-colors"
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
@@ -151,7 +151,7 @@ const Navbar = () => {
                   <Link
                     key={item.label}
                     to={item.href}
-                    className="flex items-center gap-2 px-3 py-2 text-gray-800 hover:text-primary transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 text-indigo-600 hover:text-indigo-400 font-medium text-shadow-sm transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Icon className="w-4 h-4" />

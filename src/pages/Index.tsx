@@ -174,7 +174,7 @@ const Index = () => {
           <section className="py-20 px-4 bg-secondary-feminine/30">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-serif mb-4">Curated Sri Lanka Experiences</h2>
+                <h2 className="text-3xl md:text-4xl font-serif mb-4">Curated Sri Lankan Experiences</h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   Exclusive travel packages designed for women travelers exploring the beauty and culture of Sri Lanka
                 </p>
