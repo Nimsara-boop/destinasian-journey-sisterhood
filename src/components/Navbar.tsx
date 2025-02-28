@@ -83,8 +83,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <Link to="/" className="text-2xl font-semibold text-shadow-glow text-[#D946EF] hover:text-[#FFDEE2] transition-colors">
-              DestinAsian
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png" 
+                alt="DestinAsian.travel" 
+                className="h-8"
+              />
             </Link>
           </div>
 
@@ -96,7 +100,10 @@ const Navbar = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="flex items-center gap-2 text-[#D946EF] hover:text-[#FFDEE2] font-medium text-shadow-sm transition-colors"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors 
+                    ${femaleExperience 
+                      ? 'bg-primary-feminine hover:bg-primary-feminine/90 text-white' 
+                      : 'bg-primary hover:bg-primary/90 text-white'}`}
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
@@ -151,7 +158,10 @@ const Navbar = () => {
                   <Link
                     key={item.label}
                     to={item.href}
-                    className="flex items-center gap-2 px-3 py-2 text-[#D946EF] hover:text-[#FFDEE2] font-medium text-shadow-sm transition-colors"
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md w-full
+                      ${femaleExperience 
+                        ? 'bg-primary-feminine hover:bg-primary-feminine/90 text-white' 
+                        : 'bg-primary hover:bg-primary/90 text-white'}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Icon className="w-4 h-4" />
