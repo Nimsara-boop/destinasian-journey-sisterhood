@@ -10,10 +10,61 @@ const Index = () => {
   const [isFemaleExperience, setIsFemaleExperience] = useState(false);
   const [currentAudio, setCurrentAudio] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+
+  // Female empowering quotes
+  const femaleQuotes = [
+    {
+      text: "A woman who follows the crowd will usually go no further than the crowd. The woman who walks alone is likely to find herself in places no one has ever been before.",
+      author: "Albert Einstein"
+    },
+    {
+      text: "The woman who travels alone is both protagonist and author of her own life story.",
+      author: "Unknown"
+    },
+    {
+      text: "Travel isn't always pretty. It isn't always comfortable. Sometimes it hurts, it even breaks your heart. But that's okay. The journey changes you; it should change you.",
+      author: "Anthony Bourdain"
+    },
+    {
+      text: "She believed she could, so she did. And saw the world along the way.",
+      author: "R.S. Grey"
+    }
+  ];
+
+  // Adventurous general quotes
+  const generalQuotes = [
+    {
+      text: "Adventure is worthwhile in itself.",
+      author: "Amelia Earhart"
+    },
+    {
+      text: "Travel makes one modest. You see what a tiny place you occupy in the world.",
+      author: "Gustave Flaubert"
+    },
+    {
+      text: "The world is a book and those who do not travel read only one page.",
+      author: "Saint Augustine"
+    },
+    {
+      text: "Life begins at the end of your comfort zone.",
+      author: "Neale Donald Walsch"
+    }
+  ];
 
   useEffect(() => {
     const femaleExperience = localStorage.getItem("femaleExperience") === "true";
     setIsFemaleExperience(femaleExperience);
+
+    // Rotate quotes every 10 seconds
+    const quoteInterval = setInterval(() => {
+      setCurrentQuoteIndex(prev => {
+        const quotes = femaleExperience ? femaleQuotes : generalQuotes;
+        return (prev + 1) % quotes.length;
+      });
+    }, 10000);
+
+    return () => clearInterval(quoteInterval);
   }, []);
 
   const handlePlayPodcast = (index: number) => {
@@ -77,25 +128,34 @@ const Index = () => {
     "Connect with other female travelers through our community forums"
   ];
 
+  // Choose which quote to display based on the experience
+  const quotes = isFemaleExperience ? femaleQuotes : generalQuotes;
+  const currentQuote = quotes[currentQuoteIndex];
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
       
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1469041797191-50ace28483c3')] bg-cover bg-center">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ 
+          backgroundImage: isFemaleExperience 
+            ? "url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb')" 
+            : "url('https://images.unsplash.com/photo-1469041797191-50ace28483c3')"
+        }}>
           <div className={`absolute inset-0 ${isFemaleExperience ? 'bg-primary/30' : 'bg-black/30'}`} />
         </div>
-        <div className="relative z-10 text-center text-white px-4 animate-fade-in">
+        <div className="relative z-10 text-center text-white px-4 animate-fade-in max-w-4xl mx-auto">
           <h1 className={`text-4xl md:text-6xl ${isFemaleExperience ? 'font-serif' : 'font-semibold'} mb-6`}>
             {isFemaleExperience 
               ? "Travel Confidently Across Asia" 
               : "Connect with Fellow Travelers in Asia"}
           </h1>
-          <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-            {isFemaleExperience
-              ? "Join our community of women explorers discovering Asia's beauty, culture, and hidden gems together"
-              : "Join a community of solo travelers exploring Asia's vibrant cultures, events, and destinations"}
+          <p className="text-xl md:text-2xl mb-8 italic">
+            "{currentQuote.text}"
+          </p>
+          <p className="text-lg mb-8">
+            — {currentQuote.author}
           </p>
           <Button
             size="lg"

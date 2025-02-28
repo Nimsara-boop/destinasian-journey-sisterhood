@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { User, Lock, LogIn } from "lucide-react";
+import { User, Lock, LogIn, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type GenderType = "male" | "female" | "non-binary" | "prefer-not-to-say" | null;
@@ -19,6 +19,7 @@ const Login = () => {
   
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState<GenderType>(null);
   const [femaleExperience, setFemaleExperience] = useState(false);
   const [currentStep, setCurrentStep] = useState<Step>("credentials");
@@ -32,6 +33,15 @@ const Login = () => {
         toast({
           title: "Error",
           description: "Please enter both username and password",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        toast({
+          title: "Error",
+          description: "Passwords do not match",
           variant: "destructive",
         });
         return;
@@ -119,6 +129,27 @@ const Login = () => {
                     placeholder="Enter your password"
                   />
                 </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Input 
+                    id="confirmPassword" 
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-10"
+                    placeholder="Confirm your password"
+                  />
+                </div>
+                {password !== confirmPassword && confirmPassword !== "" && (
+                  <div className="text-destructive text-sm flex items-center mt-1">
+                    <AlertCircle className="w-3 h-3 mr-1" />
+                    Passwords do not match
+                  </div>
+                )}
               </div>
             </>
           )}
