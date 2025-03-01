@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
-import { Search, Filter, ChevronDown, Menu, MapPin } from "lucide-react";
+import { Search, Filter, ChevronDown, Menu, MapPin, Calendar, Users, Plus, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import EventTabs from "./components/EventTabs";
