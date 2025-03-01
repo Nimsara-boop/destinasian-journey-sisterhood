@@ -1,19 +1,19 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Newsletter from "@/components/Newsletter";
 import EmergencyContact from "@/components/EmergencyContact";
+import MapModal from "@/components/MapModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, Headphones, Play, Pause, Globe, Heart, Shield } from "lucide-react";
+import { ArrowRight, MapPin, Headphones, Play, Pause, Globe, Heart, Shield, MapIcon } from "lucide-react";
 
 const Index = () => {
   const [isFemaleExperience, setIsFemaleExperience] = useState(false);
   const [currentAudio, setCurrentAudio] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
-  // Female empowering quotes
   const femaleQuotes = [
     {
       text: "A woman who follows the crowd will usually go no further than the crowd. The woman who walks alone is likely to find herself in places no one has ever been before.",
@@ -33,7 +33,6 @@ const Index = () => {
     }
   ];
 
-  // Adventurous general quotes
   const generalQuotes = [
     {
       text: "Adventure is worthwhile in itself.",
@@ -57,7 +56,6 @@ const Index = () => {
     const femaleExperience = localStorage.getItem("femaleExperience") === "true";
     setIsFemaleExperience(femaleExperience);
 
-    // Rotate quotes every 10 seconds
     const quoteInterval = setInterval(() => {
       setCurrentQuoteIndex(prev => {
         const quotes = femaleExperience ? femaleQuotes : generalQuotes;
@@ -78,7 +76,6 @@ const Index = () => {
     }
   };
 
-  // Female-specific content
   const featuredDestinations = [
     {
       title: "Women's Retreat in Ella",
@@ -129,7 +126,6 @@ const Index = () => {
     "Connect with other female travelers through our community forums"
   ];
 
-  // Choose which quote to display based on the experience
   const quotes = isFemaleExperience ? femaleQuotes : generalQuotes;
   const currentQuote = quotes[currentQuoteIndex];
 
@@ -138,7 +134,17 @@ const Index = () => {
       <Navbar />
       <EmergencyContact />
       
-      {/* Hero Section */}
+      <div className="fixed right-4 bottom-4 z-20">
+        <Button
+          className={`${isFemaleExperience ? 'bg-primary-feminine hover:bg-primary-feminine/90' : 'bg-primary hover:bg-primary/90'} text-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center`}
+          onClick={() => setIsMapModalOpen(true)}
+        >
+          <MapPin className="h-6 w-6" />
+        </Button>
+      </div>
+      
+      <MapModal open={isMapModalOpen} onOpenChange={setIsMapModalOpen} />
+      
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ 
           backgroundImage: isFemaleExperience 
@@ -169,10 +175,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Content - Different for female experience */}
       {isFemaleExperience ? (
         <>
-          {/* Sri Lanka Travel Packages */}
           <section className="py-20 px-4 bg-secondary-feminine/30">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
@@ -218,7 +222,6 @@ const Index = () => {
             </div>
           </section>
           
-          {/* Podcasts */}
           <section className="py-20 px-4">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
@@ -262,7 +265,6 @@ const Index = () => {
             </div>
           </section>
           
-          {/* Location-based Advice */}
           <section className="py-20 px-4 bg-muted-feminine">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
@@ -303,7 +305,6 @@ const Index = () => {
             </div>
           </section>
           
-          {/* Community Highlights */}
           <section className="py-20 px-4">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
@@ -329,7 +330,6 @@ const Index = () => {
         </>
       ) : (
         <>
-          {/* Standard Content - From the original page */}
           <section className="py-20 px-4">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
@@ -371,10 +371,8 @@ const Index = () => {
             </div>
           </section>
 
-          {/* Newsletter Section */}
           <Newsletter />
 
-          {/* About Section */}
           <section id="about" className="py-20 px-4 bg-white">
             <div className="max-w-7xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12 items-center">
