@@ -3,7 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Calendar, Clock, MapPin, Users, ArrowRight, Star } from "lucide-react";
+import { 
+  Calendar, Clock, MapPin, Users, ArrowRight, Star, 
+  Utensils, Hotel, Coffee 
+} from "lucide-react";
 import { EventType } from "../types";
 
 interface EventCardProps {

@@ -1,5 +1,5 @@
 
-import { Calendar, Utensils } from "lucide-react";
+import { Calendar, Utensils, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
 import EventCard from "./EventCard";

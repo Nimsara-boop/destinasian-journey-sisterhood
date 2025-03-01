@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
-import Events from "./pages/Events";
+import Events from "./pages/events"; // Updated import path to point to the events index file
 import Community from "./pages/Community";
 import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
