@@ -1,4 +1,4 @@
-
+<lov-code>
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   MapPin, Search, Calendar, Users, Plus, Filter, ChevronDown, 
-  Calendar as CalendarIcon, Clock, Info
+  Calendar as CalendarIcon, Clock, Info, Star, Menu, ArrowRight,
+  Utensils, Hotel, Coffee, Music, Book
 } from "lucide-react";
 import {
   Dialog,
@@ -22,6 +23,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 
 type EventType = {
   id: number;
@@ -36,6 +43,11 @@ type EventType = {
   category: string;
   imageUrl: string;
   attending: boolean;
+  isPromotion?: boolean;
+  promotionType?: 'restaurant' | 'hotel' | 'cafe';
+  rating?: number;
+  price?: string;
+  distance?: string;
 };
 
 const EventCreationForm = ({ onClose }: { onClose: () => void }) => {
@@ -135,6 +147,8 @@ const Events = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
+  const [activeTab, setActiveTab] = useState("events");
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const { toast } = useToast();
   
   const [events, setEvents] = useState<EventType[]>([
@@ -207,6 +221,101 @@ const Events = () => {
       category: "wellness",
       imageUrl: "https://images.unsplash.com/photo-1545389336-cf090694435e",
       attending: false
+    },
+    {
+      id: 6,
+      title: "New Year's Eve Special Dinner",
+      description: "5-course gourmet dinner with live music and champagne toast at midnight.",
+      date: "December 31, 2024",
+      time: "8:00 PM",
+      location: "Kaema Sutra Restaurant, Colombo",
+      coordinates: [6.9218, 79.8562],
+      organizer: "Kaema Sutra",
+      attendees: 45,
+      category: "food",
+      imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
+      attending: false,
+      isPromotion: true,
+      promotionType: "restaurant",
+      rating: 4.8,
+      price: "$$$",
+      distance: "1.2 km"
+    },
+    {
+      id: 7,
+      title: "Weekend Poolside Brunch",
+      description: "All-you-can-eat international brunch buffet with free-flowing cocktails by the infinity pool.",
+      date: "Every Saturday & Sunday",
+      time: "11:00 AM - 3:00 PM",
+      location: "Shangri-La Hotel, Colombo",
+      coordinates: [6.9277, 79.8475],
+      organizer: "Shangri-La Hotel",
+      attendees: 32,
+      category: "food",
+      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
+      attending: false,
+      isPromotion: true,
+      promotionType: "hotel",
+      rating: 4.7,
+      price: "$$$$",
+      distance: "2.5 km"
+    },
+    {
+      id: 8,
+      title: "Live Jazz Night",
+      description: "Enjoy the smooth sounds of jazz with our resident trio while sipping on craft cocktails.",
+      date: "Every Friday",
+      time: "7:00 PM - 10:00 PM",
+      location: "Cafe Kumbuk, Colombo",
+      coordinates: [6.9013, 79.8587],
+      organizer: "Cafe Kumbuk",
+      attendees: 18,
+      category: "entertainment",
+      imageUrl: "https://images.unsplash.com/photo-1559336197-ded8aaa244bc",
+      attending: false,
+      isPromotion: true,
+      promotionType: "cafe",
+      rating: 4.5,
+      price: "$$",
+      distance: "3.1 km"
+    },
+    {
+      id: 9,
+      title: "Ayurvedic Spa Day",
+      description: "Traditional Sri Lankan spa treatments including herbal baths, massages, and wellness consultations.",
+      date: "Daily",
+      time: "10:00 AM - 8:00 PM",
+      location: "Jetwing Beach Hotel, Negombo",
+      coordinates: [7.2183, 79.8358],
+      organizer: "Jetwing Beach",
+      attendees: 24,
+      category: "wellness",
+      imageUrl: "https://images.unsplash.com/photo-1540555700478-4be289fbecef",
+      attending: false,
+      isPromotion: true,
+      promotionType: "hotel",
+      rating: 4.9,
+      price: "$$$",
+      distance: "35 km"
+    },
+    {
+      id: 10,
+      title: "Sunset Seafood Dinner",
+      description: "Fresh seafood caught daily, served with ocean views on our beachfront restaurant.",
+      date: "Daily",
+      time: "6:00 PM - 10:00 PM",
+      location: "The Tuna & The Crab, Galle",
+      coordinates: [6.0328, 80.2178],
+      organizer: "Ministry of Crab",
+      attendees: 38,
+      category: "food",
+      imageUrl: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
+      attending: false,
+      isPromotion: true,
+      promotionType: "restaurant",
+      rating: 4.6,
+      price: "$$$",
+      distance: "126 km"
     }
   ]);
   
@@ -238,32 +347,74 @@ const Events = () => {
       event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    return categoryMatch && searchMatch;
+    // Filter by tab (events or promotions)
+    const tabMatch = 
+      (activeTab === "events" && !event.isPromotion) || 
+      (activeTab === "promotions" && event.isPromotion) ||
+      activeTab === "all";
+    
+    return categoryMatch && searchMatch && tabMatch;
   });
 
   const categories = [
-    { value: "all", label: "All Events" },
+    { value: "all", label: "All Categories" },
     { value: "cultural", label: "Cultural" },
     { value: "food", label: "Food & Drink" },
     { value: "outdoor", label: "Outdoor" },
     { value: "wellness", label: "Wellness" },
-    { value: "community", label: "Community" }
+    { value: "community", label: "Community" },
+    { value: "entertainment", label: "Entertainment" }
+  ];
+  
+  const promotionTypes = [
+    { value: "all", label: "All Venues" },
+    { value: "restaurant", label: "Restaurants", icon: Utensils },
+    { value: "hotel", label: "Hotels", icon: Hotel },
+    { value: "cafe", label: "Cafés", icon: Coffee }
   ];
 
+  // Helper function to render rating stars
+  const renderRating = (rating: number = 0) => {
+    return (
+      <div className="flex items-center gap-1">
+        {[...Array(5)].map((_, i) => (
+          <Star 
+            key={i} 
+            className={`w-3 h-3 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+          />
+        ))}
+        <span className="text-sm font-medium ml-1">{rating.toFixed(1)}</span>
+      </div>
+    );
+  };
+
+  const getPromotionIcon = (type?: string) => {
+    switch (type) {
+      case 'restaurant':
+        return <Utensils className="w-4 h-4 text-orange-500" />;
+      case 'hotel':
+        return <Hotel className="w-4 h-4 text-blue-500" />;
+      case 'cafe':
+        return <Coffee className="w-4 h-4 text-brown-500" />;
+      default:
+        return <MapPin className="w-4 h-4 text-muted-foreground" />;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="container max-w-7xl mx-auto pt-24 px-4 pb-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Events in Sri Lanka</h1>
+            <h1 className="text-3xl font-bold mb-2">Discover Sri Lanka</h1>
             <p className="text-muted-foreground">
-              Discover and join events across Sri Lanka
+              Find events, restaurants, hotels and more
             </p>
           </div>
           <Dialog open={isCreateEventOpen} onOpenChange={setIsCreateEventOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Event
               </Button>
@@ -280,246 +431,373 @@ const Events = () => {
           </Dialog>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <div className="relative mb-4">
+        {/* Main Tabs for Events vs Promotions */}
+        <Tabs 
+          defaultValue="events" 
+          value={activeTab} 
+          onValueChange={setActiveTab}
+          className="mb-6"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <TabsList className="grid grid-cols-3">
+              <TabsTrigger value="events">
+                <Calendar className="w-4 h-4 mr-2" />
+                Events
+              </TabsTrigger>
+              <TabsTrigger value="promotions">
+                <Utensils className="w-4 h-4 mr-2" />
+                Promotions
+              </TabsTrigger>
+              <TabsTrigger value="all">
+                <Menu className="w-4 h-4 mr-2" />
+                All
+              </TabsTrigger>
+            </TabsList>
+            
+            <div className="flex items-center gap-2">
+              <Button 
+                variant={viewMode === "grid" ? "default" : "outline"} 
+                size="sm" 
+                onClick={() => setViewMode("grid")}
+              >
+                <Menu className="w-4 h-4" />
+              </Button>
+              <Button 
+                variant={viewMode === "map" ? "default" : "outline"} 
+                size="sm" 
+                onClick={() => setViewMode("map")}
+              >
+                <MapPin className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Search & Filter Bar */}
+          <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="relative flex-grow">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
-                  placeholder="Search events..."
+                  placeholder="Search events, restaurants, hotels..."
                   className="pl-9"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               
-              <div className="mb-4">
-                <Label className="mb-2 block">Filter by Category</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  {categories.map((category) => (
-                    <Button
-                      key={category.value}
-                      variant={filter === category.value ? "default" : "outline"}
-                      size="sm"
-                      className="justify-start"
-                      onClick={() => setFilter(category.value)}
-                    >
-                      {category.label}
+              <div className="flex gap-2">
+                {activeTab === "events" || activeTab === "all" ? (
+                  <div className="relative">
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Filter className="w-4 h-4" />
+                      Categories
+                      <ChevronDown className="w-4 h-4" />
                     </Button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="font-semibold mb-3 flex items-center">
-                <Info className="w-4 h-4 mr-2" />
-                Your Events
-              </h3>
-              {events.filter(event => event.attending).length > 0 ? (
-                <div className="space-y-3">
-                  {events.filter(event => event.attending).map(event => (
-                    <div key={event.id} className="flex items-center gap-3 p-2 rounded-md bg-primary/5">
-                      <Calendar className="w-4 h-4 text-primary" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{event.title}</p>
-                        <p className="text-xs text-muted-foreground">{event.date}</p>
+                    <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md p-2 z-10 hidden group-focus:block hover:block">
+                      <div className="grid grid-cols-2 gap-1">
+                        {categories.map((category) => (
+                          <Button
+                            key={category.value}
+                            variant={filter === category.value ? "default" : "outline"}
+                            size="sm"
+                            className="justify-start"
+                            onClick={() => setFilter(category.value)}
+                          >
+                            {category.label}
+                          </Button>
+                        ))}
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">You haven't joined any events yet.</p>
-              )}
-            </div>
-
-            {/* Map of Sri Lanka with event locations */}
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="font-semibold mb-3">Event Locations</h3>
-              <div className="relative h-[400px] rounded-md overflow-hidden">
-                <img 
-                  src="https://maps.googleapis.com/maps/api/staticmap?center=Sri+Lanka&zoom=7&size=400x400&maptype=roadmap&key=YOUR_API_KEY" 
-                  alt="Map of Sri Lanka"
-                  className="w-full h-full object-cover"
-                />
+                  </div>
+                ) : null}
                 
-                {/* Event markers */}
-                {events.map(event => (
-                  <div 
-                    key={event.id}
-                    className={`absolute w-8 h-8 rounded-full flex items-center justify-center text-white font-medium -ml-4 -mt-4 cursor-pointer ${event.attending ? 'bg-green-500' : 'bg-gray-400'}`}
-                    style={{
-                      top: `${100 - (event.coordinates[0] - 5.9) * 30}%`,
-                      left: `${(event.coordinates[1] - 79.5) * 60}%`,
-                    }}
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    {event.id}
+                {activeTab === "promotions" || activeTab === "all" ? (
+                  <div className="relative">
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Utensils className="w-4 h-4" />
+                      Venue Type
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
                   </div>
-                ))}
-                
-                {/* Legend */}
-                <div className="absolute bottom-2 right-2 bg-white p-2 rounded-md shadow-md text-xs">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span>Attending</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-gray-400"></div>
-                    <span>Not Attending</span>
-                  </div>
-                </div>
+                ) : null}
               </div>
             </div>
           </div>
-          
-          <div className="lg:col-span-2 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredEvents.length > 0 ? (
-                filteredEvents.map((event) => (
-                  <Card key={event.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="relative h-48">
-                      <img 
-                        src={event.imageUrl}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <Badge 
-                        className="absolute top-2 right-2 capitalize"
-                        variant={event.attending ? "default" : "secondary"}
-                      >
-                        {event.attending ? "Attending" : event.category}
-                      </Badge>
-                    </div>
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-lg mb-2">{event.title}</h3>
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="w-4 h-4 text-muted-foreground" />
-                          <span>{event.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <Clock className="w-4 h-4 text-muted-foreground" />
-                          <span>{event.time}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <MapPin className="w-4 h-4 text-muted-foreground" />
-                          <span>{event.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <Users className="w-4 h-4 text-muted-foreground" />
-                          <span>{event.attendees} attending</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback>{event.organizer[0]}</AvatarFallback>
-                          </Avatar>
-                          <span className="text-sm">{event.organizer}</span>
-                        </div>
-                        <Button
-                          variant={event.attending ? "outline" : "default"}
-                          size="sm"
-                          onClick={() => toggleAttendance(event.id)}
+
+          <TabsContent value="events" className="mt-0">
+            {/* Events Grid View */}
+            {viewMode === "grid" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredEvents.length > 0 ? (
+                  filteredEvents.map((event) => (
+                    <Card key={event.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="relative h-48">
+                        <img 
+                          src={event.imageUrl}
+                          alt={event.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <Badge 
+                          className="absolute top-2 right-2 capitalize"
+                          variant={event.attending ? "default" : "secondary"}
                         >
-                          {event.attending ? "Leave" : "Join"}
-                        </Button>
+                          {event.attending ? "Attending" : event.category}
+                        </Badge>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))
-              ) : (
-                <div className="col-span-2 text-center py-12">
-                  <Calendar className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">No events found</h3>
-                  <p className="text-muted-foreground mb-4">
-                    No events match your current filters or search criteria.
-                  </p>
-                  <Button onClick={() => { setFilter("all"); setSearchQuery(""); }}>
-                    View All Events
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Event Details Dialog */}
-      {selectedEvent && (
-        <Dialog open={!!selectedEvent} onOpenChange={() => setSelectedEvent(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{selectedEvent.title}</DialogTitle>
-              <DialogDescription>
-                Event details and information
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="space-y-4">
-              <div className="relative h-[200px] rounded-md overflow-hidden">
-                <img 
-                  src={selectedEvent.imageUrl}
-                  alt={selectedEvent.title}
-                  className="w-full h-full object-cover"
-                />
+                      <CardContent className="p-4">
+                        <h3 className="font-semibold text-lg mb-2">{event.title}</h3>
+                        <div className="space-y-2 mb-4">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                            <span>{event.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Clock className="w-4 h-4 text-muted-foreground" />
+                            <span>{event.time}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <MapPin className="w-4 h-4 text-muted-foreground" />
+                            <span>{event.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Users className="w-4 h-4 text-muted-foreground" />
+                            <span>{event.attendees} attending</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="w-8 h-8">
+                              <AvatarFallback>{event.organizer[0]}</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm">{event.organizer}</span>
+                          </div>
+                          <Button
+                            variant={event.attending ? "outline" : "default"}
+                            size="sm"
+                            onClick={() => toggleAttendance(event.id)}
+                          >
+                            {event.attending ? "Leave" : "Join"}
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-12">
+                    <Calendar className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">No events found</h3>
+                    <p className="text-muted-foreground mb-4">
+                      No events match your current filters or search criteria.
+                    </p>
+                    <Button onClick={() => { setFilter("all"); setSearchQuery(""); }}>
+                      View All Events
+                    </Button>
+                  </div>
+                )}
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Date</Label>
-                  <p>{selectedEvent.date}</p>
-                </div>
-                
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Time</Label>
-                  <p>{selectedEvent.time}</p>
-                </div>
-                
-                <div className="space-y-1 col-span-2">
-                  <Label className="text-xs text-muted-foreground">Location</Label>
-                  <p>{selectedEvent.location}</p>
-                </div>
-                
-                <div className="space-y-1 col-span-2">
-                  <Label className="text-xs text-muted-foreground">Description</Label>
-                  <p>{selectedEvent.description}</p>
-                </div>
-                
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Organizer</Label>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="w-6 h-6">
-                      <AvatarFallback>{selectedEvent.organizer[0]}</AvatarFallback>
-                    </Avatar>
-                    <span>{selectedEvent.organizer}</span>
+            ) : (
+              // Map View - same as before
+              <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
+                <div className="relative h-full rounded-md overflow-hidden">
+                  <img 
+                    src="https://maps.googleapis.com/maps/api/staticmap?center=Sri+Lanka&zoom=7&size=800x600&maptype=roadmap&key=YOUR_API_KEY" 
+                    alt="Map of Sri Lanka"
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Event markers */}
+                  {filteredEvents.map(event => (
+                    <div 
+                      key={event.id}
+                      className={`absolute w-8 h-8 rounded-full flex items-center justify-center text-white font-medium -ml-4 -mt-4 cursor-pointer ${event.attending ? 'bg-green-500' : 'bg-gray-400'}`}
+                      style={{
+                        top: `${100 - (event.coordinates[0] - 5.9) * 30}%`,
+                        left: `${(event.coordinates[1] - 79.5) * 60}%`,
+                      }}
+                      onClick={() => setSelectedEvent(event)}
+                    >
+                      {event.id}
+                    </div>
+                  ))}
+                  
+                  {/* Legend */}
+                  <div className="absolute bottom-2 right-2 bg-white p-2 rounded-md shadow-md text-xs">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <span>Attending</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-gray-400"></div>
+                      <span>Not Attending</span>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Attendees</Label>
-                  <p>{selectedEvent.attendees} people</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="promotions" className="mt-0">
+            {/* Promotions Grid View */}
+            {viewMode === "grid" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredEvents.length > 0 ? (
+                  filteredEvents.map((promotion) => (
+                    <Card key={promotion.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="relative h-48">
+                        <img 
+                          src={promotion.imageUrl}
+                          alt={promotion.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <Badge 
+                          className="absolute top-2 right-2 capitalize"
+                          variant="secondary"
+                        >
+                          {promotion.promotionType}
+                        </Badge>
+                        
+                        {promotion.price && (
+                          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs font-medium">
+                            {promotion.price}
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-semibold text-lg">{promotion.title}</h3>
+                          {promotion.rating && renderRating(promotion.rating)}
+                        </div>
+                        
+                        <div className="space-y-2 mb-4">
+                          <div className="flex items-start gap-2 text-sm">
+                            <div className="mt-1">
+                              {getPromotionIcon(promotion.promotionType)}
+                            </div>
+                            <div>
+                              <span className="font-medium">{promotion.organizer}</span>
+                              {promotion.distance && (
+                                <span className="text-xs text-muted-foreground ml-2">
+                                  {promotion.distance}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 text-sm">
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                            <span>{promotion.date}</span>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 text-sm">
+                            <Clock className="w-4 h-4 text-muted-foreground" />
+                            <span>{promotion.time}</span>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 text-sm">
+                            <MapPin className="w-4 h-4 text-muted-foreground" />
+                            <span>{promotion.location}</span>
+                          </div>
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {promotion.description}
+                        </p>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                            {promotion.attendees} people interested
+                          </div>
+                          <Button
+                            variant={promotion.attending ? "outline" : "default"}
+                            size="sm"
+                            onClick={() => toggleAttendance(promotion.id)}
+                            className="gap-1"
+                          >
+                            {promotion.attending ? "Saved" : "I'm Interested"}
+                            <ArrowRight className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-12">
+                    <Utensils className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">No promotions found</h3>
+                    <p className="text-muted-foreground mb-4">
+                      No restaurant or hotel promotions match your current search criteria.
+                    </p>
+                    <Button onClick={() => { setFilter("all"); setSearchQuery(""); }}>
+                      View All Promotions
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Map View for Promotions (similar to events map)
+              <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
+                <div className="relative h-full rounded-md overflow-hidden">
+                  <img 
+                    src="https://maps.googleapis.com/maps/api/staticmap?center=Sri+Lanka&zoom=7&size=800x600&maptype=roadmap&key=YOUR_API_KEY" 
+                    alt="Map of Sri Lanka"
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Promotion markers with custom icons */}
+                  {filteredEvents.map(promotion => (
+                    <div 
+                      key={promotion.id}
+                      className={`absolute w-10 h-10 rounded-full flex items-center justify-center text-white font-medium -ml-5 -mt-5 cursor-pointer ${
+                        promotion.promotionType === 'restaurant' ? 'bg-orange-500' :
+                        promotion.promotionType === 'hotel' ? 'bg-blue-500' : 
+                        'bg-purple-500'
+                      }`}
+                      style={{
+                        top: `${100 - (promotion.coordinates[0] - 5.9) * 30}%`,
+                        left: `${(promotion.coordinates[1] - 79.5) * 60}%`,
+                      }}
+                      onClick={() => setSelectedEvent(promotion)}
+                    >
+                      {promotion.promotionType === 'restaurant' ? 
+                        <Utensils className="w-5 h-5" /> : 
+                        promotion.promotionType === 'hotel' ? 
+                        <Hotel className="w-5 h-5" /> : 
+                        <Coffee className="w-5 h-5" />
+                      }
+                    </div>
+                  ))}
+                  
+                  {/* Legend */}
+                  <div className="absolute bottom-2 right-2 bg-white p-2 rounded-md shadow-md text-xs">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                      <span>Restaurants</span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                      <span>Hotels</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                      <span>Cafés</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              
-              <DialogFooter>
-                <Button
-                  variant={selectedEvent.attending ? "outline" : "default"}
-                  onClick={() => {
-                    toggleAttendance(selectedEvent.id);
-                    setSelectedEvent(null);
-                  }}
-                >
-                  {selectedEvent.attending ? "Leave Event" : "Join Event"}
-                </Button>
-              </DialogFooter>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
-  );
-};
-
-export default Events;
+            )}
+          </TabsContent>
+          
+          <TabsContent value="all" className="mt-0">
+            {/* Combined View showing both */}
+            {viewMode === "grid" ? (
+              <div className="space-y-8">
+                {/* Featured Section */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold">Featured Promotions</h2>
+                    <Button variant="link" className="text-primary">
+                      See all <ArrowRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid
