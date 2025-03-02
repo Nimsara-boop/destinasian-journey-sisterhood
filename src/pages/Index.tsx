@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Newsletter from "@/components/Newsletter";
 import EmergencyContact from "@/components/EmergencyContact";
@@ -8,6 +9,7 @@ import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/c
 import { ArrowRight, MapPin, Headphones, Play, Pause, Globe, Heart, Shield, MapIcon } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [isFemaleExperience, setIsFemaleExperience] = useState(false);
   const [currentAudio, setCurrentAudio] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -76,20 +78,27 @@ const Index = () => {
     }
   };
 
+  const handlePackageClick = (id: string) => {
+    navigate(`/package/${id}`);
+  };
+
   const featuredDestinations = [
     {
+      id: '1',
       title: "Women's Retreat in Ella",
       description: "A peaceful mountain hideaway with yoga and wellness activities",
       image: "https://images.unsplash.com/photo-1580674684029-9947ef442203",
       tags: ["Wellness", "Mountain", "Yoga"]
     },
     {
+      id: '2',
       title: "Beach Getaway in Mirissa",
       description: "Enjoy the pristine beaches with women-only guided tours",
       image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
       tags: ["Beach", "Tours", "Relaxation"]
     },
     {
+      id: '3',
       title: "Cultural Immersion in Kandy",
       description: "Connect with local female artisans and learn traditional crafts",
       image: "https://images.unsplash.com/photo-1546708770-599a3abdf230",
@@ -188,7 +197,12 @@ const Index = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {featuredDestinations.map((destination, index) => (
-                  <Card key={index} className="overflow-hidden interactive-slide">
+                  <Card 
+                    key={index} 
+                    className="overflow-hidden interactive-slide"
+                    isClickable
+                    onClick={() => handlePackageClick(destination.id)}
+                  >
                     <div className="relative h-64 w-full">
                       <div 
                         className="absolute inset-0 bg-cover bg-center" 
@@ -214,6 +228,7 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   className="border-primary-feminine text-primary-feminine hover:bg-primary-feminine hover:text-white"
+                  onClick={() => navigate('/packages')}
                 >
                   View All Packages
                   <ArrowRight className="ml-2 h-4 w-4" />

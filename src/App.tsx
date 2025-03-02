@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,10 +6,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
-import Events from "./pages/events"; // Updated import path to point to the events index file
+import Events from "./pages/events";
 import Community from "./pages/Community";
 import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
+import PackageDetail from "./pages/PackageDetail";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +47,7 @@ const App = () => {
                 <Community />
               </ExperienceProvider>
             } />
+            <Route path="/package/:id" element={<PackageDetail />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
