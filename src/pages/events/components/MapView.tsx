@@ -18,7 +18,7 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
         <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
           <div className="relative h-full rounded-md overflow-hidden">
             <img 
-              src="https://maps.googleapis.com/maps/api/staticmap?center=Sri+Lanka&zoom=7&size=800x600&maptype=roadmap&key=YOUR_API_KEY" 
+              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png" 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
             />
@@ -57,7 +57,7 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
         <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
           <div className="relative h-full rounded-md overflow-hidden">
             <img 
-              src="https://maps.googleapis.com/maps/api/staticmap?center=Sri+Lanka&zoom=7&size=800x600&maptype=roadmap&key=YOUR_API_KEY" 
+              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png" 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
             />
@@ -109,7 +109,7 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
         <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
           <div className="relative h-full rounded-md overflow-hidden">
             <img 
-              src="https://maps.googleapis.com/maps/api/staticmap?center=Sri+Lanka&zoom=7&size=800x600&maptype=roadmap&key=YOUR_API_KEY" 
+              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png" 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
             />

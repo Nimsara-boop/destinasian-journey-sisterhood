@@ -141,9 +141,9 @@ const MapModal = ({ open, onOpenChange }: MapModalProps) => {
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
           >
-            {/* Offline map image */}
+            {/* Updated map image */}
             <img
-              src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/80.7718,6.9319,7,0/800x600?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
+              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png"
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
               draggable="false"
