@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, X, ZoomIn, ZoomOut, Users } from "lucide-react";
+import { MapPin, X, ZoomIn, ZoomOut, Users, Map as MapIcon } from "lucide-react";
 
 type Location = {
   id: string;
@@ -120,9 +120,9 @@ const MapModal = ({ open, onOpenChange }: MapModalProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[800px] max-h-[80vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Traveler Locations</DialogTitle>
+          <DialogTitle>Friend Map</DialogTitle>
           <DialogDescription>
-            View the last known locations of fellow travelers in Sri Lanka
+            View the last known locations of your friends and other travelers
           </DialogDescription>
         </DialogHeader>
         
@@ -143,7 +143,7 @@ const MapModal = ({ open, onOpenChange }: MapModalProps) => {
           >
             {/* Offline map image */}
             <img
-              src="https://images.unsplash.com/photo-1624967075088-5af3d40dee39?w=800&h=600&fit=crop"
+              src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/80.7718,6.9319,7,0/800x600?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
               draggable="false"
