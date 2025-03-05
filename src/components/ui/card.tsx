@@ -5,15 +5,17 @@ import { cn } from "@/lib/utils"
 
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { isClickable?: boolean }
->(({ className, isClickable, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { isClickable?: boolean; isSwiping?: boolean }
+>(({ className, isClickable, isSwiping, style, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
       "rounded-lg border bg-card text-card-foreground shadow-sm",
       isClickable && "cursor-pointer hover:shadow-md transition-all duration-200",
+      isSwiping && "transition-transform duration-300",
       className
     )}
+    style={style}
     {...props}
   />
 ))
