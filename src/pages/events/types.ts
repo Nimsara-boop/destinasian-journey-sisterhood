@@ -25,4 +25,7 @@ export type BudgetPlanType = {
   days: number;
   travelMode: 'public' | 'rental' | 'private';
   comfortLevel: 'budget' | 'standard' | 'luxury';
+  destination?: string;
+  isTrending?: boolean;
+  scope?: 'local' | 'worldwide';
 };

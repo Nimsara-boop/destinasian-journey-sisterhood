@@ -132,12 +132,12 @@ const EventDetail = () => {
   }
   
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="container mx-auto pt-24 px-4 pb-12">
+      <div className="container max-w-7xl mx-auto pt-24 px-4 pb-12">
         <Button 
           variant="ghost" 
-          className="mb-4" 
+          className="mb-6" 
           onClick={handleBack}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -146,13 +146,18 @@ const EventDetail = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
-            <div className="relative h-64 md:h-96 rounded-lg overflow-hidden mb-6">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="relative h-[400px] rounded-xl overflow-hidden shadow-lg">
               <img 
                 src={event.imageUrl} 
                 alt={event.title}
                 className="w-full h-full object-cover"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h1 className="text-4xl font-bold mb-2">{event.title}</h1>
+                <p className="text-lg opacity-90">{event.description}</p>
+              </div>
               <Badge 
                 className="absolute top-4 right-4 capitalize"
                 variant={event.attending ? "default" : "secondary"}
@@ -178,7 +183,7 @@ const EventDetail = () => {
                 </TabsTrigger>
                 <TabsTrigger value="budget" className="flex gap-2">
                   <Calculator className="h-4 w-4" />
-                  Budget Planner
+                  Plan Budget
                 </TabsTrigger>
               </TabsList>
               
@@ -326,14 +331,13 @@ const EventDetail = () => {
           </div>
           
           {/* Sidebar */}
-          <div>
-            <Card className="mb-6">
+          <div className="space-y-6">
+            <Card>
               <CardContent className="pt-6">
                 <div className="space-y-4">
                   <Button 
-                    className="w-full" 
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" 
                     size="lg"
-                    variant={event.attending ? "outline" : "default"}
                     onClick={handleToggleAttendance}
                   >
                     {event.attending ? (
@@ -363,10 +367,49 @@ const EventDetail = () => {
             
             <Card>
               <CardContent className="pt-6">
+                <h3 className="font-semibold text-lg mb-4">Event Details</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">Date</p>
+                      <p className="text-muted-foreground">{event.date}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <Clock className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">Time</p>
+                      <p className="text-muted-foreground">{event.time}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">Location</p>
+                      <p className="text-muted-foreground">{event.location}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <Users className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="font-medium">Attendees</p>
+                      <p className="text-muted-foreground">{event.attendees} people attending</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6">
                 <h3 className="font-semibold text-lg mb-4">Who's Going</h3>
                 <div className="flex flex-wrap mb-3">
                   {Array.from({ length: Math.min(8, event.attendees) }).map((_, i) => (
-                    <Avatar key={i} className="h-8 w-8 border-2 border-background -ml-2 first:ml-0">
+                    <Avatar key={i} className="h-8 w-8 border-2 border-background -ml-2 first:ml-0 hover:translate-y-[-2px] transition-transform">
                       <AvatarFallback>{["S", "A", "M", "J", "L", "R", "P", "D"][i % 8]}</AvatarFallback>
                     </Avatar>
                   ))}
@@ -383,4 +426,3 @@ const EventDetail = () => {
   );
 };
 
-export default EventDetail;
