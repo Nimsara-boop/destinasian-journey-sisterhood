@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Events from "./pages/events";
+import EventDetail from "./pages/events/EventDetail";
 import Community from "./pages/Community";
 import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
@@ -40,6 +42,11 @@ const App = () => {
             <Route path="/events" element={
               <ExperienceProvider>
                 <Events />
+              </ExperienceProvider>
+            } />
+            <Route path="/events/:id" element={
+              <ExperienceProvider>
+                <EventDetail />
               </ExperienceProvider>
             } />
             <Route path="/community" element={
