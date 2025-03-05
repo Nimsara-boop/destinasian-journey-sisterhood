@@ -27,10 +27,10 @@ const Community = () => {
   const [activeChatRoom, setActiveChatRoom] = useState<number | null>(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([
-    { id: 1, sender: "Sarah", text: "Hi everyone! I just arrived in Tokyo. Anyone want to meet up?", time: "10:25 AM", isSelf: false },
+    { id: 1, sender: "Sarah", text: "Hi everyone! I just arrived in Colombo. Anyone want to meet up?", time: "10:25 AM", isSelf: false },
     { id: 2, sender: "Maya", text: "I'll be there next week! Let's plan something", time: "10:28 AM", isSelf: false },
-    { id: 3, sender: "You", text: "I know a great sushi place in Shibuya we could try", time: "10:30 AM", isSelf: true },
-    { id: 4, sender: "Sarah", text: "That sounds perfect! I'm staying near Shibuya station", time: "10:32 AM", isSelf: false },
+    { id: 3, sender: "You", text: "I know a great place in Colombo Fort we could try", time: "10:30 AM", isSelf: true },
+    { id: 4, sender: "Sarah", text: "That sounds perfect! I'm staying near Galle Face Green", time: "10:32 AM", isSelf: false },
     { id: 5, sender: "Maya", text: "Could you share the location?", time: "10:35 AM", isSelf: false },
   ]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -41,25 +41,101 @@ const Community = () => {
   const [startX, setStartX] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  // Current location of the user (normally would come from geolocation)
+  const [userLocation, setUserLocation] = useState("Sri Lanka");
 
-  const chatRooms = [
-    {
-      id: 1,
-      name: "Tokyo Explorers",
-      location: "Tokyo, Japan",
-      members: 156,
-      lastActive: "2 mins ago",
-      image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26",
-    },
-    {
-      id: 2,
-      name: "Bangkok Food Lovers",
-      location: "Bangkok, Thailand",
-      members: 89,
-      lastActive: "5 mins ago",
-      image: "https://images.unsplash.com/photo-1534766555764-ce878a5e3a2b",
-    },
-  ];
+  // Chat rooms organized by country and city/region
+  const chatRoomsByLocation = {
+    "Sri Lanka": [
+      {
+        id: 1,
+        name: "Colombo Chats",
+        location: "Colombo, Sri Lanka",
+        members: 156,
+        lastActive: "2 mins ago",
+        image: "https://images.unsplash.com/photo-1589308155743-4ad772863eae",
+      },
+      {
+        id: 2,
+        name: "Galle Group",
+        location: "Galle, Sri Lanka",
+        members: 89,
+        lastActive: "5 mins ago",
+        image: "https://images.unsplash.com/photo-1580394693539-2111f706eaad",
+      },
+      {
+        id: 3,
+        name: "Trincomalee Talks",
+        location: "Trincomalee, Sri Lanka",
+        members: 64,
+        lastActive: "15 mins ago",
+        image: "https://images.unsplash.com/photo-1546556874-8964792e36fa",
+      },
+      {
+        id: 4,
+        name: "Jaffna Jabber",
+        location: "Jaffna, Sri Lanka",
+        members: 42,
+        lastActive: "1 hour ago",
+        image: "https://images.unsplash.com/photo-1627894006066-b45bd95ef5a5",
+      },
+      {
+        id: 5,
+        name: "Anuradhapura Assembly",
+        location: "Anuradhapura, Sri Lanka",
+        members: 57,
+        lastActive: "30 mins ago",
+        image: "https://images.unsplash.com/photo-1507904304964-4f19273e80d1",
+      },
+      {
+        id: 6,
+        name: "Batticaloa Banter",
+        location: "Batticaloa, Sri Lanka",
+        members: 37,
+        lastActive: "2 hours ago",
+        image: "https://images.unsplash.com/photo-1584552539816-caf637eff5a3",
+      },
+      {
+        id: 7,
+        name: "Matara Meetups",
+        location: "Matara, Sri Lanka",
+        members: 48,
+        lastActive: "45 mins ago",
+        image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a",
+      },
+    ],
+    "Thailand": [
+      {
+        id: 8,
+        name: "Bangkok Food Lovers",
+        location: "Bangkok, Thailand",
+        members: 203,
+        lastActive: "5 mins ago",
+        image: "https://images.unsplash.com/photo-1534766555764-ce878a5e3a2b",
+      },
+      {
+        id: 9,
+        name: "Chiang Mai Collective",
+        location: "Chiang Mai, Thailand",
+        members: 118,
+        lastActive: "10 mins ago",
+        image: "https://images.unsplash.com/photo-1599880659893-628cd44f40db",
+      },
+    ],
+    "Japan": [
+      {
+        id: 10,
+        name: "Tokyo Explorers",
+        location: "Tokyo, Japan",
+        members: 178,
+        lastActive: "2 mins ago",
+        image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26",
+      }
+    ]
+  };
+
+  // Get chat rooms for the current user location
+  const chatRooms = chatRoomsByLocation[userLocation as keyof typeof chatRoomsByLocation] || [];
 
   const travelers = [
     {
@@ -67,14 +143,14 @@ const Community = () => {
       name: "Sarah Chen",
       age: 28,
       job: "Photographer",
-      location: "Seoul, South Korea",
+      location: "Colombo, Sri Lanka",
       interests: ["Photography", "Street Food", "Architecture"],
       avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-      bio: "Adventurous soul exploring Asia one city at a time. Photographer and food enthusiast.",
+      bio: "Adventurous soul exploring Sri Lanka one city at a time. Photographer and food enthusiast.",
       verified: false,
       photos: [
         "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
-        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26",
+        "https://images.unsplash.com/photo-1589308155743-4ad772863eae",
         "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800"
       ],
       badges: [
@@ -87,14 +163,14 @@ const Community = () => {
       name: "Maya Patel",
       age: 32,
       job: "Yoga Instructor",
-      location: "Bali, Indonesia",
+      location: "Galle, Sri Lanka",
       interests: ["Surfing", "Yoga", "Local Markets"],
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
-      bio: "Yoga instructor and digital nomad. Currently based in Bali but always on the move.",
+      bio: "Yoga instructor and digital nomad. Currently based in Galle but always on the move.",
       verified: true,
       photos: [
         "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-        "https://images.unsplash.com/photo-1522383225653-ed111181a951",
+        "https://images.unsplash.com/photo-1580394693539-2111f706eaad",
         "https://images.unsplash.com/photo-1516483638261-f4dbaf036963"
       ],
       badges: [
@@ -108,14 +184,14 @@ const Community = () => {
       name: "Alex Johnson",
       age: 30,
       job: "Travel Writer",
-      location: "Chiang Mai, Thailand",
+      location: "Trincomalee, Sri Lanka",
       interests: ["Writing", "Hiking", "Cultural Experiences"],
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
-      bio: "Travel writer seeking authentic experiences and unique stories across Southeast Asia.",
+      bio: "Travel writer seeking authentic experiences and unique stories across Sri Lanka.",
       verified: true,
       photos: [
         "https://images.unsplash.com/photo-1501504905252-473c47e087f8",
-        "https://images.unsplash.com/photo-1503220317375-aaad61436b1b",
+        "https://images.unsplash.com/photo-1546556874-8964792e36fa",
         "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4"
       ],
       badges: [
@@ -128,14 +204,14 @@ const Community = () => {
       name: "Emma Wilson",
       age: 26,
       job: "Marine Biologist",
-      location: "Phuket, Thailand",
+      location: "Batticaloa, Sri Lanka",
       interests: ["Diving", "Marine Conservation", "Beach Cleanup"],
       avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-      bio: "Marine biologist studying coral reefs in Thailand. Looking for fellow ocean lovers!",
+      bio: "Marine biologist studying coral reefs in Sri Lanka. Looking for fellow ocean lovers!",
       verified: false,
       photos: [
         "https://images.unsplash.com/photo-1414609245224-afa02bfb3fda",
-        "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a",
+        "https://images.unsplash.com/photo-1584552539816-caf637eff5a3",
         "https://images.unsplash.com/photo-1582979512210-99b6a53386f9"
       ],
       badges: [
@@ -322,6 +398,15 @@ const Community = () => {
   };
 
   const currentTraveler = travelers[currentProfileIndex];
+  
+  // Function to change user's current location (demo)
+  const changeLocation = (location: string) => {
+    setUserLocation(location);
+    toast({
+      title: "Location Changed",
+      description: `Showing chat rooms in ${location}`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -414,7 +499,7 @@ const Community = () => {
                   </div>
                   <div className="aspect-video relative rounded-md overflow-hidden bg-gray-100 mb-3">
                     <img 
-                      src="https://maps.googleapis.com/maps/api/staticmap?center=Shibuya,Tokyo,Japan&zoom=14&size=600x300&maptype=roadmap&markers=color:red%7CShibuya,Tokyo,Japan&key=YOUR_API_KEY" 
+                      src="https://maps.googleapis.com/maps/api/staticmap?center=Colombo,Sri Lanka&zoom=14&size=600x300&maptype=roadmap&markers=color:red%7CColombo,Sri Lanka&key=YOUR_API_KEY" 
                       alt="Map" 
                       className="w-full h-full object-cover"
                     />
@@ -438,7 +523,10 @@ const Community = () => {
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Button onClick={() => setActiveTab('chat')}>
+                  <Button 
+                    variant={activeTab === 'chat' ? 'default' : 'outline'} 
+                    onClick={() => setActiveTab('chat')}
+                  >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Chat Rooms
                   </Button>
@@ -452,14 +540,42 @@ const Community = () => {
                 </div>
               </div>
 
+              {/* Location Selector */}
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-2">Your Location</h3>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant={userLocation === "Sri Lanka" ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => changeLocation("Sri Lanka")}
+                  >
+                    <MapPin className="w-3 h-3 mr-1" /> Sri Lanka
+                  </Button>
+                  <Button 
+                    variant={userLocation === "Thailand" ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => changeLocation("Thailand")}
+                  >
+                    <MapPin className="w-3 h-3 mr-1" /> Thailand
+                  </Button>
+                  <Button 
+                    variant={userLocation === "Japan" ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => changeLocation("Japan")}
+                  >
+                    <MapPin className="w-3 h-3 mr-1" /> Japan
+                  </Button>
+                </div>
+              </div>
+
               {activeTab === 'chat' ? (
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-8">
                   <div>
                     <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
                       <MessageSquare className="w-5 h-5" />
-                      Active Chat Rooms
+                      Chat Rooms in {userLocation}
                     </h2>
-                    <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
                       {chatRooms.map((room) => (
                         <Card key={room.id} className="p-4 hover:shadow-lg transition-shadow">
                           <div className="flex gap-4">
@@ -495,10 +611,10 @@ const Community = () => {
                   <div>
                     <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
                       <Users className="w-5 h-5" />
-                      Travelers Nearby
+                      Travelers in {userLocation}
                     </h2>
-                    <div className="space-y-4">
-                      {travelers.slice(0, 2).map((traveler) => (
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {travelers.slice(0, 4).map((traveler) => (
                         <Card key={traveler.id} className="p-4 hover:shadow-lg transition-shadow">
                           <div className="flex gap-4">
                             <Dialog>
@@ -603,7 +719,7 @@ const Community = () => {
                 <div className="flex flex-col items-center">
                   <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
                     <User className="w-5 h-5" />
-                    Meet Fellow Travelers
+                    Meet Fellow Travelers in {userLocation}
                   </h2>
                   
                   <div className="w-full max-w-md mb-8">
@@ -626,7 +742,6 @@ const Community = () => {
                         style={{ 
                           transform: offsetX ? `translateX(${offsetX}px) rotate(${offsetX * 0.05}deg)` : 'none',
                         }}
-                        isSwiping={Boolean(offsetX)}
                       >
                         <div 
                           className="w-full h-[70%] bg-cover bg-center"
