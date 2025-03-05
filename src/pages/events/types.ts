@@ -18,3 +18,11 @@ export type EventType = {
   price?: string;
   distance?: string;
 };
+
+export type BudgetPlanType = {
+  budget: number;
+  travelers: number;
+  days: number;
+  travelMode: 'public' | 'rental' | 'private';
+  comfortLevel: 'budget' | 'standard' | 'luxury';
+};

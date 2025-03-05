@@ -13,6 +13,7 @@ import InteractiveMap from "@/components/map/InteractiveMap";
 import { Location } from "@/components/map/types";
 import { EventType } from "./types";
 import { useEvents } from "./hooks/useEvents";
+import BudgetPlanner from "./components/BudgetPlanner";
 import { 
   Calendar, 
   Clock, 
@@ -26,7 +27,8 @@ import {
   ImageIcon,
   Phone,
   Video,
-  X
+  X,
+  Calculator
 } from "lucide-react";
 
 const EventDetail = () => {
@@ -34,7 +36,7 @@ const EventDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { events, toggleAttendance } = useEvents();
-  const [activeTab, setActiveTab] = useState<"details" | "chat">("details");
+  const [activeTab, setActiveTab] = useState<"details" | "chat" | "budget">("details");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([
     { id: 1, sender: "Sarah", text: "Is anyone else going to this event?", time: "10:25 AM", isSelf: false },
@@ -162,10 +164,10 @@ const EventDetail = () => {
             <Tabs 
               defaultValue="details" 
               value={activeTab}
-              onValueChange={(value) => setActiveTab(value as "details" | "chat")}
+              onValueChange={(value) => setActiveTab(value as "details" | "chat" | "budget")}
               className="mb-6"
             >
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="details" className="flex gap-2">
                   <Calendar className="h-4 w-4" />
                   Event Details
@@ -173,6 +175,10 @@ const EventDetail = () => {
                 <TabsTrigger value="chat" className="flex gap-2">
                   <MessageSquare className="h-4 w-4" />
                   Event Chat
+                </TabsTrigger>
+                <TabsTrigger value="budget" className="flex gap-2">
+                  <Calculator className="h-4 w-4" />
+                  Budget Planner
                 </TabsTrigger>
               </TabsList>
               
@@ -311,6 +317,10 @@ const EventDetail = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+              
+              <TabsContent value="budget" className="mt-6">
+                <BudgetPlanner event={event} />
               </TabsContent>
             </Tabs>
           </div>
