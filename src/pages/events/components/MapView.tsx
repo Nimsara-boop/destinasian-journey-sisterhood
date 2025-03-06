@@ -11,8 +11,8 @@ interface MapViewProps {
 const MapView = ({ events, activeTab }: MapViewProps) => {
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
   
-  // Use a reliable Sri Lanka map image
-  const mapImageUrl = 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+  // Use a reliable Sri Lanka map image with better quality
+  const mapImageUrl = 'https://images.unsplash.com/photo-1578827966064-75764461417c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80';
   
   return (
     <>
@@ -23,6 +23,10 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
               src={mapImageUrl} 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to another map image if the first one fails
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+              }}
             />
             
             {/* Event markers */}
@@ -62,6 +66,10 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
               src={mapImageUrl} 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to another map image if the first one fails
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+              }}
             />
             
             {/* Promotion markers with custom icons */}
@@ -114,6 +122,10 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
               src={mapImageUrl} 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to another map image if the first one fails
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+              }}
             />
             
             {/* All event markers */}
