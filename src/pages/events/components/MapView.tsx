@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { TabsContent } from "@/components/ui/tabs";
 import { Utensils, Hotel, Coffee } from "lucide-react";
@@ -12,13 +11,16 @@ interface MapViewProps {
 const MapView = ({ events, activeTab }: MapViewProps) => {
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
   
+  // Use a reliable Sri Lanka map image
+  const mapImageUrl = 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+  
   return (
     <>
       <TabsContent value="events" className="mt-0">
         <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
           <div className="relative h-full rounded-md overflow-hidden">
             <img 
-              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png" 
+              src={mapImageUrl} 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
             />
@@ -57,7 +59,7 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
         <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
           <div className="relative h-full rounded-md overflow-hidden">
             <img 
-              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png" 
+              src={mapImageUrl} 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
             />
@@ -109,7 +111,7 @@ const MapView = ({ events, activeTab }: MapViewProps) => {
         <div className="h-[600px] bg-white rounded-lg shadow-sm p-4">
           <div className="relative h-full rounded-md overflow-hidden">
             <img 
-              src="/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png" 
+              src={mapImageUrl} 
               alt="Map of Sri Lanka"
               className="w-full h-full object-cover"
             />

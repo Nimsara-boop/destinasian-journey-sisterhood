@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -47,14 +46,16 @@ const EventDetail = () => {
   
   const event = events.find(e => e.id === parseInt(id || "0"));
   
-  // Scroll to bottom of messages
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = 'https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+  };
+  
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, activeTab]);
   
-  // Convert event location to map location format
   const mapLocations: Location[] = event ? [
     {
       id: event.id.toString(),
@@ -83,7 +84,6 @@ const EventDetail = () => {
   };
   
   const handleShare = () => {
-    // In a real app, use the Web Share API
     navigator.clipboard.writeText(window.location.href);
     
     toast({
@@ -145,14 +145,20 @@ const EventDetail = () => {
         </Button>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="relative h-[400px] rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src={event.imageUrl} 
-                alt={event.title}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative h-[400px] rounded-xl overflow-hidden shadow-lg bg-gray-100">
+              {event.imageUrl ? (
+                <img 
+                  src={event.imageUrl} 
+                  alt={event.title}
+                  className="w-full h-full object-cover"
+                  onError={handleImageError}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                  <ImageIcon className="w-24 h-24 text-gray-400" />
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                 <h1 className="text-4xl font-bold mb-2">{event.title}</h1>
@@ -330,7 +336,6 @@ const EventDetail = () => {
             </Tabs>
           </div>
           
-          {/* Sidebar */}
           <div className="space-y-6">
             <Card>
               <CardContent className="pt-6">

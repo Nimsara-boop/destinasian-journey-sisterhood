@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { 
   Calendar, Clock, MapPin, Users, ArrowRight, Star, 
-  Utensils, Hotel, Coffee 
+  Utensils, Hotel, Coffee, ImageIcon 
 } from "lucide-react";
 import { EventType } from "../types";
 
@@ -44,17 +43,29 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
     }
   };
 
+  // Image error handling function
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = 'https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+  };
+
   // Display differently based on whether it's a promotion or regular event
   if (event.isPromotion) {
     return (
-      <Card className="overflow-hidden hover:shadow-md transition-shadow" isClickable>
+      <Card className="overflow-hidden hover:shadow-md transition-shadow">
         <Link to={`/events/${event.id}`} className="block">
-          <div className="relative h-48">
-            <img 
-              src={event.imageUrl}
-              alt={event.title}
-              className="w-full h-full object-cover"
-            />
+          <div className="relative h-48 bg-gray-100">
+            {event.imageUrl ? (
+              <img 
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-full object-cover"
+                onError={handleImageError}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                <ImageIcon className="w-12 h-12 text-gray-400" />
+              </div>
+            )}
             <Badge 
               className="absolute top-2 right-2 capitalize"
               variant="secondary"
@@ -69,6 +80,7 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
             )}
           </div>
         </Link>
+        
         <CardContent className="p-4">
           <Link to={`/events/${event.id}`} className="block">
             <div className="flex items-center justify-between mb-2">
@@ -135,14 +147,21 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
     );
   } else {
     return (
-      <Card className="overflow-hidden hover:shadow-md transition-shadow" isClickable>
+      <Card className="overflow-hidden hover:shadow-md transition-shadow">
         <Link to={`/events/${event.id}`} className="block">
-          <div className="relative h-48">
-            <img 
-              src={event.imageUrl}
-              alt={event.title}
-              className="w-full h-full object-cover"
-            />
+          <div className="relative h-48 bg-gray-100">
+            {event.imageUrl ? (
+              <img 
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-full object-cover"
+                onError={handleImageError}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                <ImageIcon className="w-12 h-12 text-gray-400" />
+              </div>
+            )}
             <Badge 
               className="absolute top-2 right-2 capitalize"
               variant={event.attending ? "default" : "secondary"}
@@ -151,6 +170,7 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
             </Badge>
           </div>
         </Link>
+        
         <CardContent className="p-4">
           <Link to={`/events/${event.id}`} className="block">
             <h3 className="font-semibold text-lg mb-2">{event.title}</h3>
