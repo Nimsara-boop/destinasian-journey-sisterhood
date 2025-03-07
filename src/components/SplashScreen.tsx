@@ -43,7 +43,7 @@ const SplashScreen = () => {
     {
       title: "Welcome to DestinAsian",
       description: "Your ultimate companion for exploring Asia's most beautiful destinations",
-      icon: <Globe className="w-16 h-16 text-primary mb-6" />
+      icon: <Globe className="w-16 h-16 text-accent mb-6" />
     },
     {
       title: "Discover Local Experiences",
@@ -53,24 +53,24 @@ const SplashScreen = () => {
     {
       title: "Join Our Community",
       description: "Connect with travelers, share stories, and get personalized recommendations",
-      icon: <Users className="w-16 h-16 text-primary mb-6" />
+      icon: <Users className="w-16 h-16 text-accent mb-6" />
     }
   ];
 
   return (
-    <div className="fixed inset-0 z-50 bg-gradient-to-b from-secondary to-background flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mx-4 border border-secondary">
+    <div className="fixed inset-0 z-50 bg-gradient-to-b from-primary to-primary/80 flex items-center justify-center">
+      <div className="glass rounded-xl shadow-xl p-8 max-w-md w-full mx-4">
         <div className="text-center">
           {slides[currentSlide].icon}
-          <h1 className="text-2xl font-bold mb-2 text-primary">{slides[currentSlide].title}</h1>
-          <p className="text-muted-foreground mb-8">{slides[currentSlide].description}</p>
+          <h1 className="text-2xl font-bold mb-2 text-white">{slides[currentSlide].title}</h1>
+          <p className="text-white/80 mb-8">{slides[currentSlide].description}</p>
           
           <div className="flex justify-center gap-2 mb-8">
             {slides.map((_, index) => (
               <button
                 key={index}
                 className={`w-3 h-3 rounded-full ${
-                  index === currentSlide ? "bg-accent" : "bg-gray-200"
+                  index === currentSlide ? "bg-accent" : "bg-white/30"
                 }`}
                 onClick={() => setCurrentSlide(index)}
               />
@@ -78,7 +78,7 @@ const SplashScreen = () => {
           </div>
           
           <div className="flex gap-4">
-            <Button variant="outline" className="flex-1 border-primary text-primary" onClick={handleDismiss}>
+            <Button variant="outline" className="flex-1 border-white text-white bg-transparent hover:bg-white/10" onClick={handleDismiss}>
               Skip
             </Button>
             <Button className="flex-1 bg-accent hover:bg-accent/90 text-white" onClick={handleExplore}>

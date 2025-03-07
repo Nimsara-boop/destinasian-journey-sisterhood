@@ -1,18 +1,19 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 35 57% 89%; /* Warm Sand Beige (#F4E7D3) */
-    --foreground: 210 100% 20%; /* Deep Navy Blue */
+    --background: 210 100% 20%; /* Deep Navy Blue (#003366) */
+    --foreground: 0 0% 100%; /* White text */
     --card: 0 0% 100%;
     --card-foreground: 210 100% 20%; /* Deep Navy Blue */
     --popover: 0 0% 100%;
     --popover-foreground: 210 100% 20%; /* Deep Navy Blue */
-    --border: 35 57% 89%; /* Light version of Warm Sand */
-    --input: 35 57% 89%; /* Light version of Warm Sand */
-    --ring: 210 100% 20%; /* Deep Navy Blue */
+    --border: 210 100% 20%; /* Deep Navy Blue */
+    --input: 210 100% 20%; /* Deep Navy Blue */
+    --ring: 0 0% 100%; /* White */
     --radius: 1rem;
   }
 
@@ -49,12 +50,12 @@
   }
 
   ::selection {
-    @apply bg-accent/20 text-primary;
+    @apply bg-accent/20 text-accent;
   }
 }
 
 .glass {
-  @apply bg-white/80 backdrop-blur-md border border-white/20;
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
 }
 
 /* Female Experience Specific Styles */
@@ -91,15 +92,15 @@
 
 /* Standard Experience Styles */
 .standard-section:nth-child(odd) {
-  background-color: #F4E7D3; /* Warm Sand Beige */
+  background-color: #003366; /* Deep Navy Blue */
 }
 
 .standard-section:nth-child(even) {
-  background-color: #fff;
+  background-color: #004080; /* Slightly lighter Navy Blue for contrast */
 }
 
 .btn-standard-primary {
-  @apply bg-primary text-white hover:bg-primary/90 shadow-md;
+  @apply bg-accent text-white hover:bg-accent/90 shadow-md;
 }
 
 .btn-standard-secondary {
@@ -111,16 +112,25 @@
 }
 
 .podcast-player-standard {
-  @apply bg-white rounded-xl p-4 border border-primary/10 shadow-sm;
+  @apply bg-primary/30 rounded-xl p-4 border border-white/10 shadow-md;
 }
 
 .location-advice-standard {
-  @apply bg-white rounded-xl p-6 border border-primary/10 shadow-sm;
+  @apply bg-primary/30 rounded-xl p-6 border border-white/10 shadow-md;
 }
 
 /* Interactive Elements */
 .female-experience-mode .interactive-slide {
   @apply transition-all duration-300 hover:shadow-lg hover:scale-[1.02] cursor-pointer;
+}
+
+/* Modern Card Styles */
+.modern-card {
+  @apply bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-white/15;
+}
+
+.modern-card-solid {
+  @apply bg-white rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl;
 }
 
 /* Animations */
@@ -139,11 +149,11 @@
 }
 
 .chat-bubble.sent {
-  @apply bg-primary text-white ml-auto rounded-tr-none;
+  @apply bg-accent text-white ml-auto rounded-tr-none;
 }
 
 .chat-bubble.received {
-  @apply bg-muted text-foreground mr-auto rounded-tl-none;
+  @apply bg-white/15 text-white mr-auto rounded-tl-none;
 }
 
 /* Map Styles */
@@ -167,16 +177,29 @@
 
 /* Text shadow for luminous effect */
 .text-shadow-glow {
-  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 .text-shadow-sm {
-  text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 /* Custom Experience Toggle Button */
 .custom-experience-toggle {
   @apply px-4 py-2 rounded-full font-medium flex items-center gap-2;
-  background-color: #003366;
+  background-color: #FF6F61;
   color: white;
+}
+
+/* Modern UI Elements */
+.modern-input {
+  @apply bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent/50;
+}
+
+.modern-button {
+  @apply rounded-lg px-6 py-2.5 font-medium transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.pill-button {
+  @apply rounded-full px-6 py-2 font-medium transition-all duration-200 shadow-md hover:shadow-lg;
 }
