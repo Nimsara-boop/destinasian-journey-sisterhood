@@ -1,10 +1,8 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { User, Lock, LogIn, AlertCircle, Eye, EyeOff, Mountain, Building, Palmtree, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -30,7 +28,7 @@ const Login = () => {
       type: "mountain" as DestinationType, 
       label: "Mountains", 
       icon: <Mountain className="w-5 h-5" />,
-      image: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
+      image: "https://images.unsplash.com/photo-1483728642387-6c3bdd4587e5?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
     },
     { 
       type: "beach" as DestinationType, 
@@ -51,6 +49,12 @@ const Login = () => {
       image: "https://images.unsplash.com/photo-1518439179742-732ccb09ce6b?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
     }
   ];
+
+  useEffect(() => {
+    // Check if there's a redirect path stored
+    const redirectPath = localStorage.getItem("redirectAfterLogin");
+    // We'll use this in handleCompleteLogin
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,8 +117,15 @@ const Login = () => {
       description: `You are now logged in as ${username}`,
     });
     
-    // Navigate to home page
-    navigate("/");
+    // Check if there's a redirect path stored
+    const redirectPath = localStorage.getItem("redirectAfterLogin");
+    if (redirectPath) {
+      localStorage.removeItem("redirectAfterLogin");
+      navigate(redirectPath);
+    } else {
+      // Default redirect to home page
+      navigate("/");
+    }
   };
 
   const togglePasswordVisibility = () => {

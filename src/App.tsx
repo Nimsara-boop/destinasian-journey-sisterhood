@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,11 +14,22 @@ import Community from "./pages/Community";
 import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
+import SplashScreen from "./components/SplashScreen";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const [showSplash, setShowSplash] = useState(true);
+  
+  useEffect(() => {
+    // Check if user is coming from a redirect after login
+    const redirectPath = localStorage.getItem("redirectAfterLogin");
+    if (redirectPath) {
+      // Clear the redirect path
+      localStorage.removeItem("redirectAfterLogin");
+      // Handle redirect if needed
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,36 +37,44 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          {showSplash && <SplashScreen />}
+          
           <Routes>
             <Route path="/login" element={<Login />} />
             
-            {/* Protected routes */}
+            {/* Public routes (no auth required) */}
             <Route path="/" element={
-              <ExperienceProvider>
+              <ExperienceProvider requireAuth={false}>
                 <Index />
               </ExperienceProvider>
             } />
-            <Route path="/profile" element={
-              <ExperienceProvider>
-                <Profile />
-              </ExperienceProvider>
-            } />
             <Route path="/events" element={
-              <ExperienceProvider>
+              <ExperienceProvider requireAuth={false}>
                 <Events />
               </ExperienceProvider>
             } />
             <Route path="/events/:id" element={
-              <ExperienceProvider>
+              <ExperienceProvider requireAuth={false}>
                 <EventDetail />
               </ExperienceProvider>
             } />
             <Route path="/community" element={
-              <ExperienceProvider>
+              <ExperienceProvider requireAuth={false}>
                 <Community />
               </ExperienceProvider>
             } />
-            <Route path="/package/:id" element={<PackageDetail />} />
+            <Route path="/package/:id" element={
+              <ExperienceProvider requireAuth={false}>
+                <PackageDetail />
+              </ExperienceProvider>
+            } />
+            
+            {/* Private routes (auth required) */}
+            <Route path="/profile" element={
+              <ExperienceProvider requireAuth={true}>
+                <Profile />
+              </ExperienceProvider>
+            } />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
