@@ -26,13 +26,13 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#C2A87D",
+          DEFAULT: "#003366", // Deep Navy Blue
           foreground: "#ffffff",
           feminine: "#E8819E",
         },
         secondary: {
-          DEFAULT: "#E8D3D1",
-          foreground: "#1A1A1A",
+          DEFAULT: "#F4E7D3", // Warm Sand Beige
+          foreground: "#003366", // Deep Navy Blue
           feminine: "#F7D0E0",
         },
         destructive: {
@@ -40,13 +40,13 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#F5F0EC",
-          foreground: "#1A1A1A",
+          DEFAULT: "#E0E0E0", // Soft Gray
+          foreground: "#3A3A3A", // Darker gray for text on light bg
           feminine: "#FFEDF5",
         },
         accent: {
-          DEFAULT: "#E8D3D1",
-          foreground: "#1A1A1A",
+          DEFAULT: "#FF6F61", // Vibrant Coral
+          foreground: "#ffffff",
           feminine: "#FFC0D6",
         },
         popover: {

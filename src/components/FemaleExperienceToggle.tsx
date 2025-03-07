@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Palette } from "lucide-react";
 
 const FemaleExperienceToggle = () => {
   const [showToggle, setShowToggle] = useState(false);
@@ -44,7 +45,8 @@ const FemaleExperienceToggle = () => {
           checked={customExperience}
           onCheckedChange={handleToggle}
         />
-        <Label htmlFor="custom-mode" className="text-sm font-medium">
+        <Label htmlFor="custom-mode" className="text-sm font-medium flex items-center gap-1">
+          <Palette className="h-4 w-4 text-accent" />
           Custom Experience
         </Label>
       </div>

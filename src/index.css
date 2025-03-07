@@ -6,14 +6,14 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 210 100% 20%; /* Deep Navy Blue */
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 210 100% 20%; /* Deep Navy Blue */
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --popover-foreground: 210 100% 20%; /* Deep Navy Blue */
+    --border: 35 57% 89%; /* Light version of Warm Sand */
+    --input: 35 57% 89%; /* Light version of Warm Sand */
+    --ring: 210 100% 20%; /* Deep Navy Blue */
     --radius: 1rem;
   }
 
@@ -50,7 +50,7 @@
   }
 
   ::selection {
-    @apply bg-primary/20 text-primary;
+    @apply bg-accent/20 text-primary;
   }
 }
 
@@ -79,15 +79,44 @@
 }
 
 .female-experience-mode .btn-primary {
-  @apply bg-primary text-white;
+  @apply bg-primary-feminine text-white;
 }
 
 .female-experience-mode .podcast-player {
-  @apply bg-secondary/50 rounded-xl p-4;
+  @apply bg-secondary-feminine/50 rounded-xl p-4;
 }
 
 .female-experience-mode .location-advice {
-  @apply bg-muted rounded-xl p-6;
+  @apply bg-muted-feminine rounded-xl p-6;
+}
+
+/* Standard Experience Styles */
+.standard-section:nth-child(odd) {
+  background-color: #fff;
+}
+
+.standard-section:nth-child(even) {
+  background-color: #F4E7D3; /* Warm Sand Beige */
+}
+
+.btn-standard-primary {
+  @apply bg-primary text-white hover:bg-primary/90 shadow-md;
+}
+
+.btn-standard-secondary {
+  @apply bg-secondary text-primary hover:bg-secondary/90 shadow-md;
+}
+
+.btn-standard-accent {
+  @apply bg-accent text-white hover:bg-accent/90 shadow-md;
+}
+
+.podcast-player-standard {
+  @apply bg-secondary/50 rounded-xl p-4 border border-primary/10 shadow-sm;
+}
+
+.location-advice-standard {
+  @apply bg-muted rounded-xl p-6 border border-primary/10 shadow-sm;
 }
 
 /* Interactive Elements */
@@ -144,4 +173,11 @@
 
 .text-shadow-sm {
   text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+}
+
+/* Custom Experience Toggle Button */
+.custom-experience-toggle {
+  @apply px-4 py-2 rounded-full font-medium flex items-center gap-2;
+  background-color: #003366;
+  color: white;
 }
