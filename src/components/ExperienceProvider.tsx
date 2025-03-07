@@ -9,27 +9,27 @@ interface ExperienceProviderProps {
 
 const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isFemaleExperience, setIsFemaleExperience] = useState(false);
+  const [isCustomExperience, setIsCustomExperience] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check login status and preferences
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const femaleExperience = localStorage.getItem("femaleExperience") === "true";
+    const customExperience = localStorage.getItem("customExperience") === "true";
     
     setIsLoggedIn(loggedIn);
-    setIsFemaleExperience(femaleExperience);
+    setIsCustomExperience(customExperience);
     setLoading(false);
 
-    // Apply feminine theme if female experience is enabled
-    if (femaleExperience) {
-      document.documentElement.classList.add('female-theme');
+    // Apply custom theme if custom experience is enabled
+    if (customExperience) {
+      document.documentElement.classList.add('custom-theme');
     } else {
-      document.documentElement.classList.remove('female-theme');
+      document.documentElement.classList.remove('custom-theme');
     }
 
     return () => {
-      document.documentElement.classList.remove('female-theme');
+      document.documentElement.classList.remove('custom-theme');
     };
   }, []);
 
@@ -42,7 +42,7 @@ const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
   }
 
   return (
-    <div className={isFemaleExperience ? "female-experience-mode" : ""}>
+    <div className={isCustomExperience ? "custom-experience-mode" : ""}>
       {children}
       <FemaleExperienceToggle />
     </div>
