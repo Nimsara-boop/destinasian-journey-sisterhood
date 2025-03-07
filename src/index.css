@@ -1,11 +1,10 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 35 57% 89%; /* Warm Sand Beige (#F4E7D3) */
     --foreground: 210 100% 20%; /* Deep Navy Blue */
     --card: 0 0% 100%;
     --card-foreground: 210 100% 20%; /* Deep Navy Blue */
@@ -92,11 +91,11 @@
 
 /* Standard Experience Styles */
 .standard-section:nth-child(odd) {
-  background-color: #fff;
+  background-color: #F4E7D3; /* Warm Sand Beige */
 }
 
 .standard-section:nth-child(even) {
-  background-color: #F4E7D3; /* Warm Sand Beige */
+  background-color: #fff;
 }
 
 .btn-standard-primary {
@@ -112,11 +111,11 @@
 }
 
 .podcast-player-standard {
-  @apply bg-secondary/50 rounded-xl p-4 border border-primary/10 shadow-sm;
+  @apply bg-white rounded-xl p-4 border border-primary/10 shadow-sm;
 }
 
 .location-advice-standard {
-  @apply bg-muted rounded-xl p-6 border border-primary/10 shadow-sm;
+  @apply bg-white rounded-xl p-6 border border-primary/10 shadow-sm;
 }
 
 /* Interactive Elements */
