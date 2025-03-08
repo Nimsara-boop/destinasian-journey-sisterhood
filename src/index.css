@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '@fontsource/playfair-display/400.css';
+@import '@fontsource/playfair-display/700.css';
 
 @layer base {
   :root {
@@ -60,7 +62,7 @@
 /* Female Experience Specific Styles */
 .female-experience-mode {
   @apply transition-all duration-300;
-  background-color: #FFEDF5;
+  background-color: #FFF6F9;
 }
 
 .female-experience-mode section:nth-child(odd) {
@@ -74,19 +76,33 @@
 .female-experience-mode h1, 
 .female-experience-mode h2, 
 .female-experience-mode h3 {
-  @apply font-serif;
+  font-family: 'Playfair Display', serif;
+  @apply tracking-tight;
 }
 
 .female-experience-mode .btn-primary {
-  @apply bg-primary-feminine text-white;
+  @apply bg-pink-400 text-white;
 }
 
 .female-experience-mode .podcast-player {
-  @apply bg-secondary-feminine/50 rounded-xl p-4;
+  @apply bg-pink-100 rounded-xl p-4 border border-pink-200;
 }
 
 .female-experience-mode .location-advice {
-  @apply bg-muted-feminine rounded-xl p-6;
+  @apply bg-pink-50 rounded-xl p-6 border border-pink-200;
+}
+
+.female-experience-mode .modern-card {
+  @apply bg-white/80 backdrop-blur-sm border border-pink-200/20 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-white/90;
+}
+
+.female-experience-mode button {
+  @apply rounded-full;
+}
+
+.female-experience-mode .interactive-element:hover {
+  transform: translateY(-3px);
+  @apply shadow-md shadow-pink-100;
 }
 
 /* Standard Experience Styles */

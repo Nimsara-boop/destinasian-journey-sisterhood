@@ -24,9 +24,9 @@ const FemaleExperienceToggle = () => {
     localStorage.setItem("customExperience", checked.toString());
     
     toast({
-      title: checked ? "Custom Experience Enabled" : "Standard Experience Enabled",
+      title: checked ? "Feminine Experience Enabled" : "Standard Experience Enabled",
       description: checked 
-        ? "You'll now see content tailored to your preferences" 
+        ? "You'll now see content with our elegant feminine styling" 
         : "You've switched back to the standard experience",
     });
 
@@ -38,16 +38,17 @@ const FemaleExperienceToggle = () => {
   if (!showToggle) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 glass rounded-lg shadow-lg p-4 bg-primary/80 backdrop-blur-md border border-accent/20">
+    <div className="fixed bottom-4 right-4 z-50 glass rounded-lg shadow-lg p-4 backdrop-blur-md border border-pink-200/50">
       <div className="flex items-center space-x-2">
         <Switch 
           id="custom-mode" 
           checked={customExperience}
           onCheckedChange={handleToggle}
+          className="data-[state=checked]:bg-pink-400"
         />
         <Label htmlFor="custom-mode" className="text-sm font-medium flex items-center gap-1 text-foreground">
-          <Palette className="h-4 w-4 text-accent" />
-          Custom Experience
+          <Palette className="h-4 w-4 text-pink-400" />
+          Feminine Experience
         </Label>
       </div>
     </div>

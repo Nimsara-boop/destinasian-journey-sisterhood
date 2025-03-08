@@ -28,12 +28,12 @@ export default {
         primary: {
           DEFAULT: "#FEC6A1", // Soft Orange
           foreground: "#3A3A3A", // Dark text
-          feminine: "#E8819E",
+          feminine: "#F7A8C1", // Soft Pink
         },
         secondary: {
           DEFAULT: "#FEF7CD", // Soft Yellow
           foreground: "#3A3A3A", // Dark text
-          feminine: "#F7D0E0",
+          feminine: "#FCD5E5", // Light Pink
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -42,12 +42,12 @@ export default {
         muted: {
           DEFAULT: "#FDE1D3", // Soft Peach
           foreground: "#3A3A3A", // Dark text
-          feminine: "#FFEDF5",
+          feminine: "#FFF0F6", // Very Light Pink
         },
         accent: {
           DEFAULT: "#FEC6A1", // Soft Orange
           foreground: "#3A3A3A", // Dark text
-          feminine: "#FFC0D6",
+          feminine: "#F7A8C1", // Soft Pink
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -56,6 +56,18 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        pink: {
+          50: "#FFF0F6",
+          100: "#FCD5E5",
+          200: "#FAB8D9",
+          300: "#F492C1",
+          400: "#F06CA8",
+          500: "#E84A8A",
+          600: "#C83571",
+          700: "#A62458",
+          800: "#851A45",
+          900: "#630D2F",
         },
       },
       fontFamily: {

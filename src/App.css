@@ -31,6 +31,21 @@
   background: rgba(254, 198, 161, 0.5); /* Soft Orange with opacity */
 }
 
+/* Female experience scroll styling */
+.female-experience-mode ::-webkit-scrollbar-track {
+  background: rgba(247, 168, 193, 0.1); /* Soft Pink with opacity */
+  border-radius: 4px;
+}
+
+.female-experience-mode ::-webkit-scrollbar-thumb {
+  background: rgba(247, 168, 193, 0.3); /* Soft Pink with opacity */
+  border-radius: 4px;
+}
+
+.female-experience-mode ::-webkit-scrollbar-thumb:hover {
+  background: rgba(247, 168, 193, 0.5); /* Soft Pink with opacity */
+}
+
 /* Animation keyframes */
 @keyframes fadeIn {
   from {
@@ -77,6 +92,17 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+/* Female experience typography */
+.female-experience-mode h1, 
+.female-experience-mode h2, 
+.female-experience-mode h3 {
+  letter-spacing: -0.02em;
+}
+
+.female-experience-mode p {
+  line-height: 1.6;
+}
+
 /* Interactive elements */
 .interactive-element {
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -85,4 +111,43 @@ h1, h2, h3, h4, h5, h6 {
 .interactive-element:hover {
   transform: translateY(-3px);
   opacity: 0.95;
+}
+
+/* Feminine Elements */
+.female-experience-mode .interactive-element:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(247, 168, 193, 0.25);
+}
+
+.female-experience-mode .btn {
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+.female-experience-mode input,
+.female-experience-mode textarea,
+.female-experience-mode select {
+  border-radius: 12px;
+  border-color: rgba(247, 168, 193, 0.3);
+}
+
+.female-experience-mode .card {
+  border-radius: 16px;
+  border-color: rgba(247, 168, 193, 0.2);
+  box-shadow: 0 4px 12px rgba(247, 168, 193, 0.1);
+}
+
+/* Feminine decorative elements */
+.feminine-accent {
+  position: relative;
+}
+
+.feminine-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(to right, #F7A8C1, transparent);
 }
