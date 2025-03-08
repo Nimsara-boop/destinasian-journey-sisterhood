@@ -1,19 +1,18 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 100% 20%; /* Deep Navy Blue (#003366) */
-    --foreground: 0 0% 100%; /* White text */
+    --background: 37 100% 95%; /* Soft yellowish background #FEF7CD */
+    --foreground: 0 0% 20%; /* Dark text */
     --card: 0 0% 100%;
-    --card-foreground: 210 100% 20%; /* Deep Navy Blue */
+    --card-foreground: 0 0% 20%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 100% 20%; /* Deep Navy Blue */
-    --border: 210 100% 20%; /* Deep Navy Blue */
-    --input: 210 100% 20%; /* Deep Navy Blue */
-    --ring: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 20%;
+    --border: 24 56% 81%;
+    --input: 24 56% 81%;
+    --ring: 24 71% 81%;
     --radius: 1rem;
   }
 
@@ -92,31 +91,31 @@
 
 /* Standard Experience Styles */
 .standard-section:nth-child(odd) {
-  background-color: #003366; /* Deep Navy Blue */
+  background-color: #FEF7CD; /* Soft Yellow */
 }
 
 .standard-section:nth-child(even) {
-  background-color: #004080; /* Slightly lighter Navy Blue for contrast */
+  background-color: #FDE1D3; /* Soft Peach */
 }
 
 .btn-standard-primary {
-  @apply bg-accent text-white hover:bg-accent/90 shadow-md;
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md;
 }
 
 .btn-standard-secondary {
-  @apply bg-secondary text-primary hover:bg-secondary/90 shadow-md;
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-md;
 }
 
 .btn-standard-accent {
-  @apply bg-accent text-white hover:bg-accent/90 shadow-md;
+  @apply bg-accent text-accent-foreground hover:bg-accent/90 shadow-md;
 }
 
 .podcast-player-standard {
-  @apply bg-primary/30 rounded-xl p-4 border border-white/10 shadow-md;
+  @apply bg-primary/30 rounded-xl p-4 border border-accent/10 shadow-md;
 }
 
 .location-advice-standard {
-  @apply bg-primary/30 rounded-xl p-6 border border-white/10 shadow-md;
+  @apply bg-primary/30 rounded-xl p-6 border border-accent/10 shadow-md;
 }
 
 /* Interactive Elements */

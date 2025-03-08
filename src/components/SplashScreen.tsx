@@ -59,18 +59,18 @@ const SplashScreen = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-gradient-to-b from-primary to-primary/80 flex items-center justify-center">
-      <div className="glass rounded-xl shadow-xl p-8 max-w-md w-full mx-4">
+      <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-xl p-8 max-w-md w-full mx-4 border border-accent/20">
         <div className="text-center">
           {slides[currentSlide].icon}
-          <h1 className="text-2xl font-bold mb-2 text-white">{slides[currentSlide].title}</h1>
-          <p className="text-white/80 mb-8">{slides[currentSlide].description}</p>
+          <h1 className="text-2xl font-bold mb-2 text-primary">{slides[currentSlide].title}</h1>
+          <p className="text-foreground/80 mb-8">{slides[currentSlide].description}</p>
           
           <div className="flex justify-center gap-2 mb-8">
             {slides.map((_, index) => (
               <button
                 key={index}
                 className={`w-3 h-3 rounded-full ${
-                  index === currentSlide ? "bg-accent" : "bg-white/30"
+                  index === currentSlide ? "bg-accent" : "bg-primary/30"
                 }`}
                 onClick={() => setCurrentSlide(index)}
               />
@@ -78,10 +78,10 @@ const SplashScreen = () => {
           </div>
           
           <div className="flex gap-4">
-            <Button variant="outline" className="flex-1 border-white text-white bg-transparent hover:bg-white/10" onClick={handleDismiss}>
+            <Button variant="outline" className="flex-1 border-primary text-primary bg-transparent hover:bg-primary/10" onClick={handleDismiss}>
               Skip
             </Button>
-            <Button className="flex-1 bg-accent hover:bg-accent/90 text-white" onClick={handleExplore}>
+            <Button className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handleExplore}>
               Start Exploring
             </Button>
           </div>
