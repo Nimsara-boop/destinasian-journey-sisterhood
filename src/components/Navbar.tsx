@@ -1,10 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { Menu, X, Calendar, Users, User, LogOut, Heart } from "lucide-react";
+import { Menu, X, Calendar, Users, User, LogOut, Heart, MessageSquare } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [isFemale, setIsFemale] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const [femaleExperience, setFemaleExperience] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -26,11 +28,13 @@ const Navbar = () => {
     const storedUsername = localStorage.getItem("username") || "";
     const gender = localStorage.getItem("gender");
     const femaleExp = localStorage.getItem("femaleExperience") === "true";
+    const verified = localStorage.getItem("verifiedFemale") === "true";
     
     setIsLoggedIn(loggedInStatus);
     setUsername(storedUsername);
     setIsFemale(gender === "female");
     setFemaleExperience(femaleExp);
+    setIsVerified(verified);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -71,6 +75,7 @@ const Navbar = () => {
   const navItems = [
     { label: "Events", href: "/events", icon: Calendar },
     { label: "Community", href: "/community", icon: Users },
+    { label: "Messages", href: "/messages", icon: MessageSquare },
     { label: "Profile", href: "/profile", icon: User },
   ];
 
@@ -96,18 +101,30 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-6">
             {isLoggedIn && navItems.map((item) => {
               const Icon = item.icon;
+              const showVerifiedBadge = item.label === "Profile" && femaleExperience && isFemale && isVerified;
+              
               return (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors 
-                    ${femaleExperience 
-                      ? 'bg-primary-feminine/30 hover:bg-primary-feminine/50 text-white shadow-md border border-primary-feminine/30' 
-                      : 'bg-primary/30 hover:bg-primary/50 text-white shadow-md border border-primary/30'}`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {item.label}
-                </Link>
+                <div key={item.label} className="relative">
+                  <Link
+                    to={item.href}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors 
+                      ${femaleExperience 
+                        ? 'bg-primary-feminine/30 hover:bg-primary-feminine/50 text-white shadow-md border border-primary-feminine/30' 
+                        : 'bg-primary/30 hover:bg-primary/50 text-white shadow-md border border-primary/30'}`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {item.label}
+                  </Link>
+                  
+                  {showVerifiedBadge && (
+                    <Badge 
+                      className="absolute -top-2 -right-2 px-1.5 py-0.5 bg-pink-500 text-white text-xs"
+                      variant="default"
+                    >
+                      Verified
+                    </Badge>
+                  )}
+                </div>
               );
             })}
             
@@ -161,19 +178,31 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 animate-fade-in bg-white/90 backdrop-blur-md rounded-lg shadow-lg mt-2">
               {isLoggedIn && navItems.map((item) => {
                 const Icon = item.icon;
+                const showVerifiedBadge = item.label === "Profile" && femaleExperience && isFemale && isVerified;
+                
                 return (
-                  <Link
-                    key={item.label}
-                    to={item.href}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md w-full
-                      ${femaleExperience 
-                        ? 'bg-primary-feminine/30 hover:bg-primary-feminine/50 text-gray-800 shadow-sm border border-primary-feminine/30' 
-                        : 'bg-primary/30 hover:bg-primary/50 text-gray-800 shadow-sm border border-primary/30'}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {item.label}
-                  </Link>
+                  <div key={item.label} className="relative">
+                    <Link
+                      to={item.href}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md w-full
+                        ${femaleExperience 
+                          ? 'bg-primary-feminine/30 hover:bg-primary-feminine/50 text-gray-800 shadow-sm border border-primary-feminine/30' 
+                          : 'bg-primary/30 hover:bg-primary/50 text-gray-800 shadow-sm border border-primary/30'}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {item.label}
+                    </Link>
+                    
+                    {showVerifiedBadge && (
+                      <Badge 
+                        className="absolute -top-2 right-2 px-1.5 py-0.5 bg-pink-500 text-white text-xs"
+                        variant="default"
+                      >
+                        Verified
+                      </Badge>
+                    )}
+                  </div>
                 );
               })}
               

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Calculator, PiggyBank } from "lucide-react";
+import { Download, Calculator, PiggyBank, MapPin } from "lucide-react";
 import { EventType } from "../types";
 import { useToast } from "@/hooks/use-toast";
 
@@ -23,7 +24,8 @@ const budgetFormSchema = z.object({
   comfortLevel: z.string().min(1, { message: "Comfort level is required" }),
   days: z.string().min(1, { message: "Duration is required" }),
   travelers: z.string().min(1, { message: "Number of travelers is required" }),
-  destination: z.string().optional(),
+  startingLocation: z.string().min(1, { message: "Starting location is required" }),
+  destination: z.string().min(1, { message: "Destination is required" }),
   scope: z.string().optional(),
 });
 
@@ -40,6 +42,7 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
     comfortLevel: "standard",
     days: "1",
     travelers: "1",
+    startingLocation: "",
     destination: event?.location || "",
     scope: "local",
   };
@@ -55,7 +58,8 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const destinationName = data.destination || "your destination";
+      const destinationName = data.destination;
+      const startingLocationName = data.startingLocation;
       const budgetNum = parseFloat(data.budget);
       const travelersNum = parseInt(data.travelers);
       const daysNum = parseInt(data.days);
@@ -74,6 +78,8 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
 - Duration: ${daysNum} day${daysNum > 1 ? 's' : ''}
 - Travel Mode: ${data.travelMode.charAt(0).toUpperCase() + data.travelMode.slice(1)}
 - Comfort Level: ${data.comfortLevel.charAt(0).toUpperCase() + data.comfortLevel.slice(1)}
+- From: ${startingLocationName}
+- To: ${destinationName}
 
 ## Budget Breakdown
 - Accommodation: $${(budgetNum * accommodation).toFixed(2)} (${(accommodation * 100).toFixed(0)}%)
@@ -83,6 +89,13 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
 
 ## Daily Budget
 - Per person: $${perPersonPerDay.toFixed(2)}/day
+
+## Transportation from ${startingLocationName} to ${destinationName}
+${data.travelMode === "public" 
+  ? "- Public transportation options between these locations\n- Estimated travel time and cost" 
+  : data.travelMode === "rental" 
+  ? "- Car/scooter rental options and routes\n- Fuel costs and tolls estimation" 
+  : "- Private transfer options\n- Taxi or car service pricing"}
 
 ## Recommendations for ${destinationName}
 
@@ -176,6 +189,24 @@ ${data.comfortLevel === "budget"
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
+                    name="startingLocation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Starting Location</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Your current location" 
+                            {...field}
+                            value={field.value || ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
                     name="destination"
                     render={({ field }) => (
                       <FormItem>
@@ -191,30 +222,30 @@ ${data.comfortLevel === "budget"
                       </FormItem>
                     )}
                   />
-                  
-                  <FormField
-                    control={form.control}
-                    name="scope"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Event Scope</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select scope" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="local">Local Events</SelectItem>
-                            <SelectItem value="worldwide">Worldwide Events</SelectItem>
-                            <SelectItem value="trending">Trending Events</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                 </div>
+                
+                <FormField
+                  control={form.control}
+                  name="scope"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Event Scope</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select scope" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="local">Local Events</SelectItem>
+                          <SelectItem value="worldwide">Worldwide Events</SelectItem>
+                          <SelectItem value="trending">Trending Events</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 
                 <FormField
                   control={form.control}

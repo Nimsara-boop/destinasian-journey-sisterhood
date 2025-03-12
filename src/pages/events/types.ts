@@ -19,6 +19,8 @@ export type EventType = {
   distance?: string;
   isPrivate?: boolean;
   inviteLink?: string;
+  organizerGender?: 'male' | 'female';
+  isVerified?: boolean;
 };
 
 export type BudgetPlanType = {
@@ -28,6 +30,7 @@ export type BudgetPlanType = {
   travelMode: 'public' | 'rental' | 'private';
   comfortLevel: 'budget' | 'standard' | 'luxury';
   destination?: string;
+  startingLocation?: string;
   isTrending?: boolean;
   scope?: 'local' | 'worldwide';
 };
