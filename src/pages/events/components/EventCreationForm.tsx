@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { DialogFooter } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Link2, Copy } from "lucide-react";
 
 interface EventCreationFormProps {
   onClose: () => void;
@@ -21,6 +21,7 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
   const [eventDescription, setEventDescription] = useState("");
   const [eventPrivacy, setEventPrivacy] = useState("public");
   const [eventLink, setEventLink] = useState("");
+  const [isLinkGenerated, setIsLinkGenerated] = useState(false);
 
   const handleCreateEvent = () => {
     if (!eventTitle || !eventDate || !eventTime || !eventLocation) {
@@ -32,25 +33,26 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
       return;
     }
 
+    const randomId = Math.random().toString(36).substring(2, 8);
+    const newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
+    setEventLink(newLink);
+    setIsLinkGenerated(true);
+
     toast({
       title: "Event Created",
       description: "Your event has been successfully created!",
     });
-
-    onClose();
   };
 
   const copyLinkToClipboard = () => {
-    // Generate a random link if none exists
-    if (!eventLink) {
+    if (!isLinkGenerated) {
       const randomId = Math.random().toString(36).substring(2, 8);
       const newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
       setEventLink(newLink);
-      navigator.clipboard.writeText(newLink);
-    } else {
-      navigator.clipboard.writeText(eventLink);
+      setIsLinkGenerated(true);
     }
     
+    navigator.clipboard.writeText(eventLink);
     toast({
       title: "Link Copied",
       description: "Event invitation link copied to clipboard!"
@@ -129,29 +131,31 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
         </RadioGroup>
       </div>
       
-      {eventPrivacy === "private" && (
-        <div>
+      <div className="border rounded-lg p-4 bg-muted/30">
+        <div className="flex items-center gap-2 mb-2">
+          <Link2 className="h-4 w-4 text-muted-foreground" />
           <Label>Invitation Link</Label>
-          <div className="flex mt-1">
-            <Input 
-              value={eventLink} 
-              readOnly 
-              placeholder="Create event to generate link" 
-              className="rounded-r-none"
-            />
-            <Button 
-              type="button" 
-              onClick={copyLinkToClipboard}
-              className="rounded-l-none"
-            >
-              Copy
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Share this link to invite people to your private event
-          </p>
         </div>
-      )}
+        <div className="flex mt-1">
+          <Input 
+            value={eventLink} 
+            readOnly 
+            placeholder={isLinkGenerated ? undefined : "Create event to generate link"}
+            className="rounded-r-none"
+          />
+          <Button 
+            type="button" 
+            onClick={copyLinkToClipboard}
+            className="rounded-l-none gap-2"
+          >
+            <Copy className="h-4 w-4" />
+            Copy
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          Share this link to invite people to your event
+        </p>
+      </div>
 
       <DialogFooter>
         <Button variant="outline" onClick={onClose}>
