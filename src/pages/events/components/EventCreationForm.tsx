@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -33,10 +34,13 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
       return;
     }
 
-    const randomId = Math.random().toString(36).substring(2, 8);
-    const newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
-    setEventLink(newLink);
-    setIsLinkGenerated(true);
+    // Generate an invitation link for private events
+    if (eventPrivacy === "private") {
+      const randomId = Math.random().toString(36).substring(2, 8);
+      const newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
+      setEventLink(newLink);
+      setIsLinkGenerated(true);
+    }
 
     toast({
       title: "Event Created",
@@ -45,7 +49,7 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
   };
 
   const copyLinkToClipboard = () => {
-    if (!isLinkGenerated) {
+    if (!isLinkGenerated && eventPrivacy === "private") {
       const randomId = Math.random().toString(36).substring(2, 8);
       const newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
       setEventLink(newLink);
@@ -131,31 +135,33 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
         </RadioGroup>
       </div>
       
-      <div className="border rounded-lg p-4 bg-muted/30">
-        <div className="flex items-center gap-2 mb-2">
-          <Link2 className="h-4 w-4 text-muted-foreground" />
-          <Label>Invitation Link</Label>
+      {eventPrivacy === "private" && (
+        <div className="border rounded-lg p-4 bg-muted/30">
+          <div className="flex items-center gap-2 mb-2">
+            <Link2 className="h-4 w-4 text-muted-foreground" />
+            <Label>Invitation Link</Label>
+          </div>
+          <div className="flex mt-1">
+            <Input 
+              value={eventLink} 
+              readOnly 
+              placeholder={isLinkGenerated ? undefined : "Create event to generate link"}
+              className="rounded-r-none"
+            />
+            <Button 
+              type="button" 
+              onClick={copyLinkToClipboard}
+              className="rounded-l-none gap-2"
+            >
+              <Copy className="h-4 w-4" />
+              Copy
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Share this link to invite people to your private event
+          </p>
         </div>
-        <div className="flex mt-1">
-          <Input 
-            value={eventLink} 
-            readOnly 
-            placeholder={isLinkGenerated ? undefined : "Create event to generate link"}
-            className="rounded-r-none"
-          />
-          <Button 
-            type="button" 
-            onClick={copyLinkToClipboard}
-            className="rounded-l-none gap-2"
-          >
-            <Copy className="h-4 w-4" />
-            Copy
-          </Button>
-        </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          Share this link to invite people to your event
-        </p>
-      </div>
+      )}
 
       <DialogFooter>
         <Button variant="outline" onClick={onClose}>
