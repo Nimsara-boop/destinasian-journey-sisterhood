@@ -192,5 +192,14 @@ export function useEvents() {
     }
   };
   
-  return { events, toggleAttendance };
+  const addEvent = (newEvent: EventType) => {
+    setEvents(prevEvents => [newEvent, ...prevEvents]);
+    
+    toast({
+      title: "Event Published",
+      description: `Your event "${newEvent.title}" is now visible to the community!`,
+    });
+  };
+  
+  return { events, toggleAttendance, addEvent };
 }

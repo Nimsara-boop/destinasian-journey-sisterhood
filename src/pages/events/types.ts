@@ -17,6 +17,8 @@ export type EventType = {
   rating?: number;
   price?: string;
   distance?: string;
+  isPrivate?: boolean;
+  inviteLink?: string;
 };
 
 export type BudgetPlanType = {

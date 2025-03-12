@@ -8,6 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { DialogFooter } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link2, Copy } from "lucide-react";
+import { EventType } from "../types";
+import { useEvents } from "../hooks/useEvents";
 
 interface EventCreationFormProps {
   onClose: () => void;
@@ -15,6 +17,7 @@ interface EventCreationFormProps {
 
 const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
   const { toast } = useToast();
+  const { addEvent } = useEvents();
   const [eventTitle, setEventTitle] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
@@ -34,18 +37,47 @@ const EventCreationForm = ({ onClose }: EventCreationFormProps) => {
       return;
     }
 
+    // Generate random ID for the event
+    const randomId = Math.random().toString(36).substring(2, 8);
+    let newLink = "";
+    
     // Generate an invitation link for private events
     if (eventPrivacy === "private") {
-      const randomId = Math.random().toString(36).substring(2, 8);
-      const newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
+      newLink = `https://srilanka-travel.com/events/invite/${randomId}`;
       setEventLink(newLink);
       setIsLinkGenerated(true);
     }
-
+    
+    // Create the new event
+    const newEvent: EventType = {
+      id: Date.now(),
+      title: eventTitle,
+      description: eventDescription || "No description provided",
+      date: eventDate,
+      time: eventTime,
+      location: eventLocation,
+      coordinates: [7.8731, 80.7718], // Default coordinates for Sri Lanka
+      organizer: "Current User",
+      attendees: 1,
+      category: "cultural", // Default category
+      imageUrl: "https://images.unsplash.com/photo-1518002171953-a080ee817e1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // Default image
+      attending: true,
+      isPrivate: eventPrivacy === "private",
+      inviteLink: newLink
+    };
+    
+    // Add the event to the events list
+    if (eventPrivacy === "public") {
+      addEvent(newEvent);
+    }
+    
     toast({
       title: "Event Created",
       description: "Your event has been successfully created!",
     });
+    
+    // Close the dialog
+    onClose();
   };
 
   const copyLinkToClipboard = () => {
