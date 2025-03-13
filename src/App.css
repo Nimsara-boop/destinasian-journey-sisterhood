@@ -18,32 +18,32 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(254, 198, 161, 0.1); /* Soft Orange with opacity */
+  background: rgba(246, 168, 192, 0.1); /* Soft Pink with opacity (replaced Soft Orange) */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(254, 198, 161, 0.3); /* Soft Orange with opacity */
+  background: rgba(246, 168, 192, 0.3); /* Soft Pink with opacity (replaced Soft Orange) */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(254, 198, 161, 0.5); /* Soft Orange with opacity */
+  background: rgba(246, 168, 192, 0.5); /* Soft Pink with opacity (replaced Soft Orange) */
 }
 
 /* Female experience scroll styling */
 .female-experience-mode ::-webkit-scrollbar-track {
-  background: rgba(247, 168, 193, 0.1); /* Soft Pink with opacity */
+  background: rgba(246, 168, 192, 0.1); /* Soft Pink with opacity (replaced #F7A8C1) */
   border-radius: 4px;
 }
 
 .female-experience-mode ::-webkit-scrollbar-thumb {
-  background: rgba(247, 168, 193, 0.3); /* Soft Pink with opacity */
+  background: rgba(246, 168, 192, 0.3); /* Soft Pink with opacity (replaced #F7A8C1) */
   border-radius: 4px;
 }
 
 .female-experience-mode ::-webkit-scrollbar-thumb:hover {
-  background: rgba(247, 168, 193, 0.5); /* Soft Pink with opacity */
+  background: rgba(246, 168, 192, 0.5); /* Soft Pink with opacity (replaced #F7A8C1) */
 }
 
 /* Animation keyframes */
@@ -116,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Feminine Elements */
 .female-experience-mode .interactive-element:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px -5px rgba(247, 168, 193, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(246, 168, 192, 0.25); /* Updated from #F7A8C1 */
 }
 
 .female-experience-mode .btn {
@@ -128,13 +128,13 @@ h1, h2, h3, h4, h5, h6 {
 .female-experience-mode textarea,
 .female-experience-mode select {
   border-radius: 12px;
-  border-color: rgba(247, 168, 193, 0.3);
+  border-color: rgba(246, 168, 192, 0.3); /* Updated from #F7A8C1 */
 }
 
 .female-experience-mode .card {
   border-radius: 16px;
-  border-color: rgba(247, 168, 193, 0.2);
-  box-shadow: 0 4px 12px rgba(247, 168, 193, 0.1);
+  border-color: rgba(246, 168, 192, 0.2); /* Updated from #F7A8C1 */
+  box-shadow: 0 4px 12px rgba(246, 168, 192, 0.1); /* Updated from #F7A8C1 */
 }
 
 /* Feminine decorative elements */
@@ -149,5 +149,5 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 40%;
   height: 2px;
-  background: linear-gradient(to right, #F7A8C1, transparent);
+  background: linear-gradient(to right, #F6A8C0, transparent); /* Updated from #F7A8C1 */
 }

@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import FemaleExperienceToggle from "./FemaleExperienceToggle";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./ui/button";
 import { LogIn } from "lucide-react";
@@ -85,8 +84,6 @@ const ExperienceProvider = ({ children, requireAuth = false }: ExperienceProvide
           </Button>
         </div>
       )}
-      
-      <FemaleExperienceToggle />
     </div>
   );
 };
