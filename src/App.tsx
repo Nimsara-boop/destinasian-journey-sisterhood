@@ -8,6 +8,8 @@ import EventDetail from "./pages/events/EventDetail";
 import Community from "./pages/Community";
 import Profile from "./pages/Profile";
 import Messages from "./pages/messages";
+import ChallengesPage from "./pages/challenges";
+import ChallengeDetail from "./pages/challenges/ChallengeDetail";
 import NotFound from "./pages/NotFound";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
@@ -25,6 +27,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/packages/:id" element={<PackageDetail />} />
+          <Route path="/challenges" element={<ChallengesPage />} />
+          <Route path="/challenges/:id" element={<ChallengeDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ExperienceProvider>

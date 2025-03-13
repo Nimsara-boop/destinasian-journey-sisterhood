@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Newsletter from "@/components/Newsletter";
 import EmergencyContact from "@/components/EmergencyContact";
 import MapModal from "@/components/MapModal";
+import { ChallengesSection } from "@/components/challenges/ChallengesSection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { ArrowRight, MapPin, Headphones, Play, Pause, Globe, Heart, Shield, MapIcon } from "lucide-react";
@@ -183,6 +184,8 @@ const Index = () => {
           </Button>
         </div>
       </section>
+
+      <ChallengesSection isFemaleExperience={isFemaleExperience} />
 
       {isFemaleExperience ? (
         <>
