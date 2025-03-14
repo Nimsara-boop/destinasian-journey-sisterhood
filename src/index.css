@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 60 10% 90%; /* Soft yellowish background #FEF7CD */
+    --background: 60 10% 95%; /* Soft yellowish background #FEF7CD */
     --foreground: 30 5% 20%; /* Dark text */
     --card: 0 0% 100%;
     --card-foreground: 30 5% 20%;
