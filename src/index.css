@@ -6,21 +6,33 @@
 
 @layer base {
   :root {
-    --background: 37 100% 95%; /* Soft yellowish background #FEF7CD */
-    --foreground: 0 0% 20%; /* Dark text */
+    --background: 60 10% 95%; /* Soft yellowish background #FEF7CD */
+    --foreground: 30 5% 20%; /* Dark text */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card-foreground: 30 5% 20%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
-    --border: 24 56% 81%;
-    --input: 24 56% 81%;
-    --ring: 24 71% 81%;
+    --popover-foreground: 30 5% 20%;
+    
+    --primary: 260 30% 70%; /* Soft Lavender (#C1AATF) */
+    --primary-foreground: 0 0% 100%; /* White for primary text */
+    --secondary: 260 20% 90%; /* Light Lavender for secondary elements */
+    --secondary-foreground: 30 5% 20%; /* Dark Gray for secondary text */
+    --muted: 60 10% 95%; /* Light Beige for muted elements */
+    --muted-foreground: 30 5% 50%; /* Gray for muted text */
+    --accent: 260 20% 90%; /* Light Lavender for accents */
+    --accent-foreground: 30 5% 20%; /* Dark Gray for accent text */
+    --destructive: 0 85% 60%; /* Red for destructive actions */
+    --destructive-foreground: 0 0% 98%; /* White for destructive text */
+
+    --border: 260 20% 80%;
+    --input: 260 20% 80%;
+    --ring: 260 30% 70%;
     --radius: 1rem;
   }
 
   /* Feminine Theme Colors */
   .female-theme {
-    --background: 350 100% 98%;
+    --background: 340 60% 85%;
     --foreground: 340 40% 30%;
     --card: 0 0% 100%;
     --card-foreground: 340 40% 30%;
@@ -62,15 +74,15 @@
 /* Female Experience Specific Styles */
 .female-experience-mode {
   @apply transition-all duration-300;
-  background-color: #FFF6F9;
+  background-color: #f894b5;
 }
 
 .female-experience-mode section:nth-child(odd) {
-  background-color: #FFF6F9;
+  background-color: #e34b7e;
 }
 
 .female-experience-mode section:nth-child(even) {
-  background-color: #FFDEE2;
+  background-color: #f9adb6;
 }
 
 .female-experience-mode h1, 
@@ -107,32 +119,35 @@
 
 /* Standard Experience Styles */
 .standard-section:nth-child(odd) {
-  background-color: #FEF7CD; /* Soft Yellow */
+  background-color: #F9F8F3; /* Soft Yellow */
 }
+
 
 .standard-section:nth-child(even) {
-  background-color: #FDE1D3; /* Soft Peach */
+  background-color: #C1AA7F; /* Soft Lavender */
 }
 
+
 .btn-standard-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md;
+  @apply bg-[#C1AATF] text-[#F9F8F3] hover:bg-[#C1AATF]/90 shadow-md; /* Soft Lavender with Light Beige text */
 }
 
 .btn-standard-secondary {
-  @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-md;
+  @apply bg-[#393732] text-[#F9F8F3] hover:bg-[#393732]/90 shadow-md; /* Dark Gray with Light Beige text */
 }
 
 .btn-standard-accent {
-  @apply bg-accent text-accent-foreground hover:bg-accent/90 shadow-md;
+  @apply bg-[#24282B] text-[#F9F8F3] hover:bg-[#24282B]/90 shadow-md; /* Almost Black with Light Beige text */
 }
 
 .podcast-player-standard {
-  @apply bg-primary/30 rounded-xl p-4 border border-accent/10 shadow-md;
+  @apply bg-[#C1AATF]/30 rounded-xl p-4 border border-[#393732]/10 shadow-md; /* Soft Lavender with Dark Gray border */
 }
 
 .location-advice-standard {
-  @apply bg-primary/30 rounded-xl p-6 border border-accent/10 shadow-md;
+  @apply bg-[#C1AATF]/30 rounded-xl p-6 border border-[#393732]/10 shadow-md; /* Soft Lavender with Dark Gray border */
 }
+
 
 /* Interactive Elements */
 .female-experience-mode .interactive-slide {
@@ -141,11 +156,11 @@
 
 /* Modern Card Styles */
 .modern-card {
-  @apply bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-white/15;
+  @apply bg-[#F9F8F3] backdrop-blur-sm border border-[#C1AATF]/20 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-[#F9F8F3]/90; /* Light Beige with Soft Lavender border */
 }
 
 .modern-card-solid {
-  @apply bg-white rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl;
+  @apply bg-[#F9F8F3] rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl; /* Light Beige */
 }
 
 /* Animations */
@@ -153,7 +168,6 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
-
 .female-experience-mode .animate-soft-bounce {
   animation: soft-bounce 3s infinite ease-in-out;
 }
@@ -164,11 +178,11 @@
 }
 
 .chat-bubble.sent {
-  @apply bg-accent text-white ml-auto rounded-tr-none;
+  @apply bg-[#C1AATF] text-[#F9F8F3] ml-auto rounded-tr-none; /* Soft Lavender with Light Beige text */
 }
 
 .chat-bubble.received {
-  @apply bg-white/15 text-white mr-auto rounded-tl-none;
+  @apply bg-[#F9F8F3] text-[#393732] mr-auto rounded-tl-none; /* Light Beige with Dark Gray text */
 }
 
 /* Map Styles */
@@ -208,7 +222,7 @@
 
 /* Modern UI Elements */
 .modern-input {
-  @apply bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent/50;
+  @apply bg-[#F9F8F3] border border-[#C1AATF] rounded-lg px-4 py-2 text-[#393732] placeholder:text-[#393732]/60 focus:outline-none focus:ring-2 focus:ring-[#C1AATF]/50; /* Light Beige with Soft Lavender border */
 }
 
 .modern-button {
