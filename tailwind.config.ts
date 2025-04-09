@@ -26,9 +26,9 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#FEF3F6", // Light Pink (replaced Soft Orange)
+          DEFAULT: "#FEF3F6", // Light Pink
           foreground: "#3A3A3A", // Dark text
-          feminine: "#F6A8C0", // Soft Pink (replaced #F7A8C1)
+          feminine: "#F6A8C0", // Soft Pink
         },
         secondary: {
           DEFAULT: "#FEF7CD", // Soft Yellow
@@ -40,14 +40,14 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#FEF3F6", // Light Pink (replaced Soft Peach)
+          DEFAULT: "#FEF3F6", // Light Pink
           foreground: "#3A3A3A", // Dark text
           feminine: "#FFF0F6", // Very Light Pink
         },
         accent: {
-          DEFAULT: "#F6A8C0", // Soft Pink (replaced Soft Orange)
+          DEFAULT: "#F6A8C0", // Soft Pink
           foreground: "#3A3A3A", // Dark text
-          feminine: "#F6A8C0", // Soft Pink (replaced #F7A8C1)
+          feminine: "#F6A8C0", // Soft Pink
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",

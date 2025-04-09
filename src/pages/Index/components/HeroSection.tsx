@@ -62,7 +62,7 @@ const HeroSection = ({ isFemaleExperience, currentQuoteIndex }: HeroSectionProps
           ? "url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb')" 
           : "url('https://images.unsplash.com/photo-1469041797191-50ace28483c3')"
       }}>
-        <div className={`absolute inset-0 ${isFemaleExperience ? 'bg-primary/30' : 'bg-black/30'}`} />
+        <div className={`absolute inset-0 ${isFemaleExperience ? 'bg-primary-feminine/30' : 'bg-black/30'}`} />
       </div>
       <div className="relative z-10 text-center text-white px-4 animate-fade-in max-w-4xl mx-auto">
         <h1 className={`text-4xl md:text-6xl ${isFemaleExperience ? 'font-serif' : 'font-semibold'} mb-6`}>

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,7 +75,7 @@
 /* Female Experience Specific Styles */
 .female-experience-mode {
   @apply transition-all duration-300;
-  background-color: #f894b5;
+  background-color: #f6a8c0;
 }
 
 .female-experience-mode section:nth-child(odd) {
@@ -201,7 +202,7 @@
 /* Female Experience Toggle Button */
 .female-experience-toggle {
   @apply px-4 py-2 rounded-full text-white font-medium flex items-center gap-2;
-  background-color: #E8819E;
+  background-color: #F6A8C0;
 }
 
 /* Text shadow for luminous effect */
