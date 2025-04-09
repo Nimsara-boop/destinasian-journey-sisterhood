@@ -130,23 +130,23 @@
 
 
 .btn-standard-primary {
-  @apply bg-[#C1AATF] text-[#F9F8F3] hover:bg-[#C1AATF]/90 shadow-md; /* Soft Lavender with Light Beige text */
+  @apply bg-[#C1AATF] text-[#F9F8F3] hover:bg-[#C1AATF] hover:bg-opacity-90 shadow-md; /* Soft Lavender with Light Beige text */
 }
 
 .btn-standard-secondary {
-  @apply bg-[#393732] text-[#F9F8F3] hover:bg-[#393732]/90 shadow-md; /* Dark Gray with Light Beige text */
+  @apply bg-[#393732] text-[#F9F8F3] hover:bg-[#393732] hover:bg-opacity-90 shadow-md; /* Dark Gray with Light Beige text */
 }
 
 .btn-standard-accent {
-  @apply bg-[#24282B] text-[#F9F8F3] hover:bg-[#24282B]/90 shadow-md; /* Almost Black with Light Beige text */
+  @apply bg-[#24282B] text-[#F9F8F3] hover:bg-[#24282B] hover:bg-opacity-90 shadow-md; /* Almost Black with Light Beige text */
 }
 
 .podcast-player-standard {
-  @apply bg-[#C1AATF]/30 rounded-xl p-4 border border-[#393732]/10 shadow-md; /* Soft Lavender with Dark Gray border */
+  @apply bg-[#C1AATF] bg-opacity-30 rounded-xl p-4 border border-[#393732] border-opacity-10 shadow-md; /* Soft Lavender with Dark Gray border */
 }
 
 .location-advice-standard {
-  @apply bg-[#C1AATF]/30 rounded-xl p-6 border border-[#393732]/10 shadow-md; /* Soft Lavender with Dark Gray border */
+  @apply bg-[#C1AATF] bg-opacity-30 rounded-xl p-6 border border-[#393732] border-opacity-10 shadow-md; /* Soft Lavender with Dark Gray border */
 }
 
 
@@ -157,7 +157,7 @@
 
 /* Modern Card Styles */
 .modern-card {
-  @apply bg-[#F9F8F3] backdrop-blur-sm border border-[#C1AATF]/20 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-[#F9F8F3]/90; /* Light Beige with Soft Lavender border */
+  @apply bg-[#F9F8F3] backdrop-blur-sm border border-[#C1AATF] border-opacity-20 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-[#F9F8F3] hover:bg-opacity-90; /* Light Beige with Soft Lavender border */
 }
 
 .modern-card-solid {
@@ -223,7 +223,7 @@
 
 /* Modern UI Elements */
 .modern-input {
-  @apply bg-[#F9F8F3] border border-[#C1AATF] rounded-lg px-4 py-2 text-[#393732] placeholder:text-[#393732]/60 focus:outline-none focus:ring-2 focus:ring-[#C1AATF]/50; /* Light Beige with Soft Lavender border */
+  @apply bg-[#F9F8F3] border border-[#C1AATF] rounded-lg px-4 py-2 text-[#393732] placeholder:text-[#393732]/60 focus:outline-none focus:ring-2 focus:ring-[#C1AATF] focus:ring-opacity-50; /* Light Beige with Soft Lavender border */
 }
 
 .modern-button {
