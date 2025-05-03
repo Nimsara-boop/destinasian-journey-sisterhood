@@ -20,7 +20,7 @@ const FeaturedPackages = ({ featuredDestinations }: FeaturedPackagesProps) => {
   const navigate = useNavigate();
 
   const handlePackageClick = (id: string) => {
-    navigate(`/package/${id}`);
+    navigate(`/packages/${id}`);
   };
 
   return (
@@ -37,8 +37,7 @@ const FeaturedPackages = ({ featuredDestinations }: FeaturedPackagesProps) => {
           {featuredDestinations.map((destination, index) => (
             <Card 
               key={index} 
-              className="overflow-hidden interactive-slide"
-              isClickable
+              className="overflow-hidden interactive-slide cursor-pointer"
               onClick={() => handlePackageClick(destination.id)}
             >
               <div className="relative h-64 w-full">

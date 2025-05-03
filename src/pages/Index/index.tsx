@@ -14,6 +14,7 @@ import FeatureSection from "./components/FeatureSection";
 import AboutSection from "./components/AboutSection";
 import MapButton from "./components/MapButton";
 import { DestinationType } from "./components/FeaturedPackages";
+import { ChallengesSection } from "@/components/challenges/ChallengesSection";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -154,6 +155,8 @@ const Index = () => {
         isFemaleExperience={isFemaleExperience}
         currentQuoteIndex={currentQuoteIndex}
       />
+
+      <ChallengesSection isFemaleExperience={isFemaleExperience} />
 
       {isFemaleExperience ? (
         <>
