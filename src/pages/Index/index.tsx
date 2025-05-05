@@ -15,6 +15,7 @@ import AboutSection from "./components/AboutSection";
 import MapButton from "./components/MapButton";
 import { DestinationType } from "./components/FeaturedPackages";
 import { ChallengesSection } from "@/components/challenges/ChallengesSection";
+import FemaleExperienceToggle from "@/components/FemaleExperienceToggle";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -182,6 +183,8 @@ const Index = () => {
           <AboutSection />
         </>
       )}
+      
+      <FemaleExperienceToggle />
     </div>
   );
 };
