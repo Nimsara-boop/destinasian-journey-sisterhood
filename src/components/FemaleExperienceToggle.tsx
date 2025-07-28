@@ -11,17 +11,17 @@ const FemaleExperienceToggle = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if the user has selected custom experience preferences
-    const hasCustomExperience = localStorage.getItem("customExperience") === "true";
-    setCustomExperience(hasCustomExperience);
+    // Check if the user has selected female experience preferences
+    const hasFemaleExperience = localStorage.getItem("femaleExperience") === "true";
+    setCustomExperience(hasFemaleExperience);
     
-    // Always show the toggle - we're no longer checking for gender
+    // Always show the toggle
     setShowToggle(true);
   }, []);
 
   const handleToggle = (checked: boolean) => {
     setCustomExperience(checked);
-    localStorage.setItem("customExperience", checked.toString());
+    localStorage.setItem("femaleExperience", checked.toString());
     
     toast({
       title: checked ? "Feminine Experience Enabled" : "Standard Experience Enabled",
