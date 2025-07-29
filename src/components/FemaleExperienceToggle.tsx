@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 import { Palette } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const FemaleExperienceToggle = () => {
   const [showToggle, setShowToggle] = useState(false);
@@ -11,11 +10,8 @@ const FemaleExperienceToggle = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if the user has selected female experience preferences
-    const hasFemaleExperience = localStorage.getItem("femaleExperience") === "true";
-    setCustomExperience(hasFemaleExperience);
-    
-    // Always show the toggle
+    const isCustom = localStorage.getItem("femaleExperience") === "true";
+    setCustomExperience(isCustom);
     setShowToggle(true);
   }, []);
 
@@ -24,32 +20,31 @@ const FemaleExperienceToggle = () => {
     localStorage.setItem("femaleExperience", checked.toString());
     
     toast({
-      title: checked ? "Feminine Experience Enabled" : "Standard Experience Enabled",
+      title: checked ? "Female Experience Enabled" : "Standard Experience Enabled",
       description: checked 
-        ? "You'll now see content with our elegant feminine styling" 
-        : "You've switched back to the standard experience",
+        ? "Content now tailored for female travelers" 
+        : "Showing general travel content",
     });
-
-    // In a real app, this would trigger a re-render or state change in the parent component
-    // For now, we'll just reload the page to simulate the experience change
+    
+    // Reload the page to apply the change
     window.location.reload();
   };
 
   if (!showToggle) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 glass rounded-lg shadow-lg p-4 backdrop-blur-md border border-pink-200/50">
-      <div className="flex items-center space-x-2">
-        <Switch 
-          id="custom-mode" 
-          checked={customExperience}
-          onCheckedChange={handleToggle}
-          className="data-[state=checked]:bg-pink-400"
-        />
-        <Label htmlFor="custom-mode" className="text-sm font-medium flex items-center gap-1 text-foreground">
-          <Palette className="h-4 w-4 text-pink-400" />
+    <div className="fixed bottom-6 right-6 z-50 bg-white/95 backdrop-blur-sm border rounded-lg p-4 shadow-lg">
+      <div className="flex items-center space-x-3">
+        <Palette className="h-4 w-4 text-pink-500" />
+        <Label htmlFor="female-experience" className="text-sm font-medium">
           Feminine Experience
         </Label>
+        <Switch
+          id="female-experience"
+          checked={customExperience}
+          onCheckedChange={handleToggle}
+          className="data-[state=checked]:bg-pink-500"
+        />
       </div>
     </div>
   );
