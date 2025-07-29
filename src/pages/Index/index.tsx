@@ -140,6 +140,9 @@ const Index = () => {
     }
   ];
 
+  console.log("Rendering Index with isFemaleExperience:", isFemaleExperience);
+  console.log("Components check:", { HeroSection, ChallengesSection, FemaleExperienceToggle });
+  
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
