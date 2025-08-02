@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import FemaleExperienceToggle from "./FemaleExperienceToggle";
 
 interface ExperienceProviderProps {
   children: React.ReactNode;
@@ -9,24 +8,17 @@ interface ExperienceProviderProps {
 
 const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isFemaleExperience, setIsFemaleExperience] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check login status and preferences
+    // Check login status
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const femaleExperience = localStorage.getItem("femaleExperience") === "true";
     
     setIsLoggedIn(loggedIn);
-    setIsFemaleExperience(femaleExperience);
     setLoading(false);
 
-    // Apply feminine theme if female experience is enabled
-    if (femaleExperience) {
-      document.documentElement.classList.add('female-theme');
-    } else {
-      document.documentElement.classList.remove('female-theme');
-    }
+    // Always apply feminine theme
+    document.documentElement.classList.add('female-theme');
 
     return () => {
       document.documentElement.classList.remove('female-theme');
@@ -42,9 +34,8 @@ const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
   }
 
   return (
-    <div className={isFemaleExperience ? "female-experience-mode" : ""}>
+    <div className="female-experience-mode">
       {children}
-      <FemaleExperienceToggle />
     </div>
   );
 };

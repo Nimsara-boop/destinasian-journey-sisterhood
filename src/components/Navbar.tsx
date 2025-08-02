@@ -1,18 +1,15 @@
 
 import { useState, useEffect } from "react";
-import { Menu, X, Calendar, Users, User, LogOut, Heart } from "lucide-react";
+import { Menu, X, Calendar, Users, User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Switch } from "@/components/ui/switch";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-  const [isFemale, setIsFemale] = useState(false);
-  const [femaleExperience, setFemaleExperience] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -24,13 +21,9 @@ const Navbar = () => {
     // Check login status
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
     const storedUsername = localStorage.getItem("username") || "";
-    const gender = localStorage.getItem("gender");
-    const femaleExp = localStorage.getItem("femaleExperience") === "true";
     
     setIsLoggedIn(loggedInStatus);
     setUsername(storedUsername);
-    setIsFemale(gender === "female");
-    setFemaleExperience(femaleExp);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -40,7 +33,6 @@ const Navbar = () => {
     // Clear user data from localStorage
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("username");
-    localStorage.removeItem("gender");
     localStorage.removeItem("femaleExperience");
     
     setIsLoggedIn(false);
@@ -53,20 +45,6 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const toggleFemaleExperience = () => {
-    const newValue = !femaleExperience;
-    localStorage.setItem("femaleExperience", newValue.toString());
-    
-    toast({
-      title: newValue ? "Female Experience Enabled" : "Standard Experience Enabled",
-      description: newValue 
-        ? "You'll now see content tailored for women travelers" 
-        : "You've switched back to the standard experience",
-    });
-    
-    // Reload the page to update the experience
-    window.location.reload();
-  };
 
   const navItems = [
     { label: "Events", href: "/events", icon: Calendar },
@@ -100,29 +78,13 @@ const Navbar = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors 
-                    ${femaleExperience 
-                      ? 'bg-primary-feminine/30 hover:bg-primary-feminine/50 text-white shadow-md border border-primary-feminine/30' 
-                      : 'bg-primary/30 hover:bg-primary/50 text-white shadow-md border border-primary/30'}`}
+                  className="flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors bg-primary-feminine/30 hover:bg-primary-feminine/50 text-white shadow-md border border-primary-feminine/30"
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
                 </Link>
               );
             })}
-            
-            {/* Female Experience Toggle for female users */}
-            {isLoggedIn && isFemale && (
-              <div className="flex items-center">
-                <button 
-                  onClick={toggleFemaleExperience}
-                  className={`female-experience-toggle ${femaleExperience ? 'bg-pink-500' : 'bg-gray-300'}`}
-                >
-                  <Heart className="w-4 h-4" />
-                  {femaleExperience ? "Female Experience" : "Standard Mode"}
-                </button>
-              </div>
-            )}
             
             {isLoggedIn ? (
               <Button 
@@ -165,10 +127,7 @@ const Navbar = () => {
                   <Link
                     key={item.label}
                     to={item.href}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md w-full
-                      ${femaleExperience 
-                        ? 'bg-primary-feminine/30 hover:bg-primary-feminine/50 text-gray-800 shadow-sm border border-primary-feminine/30' 
-                        : 'bg-primary/30 hover:bg-primary/50 text-gray-800 shadow-sm border border-primary/30'}`}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md w-full bg-primary-feminine/30 hover:bg-primary-feminine/50 text-gray-800 shadow-sm border border-primary-feminine/30"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Icon className="w-4 h-4" />
@@ -176,19 +135,6 @@ const Navbar = () => {
                   </Link>
                 );
               })}
-              
-              {/* Female Experience Toggle for mobile */}
-              {isLoggedIn && isFemale && (
-                <div className="flex items-center px-3 py-2">
-                  <button 
-                    onClick={toggleFemaleExperience}
-                    className={`female-experience-toggle w-full text-center ${femaleExperience ? 'bg-pink-500' : 'bg-gray-300'}`}
-                  >
-                    <Heart className="w-4 h-4" />
-                    {femaleExperience ? "Female Experience" : "Standard Mode"}
-                  </button>
-                </div>
-              )}
               
               {isLoggedIn ? (
                 <button
