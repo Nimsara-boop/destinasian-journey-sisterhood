@@ -14,8 +14,6 @@ import FeatureSection from "./components/FeatureSection";
 import AboutSection from "./components/AboutSection";
 import MapButton from "./components/MapButton";
 import { DestinationType } from "./components/FeaturedPackages";
-import { ChallengesSection } from "@/components/challenges/ChallengesSection";
-import FemaleExperienceToggle from "@/components/FemaleExperienceToggle";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -140,9 +138,6 @@ const Index = () => {
     }
   ];
 
-  console.log("Rendering Index with isFemaleExperience:", isFemaleExperience);
-  console.log("Components check:", { HeroSection, ChallengesSection, FemaleExperienceToggle });
-  
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -159,8 +154,6 @@ const Index = () => {
         isFemaleExperience={isFemaleExperience}
         currentQuoteIndex={currentQuoteIndex}
       />
-
-      <ChallengesSection isFemaleExperience={isFemaleExperience} />
 
       {isFemaleExperience ? (
         <>
@@ -186,8 +179,6 @@ const Index = () => {
           <AboutSection />
         </>
       )}
-      
-      <FemaleExperienceToggle />
     </div>
   );
 };

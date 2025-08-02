@@ -1,41 +1,67 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
-import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
 import Events from "./pages/events";
 import EventDetail from "./pages/events/EventDetail";
 import Community from "./pages/Community";
-import Profile from "./pages/Profile";
-import Messages from "./pages/messages";
-import ChallengesPage from "./pages/challenges";
-import ChallengeDetail from "./pages/challenges/ChallengeDetail";
-import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
-import { Toaster } from "@/components/ui/toaster";
 
-function App() {
+const queryClient = new QueryClient();
+
+const App = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
   return (
-    <Router>
-      <ExperienceProvider>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/events/:id" element={<EventDetail />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/packages/:id" element={<PackageDetail />} />
-          <Route path="/challenges" element={<ChallengesPage />} />
-          <Route path="/challenges/:id" element={<ChallengeDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
         <Toaster />
-      </ExperienceProvider>
-    </Router>
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            
+            {/* Protected routes */}
+            <Route path="/" element={
+              <ExperienceProvider>
+                <Index />
+              </ExperienceProvider>
+            } />
+            <Route path="/profile" element={
+              <ExperienceProvider>
+                <Profile />
+              </ExperienceProvider>
+            } />
+            <Route path="/events" element={
+              <ExperienceProvider>
+                <Events />
+              </ExperienceProvider>
+            } />
+            <Route path="/events/:id" element={
+              <ExperienceProvider>
+                <EventDetail />
+              </ExperienceProvider>
+            } />
+            <Route path="/community" element={
+              <ExperienceProvider>
+                <Community />
+              </ExperienceProvider>
+            } />
+            <Route path="/package/:id" element={<PackageDetail />} />
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;

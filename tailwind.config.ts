@@ -26,28 +26,28 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#FEF3F6", // Light Pink
-          foreground: "#3A3A3A", // Dark text
-          feminine: "#F6A8C0", // Soft Pink
+          DEFAULT: "#C2A87D",
+          foreground: "#ffffff",
+          feminine: "#E8819E",
         },
         secondary: {
-          DEFAULT: "#FEF7CD", // Soft Yellow
-          foreground: "#3A3A3A", // Dark text
-          feminine: "#FCD5E5", // Light Pink
+          DEFAULT: "#E8D3D1",
+          foreground: "#1A1A1A",
+          feminine: "#F7D0E0",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#FEF3F6", // Light Pink
-          foreground: "#3A3A3A", // Dark text
-          feminine: "#FFF0F6", // Very Light Pink
+          DEFAULT: "#F5F0EC",
+          foreground: "#1A1A1A",
+          feminine: "#FFEDF5",
         },
         accent: {
-          DEFAULT: "#F6A8C0", // Soft Pink
-          foreground: "#3A3A3A", // Dark text
-          feminine: "#F6A8C0", // Soft Pink
+          DEFAULT: "#E8D3D1",
+          foreground: "#1A1A1A",
+          feminine: "#FFC0D6",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -56,18 +56,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        pink: {
-          50: "#FFF0F6",
-          100: "#FCD5E5",
-          200: "#FAB8D9",
-          300: "#F492C1",
-          400: "#F06CA8",
-          500: "#E84A8A",
-          600: "#C83571",
-          700: "#A62458",
-          800: "#851A45",
-          900: "#630D2F",
         },
       },
       fontFamily: {

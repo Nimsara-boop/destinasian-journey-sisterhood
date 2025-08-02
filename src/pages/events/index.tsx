@@ -1,7 +1,8 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import { Search, Filter, ChevronDown, Menu, MapPin, Calendar, Users, Plus, Utensils, Calculator } from "lucide-react";
+import { Search, Filter, ChevronDown, Menu, MapPin, Calendar, Users, Plus, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import EventTabs from "./components/EventTabs";
@@ -27,11 +28,16 @@ export default function Events() {
   const { events, toggleAttendance } = useEvents();
   
   const filteredEvents = events.filter(event => {
+    // Filter by category
     const categoryMatch = filter === "all" || event.category === filter;
+    
+    // Filter by search query
     const searchMatch = 
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filter by tab (events or promotions)
     const tabMatch = 
       (activeTab === "events" && !event.isPromotion) || 
       (activeTab === "promotions" && event.isPromotion) ||
@@ -67,11 +73,7 @@ export default function Events() {
           </div>
           <div className="flex gap-2">
             <Tabs value={displayView} onValueChange={(value) => setDisplayView(value as "list" | "calendar" | "planner")}>
-              <TabsList className="mb-6">
-                <TabsTrigger value="planner" className="flex items-center">
-                  <Calculator className="w-4 h-4 mr-2" />
-                  Budget Planner
-                </TabsTrigger>
+              <TabsList>
                 <TabsTrigger value="list">
                   <Menu className="w-4 h-4 mr-2" />
                   List View
@@ -80,13 +82,11 @@ export default function Events() {
                   <Calendar className="w-4 h-4 mr-2" />
                   Calendar
                 </TabsTrigger>
+                <TabsTrigger value="planner">
+                  <Users className="w-4 h-4 mr-2" />
+                  Budget Planner
+                </TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="planner" className="mt-6">
-                <div className="max-w-4xl mx-auto">
-                  <BudgetPlanner />
-                </div>
-              </TabsContent>
             </Tabs>
             
             <Dialog open={isCreateEventOpen} onOpenChange={setIsCreateEventOpen}>
@@ -111,6 +111,7 @@ export default function Events() {
 
         {displayView === "list" && (
           <>
+            {/* Main Tabs for Events vs Promotions */}
             <EventTabs 
               activeTab={activeTab} 
               onTabChange={setActiveTab}
@@ -118,6 +119,7 @@ export default function Events() {
               onViewModeChange={setViewMode}
             />
 
+            {/* Search & Filter Bar */}
             <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
               <div className="flex flex-col md:flex-row gap-3">
                 <div className="relative flex-grow">
@@ -193,6 +195,12 @@ export default function Events() {
               location="Sri Lanka" 
               onEventSelect={handleEventSelect}
             />
+          </div>
+        )}
+        
+        {displayView === "planner" && (
+          <div className="mt-6">
+            <BudgetPlanner />
           </div>
         )}
       </div>

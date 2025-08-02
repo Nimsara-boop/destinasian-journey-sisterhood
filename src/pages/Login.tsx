@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { User, Lock, LogIn, AlertCircle, Eye, EyeOff, Mountain, Building, Palmtree, MapPin } from "lucide-react";
+import { User, Lock, LogIn, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-type DestinationType = "mountain" | "beach" | "city" | "village" | null;
-type Step = "credentials" | "visited" | "wishlist";
+type GenderType = "male" | "female" | "non-binary" | "prefer-not-to-say" | null;
+type Step = "credentials" | "gender" | "preference";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,44 +20,11 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [visitedDestinations, setVisitedDestinations] = useState<DestinationType[]>([]);
-  const [wishlistDestinations, setWishlistDestinations] = useState<DestinationType[]>([]);
+  const [gender, setGender] = useState<GenderType>(null);
+  const [femaleExperience, setFemaleExperience] = useState(false);
   const [currentStep, setCurrentStep] = useState<Step>("credentials");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const destinationOptions = [
-    { 
-      type: "mountain" as DestinationType, 
-      label: "Mountains", 
-      icon: <Mountain className="w-5 h-5" />,
-      image: "https://images.unsplash.com/photo-1483728642387-6c3bdd4587e5?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
-    },
-    { 
-      type: "beach" as DestinationType, 
-      label: "Beaches", 
-      icon: <Palmtree className="w-5 h-5" />,
-      image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
-    },
-    { 
-      type: "city" as DestinationType, 
-      label: "Cities", 
-      icon: <Building className="w-5 h-5" />,
-      image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
-    },
-    { 
-      type: "village" as DestinationType, 
-      label: "Villages", 
-      icon: <MapPin className="w-5 h-5" />,
-      image: "https://images.unsplash.com/photo-1518439179742-732ccb09ce6b?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
-    }
-  ];
-
-  useEffect(() => {
-    // Check if there's a redirect path stored
-    const redirectPath = localStorage.getItem("redirectAfterLogin");
-    // We'll use this in handleCompleteLogin
-  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,53 +49,40 @@ const Login = () => {
         return;
       }
       
-      setCurrentStep("visited");
-    } else if (currentStep === "visited") {
-      if (visitedDestinations.length === 0) {
+      setCurrentStep("gender");
+    } else if (currentStep === "gender") {
+      if (!gender) {
         toast({
           title: "Error",
-          description: "Please select at least one destination you've visited",
+          description: "Please select your gender",
           variant: "destructive",
         });
         return;
       }
       
-      setCurrentStep("wishlist");
-    } else if (currentStep === "wishlist") {
-      if (wishlistDestinations.length === 0) {
-        toast({
-          title: "Error",
-          description: "Please select at least one destination you'd like to visit",
-          variant: "destructive",
-        });
-        return;
+      if (gender === "female") {
+        setCurrentStep("preference");
+      } else {
+        // For non-female users, go straight to the main site
+        handleCompleteLogin(false);
       }
-      
-      handleCompleteLogin();
     }
   };
 
-  const handleCompleteLogin = () => {
+  const handleCompleteLogin = (femaleExperienceOnly: boolean) => {
     // Save user preferences in localStorage
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("username", username);
-    localStorage.setItem("visitedDestinations", JSON.stringify(visitedDestinations));
-    localStorage.setItem("wishlistDestinations", JSON.stringify(wishlistDestinations));
+    localStorage.setItem("gender", gender || "");
+    localStorage.setItem("femaleExperience", femaleExperienceOnly.toString());
     
     toast({
       title: "Welcome!",
       description: `You are now logged in as ${username}`,
     });
     
-    // Check if there's a redirect path stored
-    const redirectPath = localStorage.getItem("redirectAfterLogin");
-    if (redirectPath) {
-      localStorage.removeItem("redirectAfterLogin");
-      navigate(redirectPath);
-    } else {
-      // Default redirect to home page
-      navigate("/");
-    }
+    // Navigate to home page
+    navigate("/");
   };
 
   const togglePasswordVisibility = () => {
@@ -136,35 +93,19 @@ const Login = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const toggleDestination = (destination: DestinationType, isVisited: boolean) => {
-    if (isVisited) {
-      if (visitedDestinations.includes(destination)) {
-        setVisitedDestinations(visitedDestinations.filter(d => d !== destination));
-      } else {
-        setVisitedDestinations([...visitedDestinations, destination]);
-      }
-    } else {
-      if (wishlistDestinations.includes(destination)) {
-        setWishlistDestinations(wishlistDestinations.filter(d => d !== destination));
-      } else {
-        setWishlistDestinations([...wishlistDestinations, destination]);
-      }
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md p-6 space-y-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold">
             {currentStep === "credentials" && "Sign In"}
-            {currentStep === "visited" && "Where Have You Been?"}
-            {currentStep === "wishlist" && "Where Would You Like to Go?"}
+            {currentStep === "gender" && "Tell Us About Yourself"}
+            {currentStep === "preference" && "Customize Your Experience"}
           </h1>
           <p className="text-muted-foreground mt-2">
             {currentStep === "credentials" && "Enter your account details to continue"}
-            {currentStep === "visited" && "Select destinations you've already visited"}
-            {currentStep === "wishlist" && "Select destinations you'd like to visit in the future"}
+            {currentStep === "gender" && "This helps us personalize your experience"}
+            {currentStep === "preference" && "Choose your preferred experience"}
           </p>
         </div>
 
@@ -239,98 +180,65 @@ const Login = () => {
             </>
           )}
 
-          {currentStep === "visited" && (
+          {currentStep === "gender" && (
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {destinationOptions.map((destination) => (
-                  <div 
-                    key={destination.type} 
-                    className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-200 ${
-                      visitedDestinations.includes(destination.type) 
-                        ? "ring-2 ring-primary ring-offset-2" 
-                        : "hover:shadow-md"
-                    }`}
-                    onClick={() => toggleDestination(destination.type, true)}
-                  >
-                    <div className="aspect-video w-full overflow-hidden">
-                      <img 
-                        src={destination.image} 
-                        alt={destination.label}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500";
-                        }}
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-3">
-                      <div className="flex items-center text-white">
-                        {destination.icon}
-                        <span className="ml-2 font-medium">{destination.label}</span>
-                      </div>
-                    </div>
-                    {visitedDestinations.includes(destination.type) && (
-                      <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <Label>Gender</Label>
+              <RadioGroup value={gender || ""} onValueChange={(value) => setGender(value as GenderType)}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="female" id="female" />
+                  <Label htmlFor="female">Female</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="male" id="male" />
+                  <Label htmlFor="male">Male</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="non-binary" id="non-binary" />
+                  <Label htmlFor="non-binary">Non-binary</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="prefer-not-to-say" id="prefer-not-to-say" />
+                  <Label htmlFor="prefer-not-to-say">Prefer not to say</Label>
+                </div>
+              </RadioGroup>
+            </div>
+          )}
+
+          {currentStep === "preference" && (
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h3 className="font-medium">Would you like an exclusively female experience?</h3>
+                <p className="text-sm text-muted-foreground">
+                  Our female-focused experience offers tailored travel packages and recommendations specifically designed for women travelers.
+                </p>
+              </div>
+              
+              <div className="flex flex-col space-y-4">
+                <Button 
+                  type="button" 
+                  onClick={() => handleCompleteLogin(true)}
+                  className="w-full"
+                >
+                  Yes, enable female-focused experience
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => handleCompleteLogin(false)}
+                  className="w-full"
+                >
+                  No, use standard experience
+                </Button>
               </div>
             </div>
           )}
 
-          {currentStep === "wishlist" && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {destinationOptions.map((destination) => (
-                  <div 
-                    key={destination.type} 
-                    className={`relative overflow-hidden rounded-lg cursor-pointer transition-all duration-200 ${
-                      wishlistDestinations.includes(destination.type) 
-                        ? "ring-2 ring-primary ring-offset-2" 
-                        : "hover:shadow-md"
-                    }`}
-                    onClick={() => toggleDestination(destination.type, false)}
-                  >
-                    <div className="aspect-video w-full overflow-hidden">
-                      <img 
-                        src={destination.image} 
-                        alt={destination.label}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500";
-                        }}
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-3">
-                      <div className="flex items-center text-white">
-                        {destination.icon}
-                        <span className="ml-2 font-medium">{destination.label}</span>
-                      </div>
-                    </div>
-                    {wishlistDestinations.includes(destination.type) && (
-                      <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+          {(currentStep === "credentials" || currentStep === "gender") && (
+            <Button type="submit" className="w-full">
+              <LogIn className="w-4 h-4 mr-2" />
+              {currentStep === "credentials" ? "Sign In" : "Continue"}
+            </Button>
           )}
-
-          <Button type="submit" className="w-full">
-            <LogIn className="w-4 h-4 mr-2" />
-            {currentStep === "credentials" && "Sign In"}
-            {currentStep === "visited" && "Continue"}
-            {currentStep === "wishlist" && "Complete Sign In"}
-          </Button>
         </form>
       </Card>
     </div>

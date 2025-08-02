@@ -2,38 +2,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '@fontsource/playfair-display/400.css';
-@import '@fontsource/playfair-display/700.css';
 
 @layer base {
   :root {
-    --background: 60 10% 95%; /* Soft yellowish background #FEF7CD */
-    --foreground: 30 5% 20%; /* Dark text */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
-    --card-foreground: 30 5% 20%;
+    --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 30 5% 20%;
-    
-    --primary: 260 30% 70%; /* Soft Lavender (#C1AATF) */
-    --primary-foreground: 0 0% 100%; /* White for primary text */
-    --secondary: 260 20% 90%; /* Light Lavender for secondary elements */
-    --secondary-foreground: 30 5% 20%; /* Dark Gray for secondary text */
-    --muted: 60 10% 95%; /* Light Beige for muted elements */
-    --muted-foreground: 30 5% 50%; /* Gray for muted text */
-    --accent: 260 20% 90%; /* Light Lavender for accents */
-    --accent-foreground: 30 5% 20%; /* Dark Gray for accent text */
-    --destructive: 0 85% 60%; /* Red for destructive actions */
-    --destructive-foreground: 0 0% 98%; /* White for destructive text */
-
-    --border: 260 20% 80%;
-    --input: 260 20% 80%;
-    --ring: 260 30% 70%;
+    --popover-foreground: 240 10% 3.9%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
     --radius: 1rem;
   }
 
   /* Feminine Theme Colors */
   .female-theme {
-    --background: 340 60% 85%;
+    --background: 350 100% 98%;
     --foreground: 340 40% 30%;
     --card: 0 0% 100%;
     --card-foreground: 340 40% 30%;
@@ -64,104 +50,49 @@
   }
 
   ::selection {
-    @apply bg-accent/20 text-accent;
+    @apply bg-primary/20 text-primary;
   }
 }
 
 .glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20;
+  @apply bg-white/80 backdrop-blur-md border border-white/20;
 }
 
 /* Female Experience Specific Styles */
 .female-experience-mode {
   @apply transition-all duration-300;
-  background-color: #f6a8c0;
+  background-color: #FFEDF5;
 }
 
 .female-experience-mode section:nth-child(odd) {
-  background-color: #e34b7e;
+  background-color: #FFF6F9;
 }
 
 .female-experience-mode section:nth-child(even) {
-  background-color: #f9adb6;
+  background-color: #FFDEE2;
 }
 
 .female-experience-mode h1, 
 .female-experience-mode h2, 
 .female-experience-mode h3 {
-  font-family: 'Playfair Display', serif;
-  @apply tracking-tight;
+  @apply font-serif;
 }
 
 .female-experience-mode .btn-primary {
-  @apply bg-pink-400 text-white;
+  @apply bg-primary text-white;
 }
 
 .female-experience-mode .podcast-player {
-  @apply bg-pink-100 rounded-xl p-4 border border-pink-200;
+  @apply bg-secondary/50 rounded-xl p-4;
 }
 
 .female-experience-mode .location-advice {
-  @apply bg-pink-50 rounded-xl p-6 border border-pink-200;
+  @apply bg-muted rounded-xl p-6;
 }
-
-.female-experience-mode .modern-card {
-  @apply bg-white/80 backdrop-blur-sm border border-pink-200/20 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-white/90;
-}
-
-.female-experience-mode button {
-  @apply rounded-full;
-}
-
-.female-experience-mode .interactive-element:hover {
-  transform: translateY(-3px);
-  @apply shadow-md shadow-pink-100;
-}
-
-/* Standard Experience Styles */
-.standard-section:nth-child(odd) {
-  background-color: #F9F8F3; /* Soft Yellow */
-}
-
-
-.standard-section:nth-child(even) {
-  background-color: #C1AA7F; /* Soft Lavender */
-}
-
-
-.btn-standard-primary {
-  @apply bg-[#C1AATF] text-[#F9F8F3] hover:bg-[#C1AATF] hover:bg-opacity-90 shadow-md; /* Soft Lavender with Light Beige text */
-}
-
-.btn-standard-secondary {
-  @apply bg-[#393732] text-[#F9F8F3] hover:bg-[#393732] hover:bg-opacity-90 shadow-md; /* Dark Gray with Light Beige text */
-}
-
-.btn-standard-accent {
-  @apply bg-[#24282B] text-[#F9F8F3] hover:bg-[#24282B] hover:bg-opacity-90 shadow-md; /* Almost Black with Light Beige text */
-}
-
-.podcast-player-standard {
-  @apply bg-[#C1AATF] bg-opacity-30 rounded-xl p-4 border border-[#393732] border-opacity-10 shadow-md; /* Soft Lavender with Dark Gray border */
-}
-
-.location-advice-standard {
-  @apply bg-[#C1AATF] bg-opacity-30 rounded-xl p-6 border border-[#393732] border-opacity-10 shadow-md; /* Soft Lavender with Dark Gray border */
-}
-
 
 /* Interactive Elements */
 .female-experience-mode .interactive-slide {
   @apply transition-all duration-300 hover:shadow-lg hover:scale-[1.02] cursor-pointer;
-}
-
-/* Modern Card Styles */
-.modern-card {
-  @apply bg-[#F9F8F3] backdrop-blur-sm border border-[#C1AATF] border-opacity-20 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-[#F9F8F3] hover:bg-opacity-90; /* Light Beige with Soft Lavender border */
-}
-
-.modern-card-solid {
-  @apply bg-[#F9F8F3] rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl; /* Light Beige */
 }
 
 /* Animations */
@@ -169,6 +100,7 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
+
 .female-experience-mode .animate-soft-bounce {
   animation: soft-bounce 3s infinite ease-in-out;
 }
@@ -179,11 +111,11 @@
 }
 
 .chat-bubble.sent {
-  @apply bg-[#C1AATF] text-[#F9F8F3] ml-auto rounded-tr-none; /* Soft Lavender with Light Beige text */
+  @apply bg-primary text-white ml-auto rounded-tr-none;
 }
 
 .chat-bubble.received {
-  @apply bg-[#F9F8F3] text-[#393732] mr-auto rounded-tl-none; /* Light Beige with Dark Gray text */
+  @apply bg-muted text-foreground mr-auto rounded-tl-none;
 }
 
 /* Map Styles */
@@ -202,34 +134,14 @@
 /* Female Experience Toggle Button */
 .female-experience-toggle {
   @apply px-4 py-2 rounded-full text-white font-medium flex items-center gap-2;
-  background-color: #F6A8C0;
+  background-color: #E8819E;
 }
 
 /* Text shadow for luminous effect */
 .text-shadow-glow {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 .text-shadow-sm {
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-}
-
-/* Custom Experience Toggle Button */
-.custom-experience-toggle {
-  @apply px-4 py-2 rounded-full font-medium flex items-center gap-2;
-  background-color: #FF6F61;
-  color: white;
-}
-
-/* Modern UI Elements */
-.modern-input {
-  @apply bg-[#F9F8F3] border border-[#C1AATF] rounded-lg px-4 py-2 text-[#393732] placeholder:text-[#393732]/60 focus:outline-none focus:ring-2 focus:ring-[#C1AATF] focus:ring-opacity-50; /* Light Beige with Soft Lavender border */
-}
-
-.modern-button {
-  @apply rounded-lg px-6 py-2.5 font-medium transition-all duration-200 shadow-md hover:shadow-lg;
-}
-
-.pill-button {
-  @apply rounded-full px-6 py-2 font-medium transition-all duration-200 shadow-md hover:shadow-lg;
+  text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
 }

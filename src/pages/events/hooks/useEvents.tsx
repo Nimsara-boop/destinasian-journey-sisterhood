@@ -18,7 +18,7 @@ export function useEvents() {
       organizer: "Sarah Chen",
       attendees: 12,
       category: "cultural",
-      imageUrl: "https://images.unsplash.com/photo-1546708770-599a3abdf230?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1546708770-599a3abdf230",
       attending: true
     },
     {
@@ -32,7 +32,7 @@ export function useEvents() {
       organizer: "Maya Patel",
       attendees: 8,
       category: "community",
-      imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
       attending: false
     },
     {
@@ -46,7 +46,7 @@ export function useEvents() {
       organizer: "Leah Johnson",
       attendees: 15,
       category: "outdoor",
-      imageUrl: "https://images.unsplash.com/photo-1580674684029-9947ef442203?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1580674684029-9947ef442203",
       attending: false
     },
     {
@@ -60,7 +60,7 @@ export function useEvents() {
       organizer: "David Lee",
       attendees: 10,
       category: "food",
-      imageUrl: "https://images.unsplash.com/photo-1567529854900-8afc0aca3ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1534766555764-ce878a5e3a2b",
       attending: true
     },
     {
@@ -74,7 +74,7 @@ export function useEvents() {
       organizer: "Emma Wilson",
       attendees: 6,
       category: "wellness",
-      imageUrl: "https://images.unsplash.com/photo-1586041828039-b8d193d6d1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1545389336-cf090694435e",
       attending: false
     },
     {
@@ -88,7 +88,7 @@ export function useEvents() {
       organizer: "Kaema Sutra",
       attendees: 45,
       category: "food",
-      imageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
       attending: false,
       isPromotion: true,
       promotionType: 'restaurant',
@@ -107,7 +107,7 @@ export function useEvents() {
       organizer: "Shangri-La Hotel",
       attendees: 32,
       category: "food",
-      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
       attending: false,
       isPromotion: true,
       promotionType: 'hotel',
@@ -126,7 +126,7 @@ export function useEvents() {
       organizer: "Cafe Kumbuk",
       attendees: 18,
       category: "entertainment",
-      imageUrl: "https://images.unsplash.com/photo-1559336197-ded8aaa244bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1559336197-ded8aaa244bc",
       attending: false,
       isPromotion: true,
       promotionType: 'cafe',
@@ -145,7 +145,7 @@ export function useEvents() {
       organizer: "Jetwing Beach",
       attendees: 24,
       category: "wellness",
-      imageUrl: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1540555700478-4be289fbecef",
       attending: false,
       isPromotion: true,
       promotionType: 'hotel',
@@ -164,7 +164,7 @@ export function useEvents() {
       organizer: "Ministry of Crab",
       attendees: 38,
       category: "food",
-      imageUrl: "https://images.unsplash.com/photo-1607478900766-efe13248b125?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
       attending: false,
       isPromotion: true,
       promotionType: 'restaurant',
@@ -192,14 +192,5 @@ export function useEvents() {
     }
   };
   
-  const addEvent = (newEvent: EventType) => {
-    setEvents(prevEvents => [newEvent, ...prevEvents]);
-    
-    toast({
-      title: "Event Published",
-      description: `Your event "${newEvent.title}" is now visible to the community!`,
-    });
-  };
-  
-  return { events, toggleAttendance, addEvent };
+  return { events, toggleAttendance };
 }

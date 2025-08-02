@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -46,16 +47,14 @@ const EventDetail = () => {
   
   const event = events.find(e => e.id === parseInt(id || "0"));
   
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = 'https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
-  };
-  
+  // Scroll to bottom of messages
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, activeTab]);
   
+  // Convert event location to map location format
   const mapLocations: Location[] = event ? [
     {
       id: event.id.toString(),
@@ -84,6 +83,7 @@ const EventDetail = () => {
   };
   
   const handleShare = () => {
+    // In a real app, use the Web Share API
     navigator.clipboard.writeText(window.location.href);
     
     toast({
@@ -132,12 +132,12 @@ const EventDetail = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container max-w-7xl mx-auto pt-24 px-4 pb-12">
+      <div className="container mx-auto pt-24 px-4 pb-12">
         <Button 
           variant="ghost" 
-          className="mb-6" 
+          className="mb-4" 
           onClick={handleBack}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -145,25 +145,14 @@ const EventDetail = () => {
         </Button>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="relative h-[400px] rounded-xl overflow-hidden shadow-lg bg-gray-100">
-              {event.imageUrl ? (
-                <img 
-                  src={event.imageUrl} 
-                  alt={event.title}
-                  className="w-full h-full object-cover"
-                  onError={handleImageError}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                  <ImageIcon className="w-24 h-24 text-gray-400" />
-                </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h1 className="text-4xl font-bold mb-2">{event.title}</h1>
-                <p className="text-lg opacity-90">{event.description}</p>
-              </div>
+          {/* Main Content */}
+          <div className="lg:col-span-2">
+            <div className="relative h-64 md:h-96 rounded-lg overflow-hidden mb-6">
+              <img 
+                src={event.imageUrl} 
+                alt={event.title}
+                className="w-full h-full object-cover"
+              />
               <Badge 
                 className="absolute top-4 right-4 capitalize"
                 variant={event.attending ? "default" : "secondary"}
@@ -189,7 +178,7 @@ const EventDetail = () => {
                 </TabsTrigger>
                 <TabsTrigger value="budget" className="flex gap-2">
                   <Calculator className="h-4 w-4" />
-                  Plan Budget
+                  Budget Planner
                 </TabsTrigger>
               </TabsList>
               
@@ -336,13 +325,15 @@ const EventDetail = () => {
             </Tabs>
           </div>
           
-          <div className="space-y-6">
-            <Card>
+          {/* Sidebar */}
+          <div>
+            <Card className="mb-6">
               <CardContent className="pt-6">
                 <div className="space-y-4">
                   <Button 
-                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" 
+                    className="w-full" 
                     size="lg"
+                    variant={event.attending ? "outline" : "default"}
                     onClick={handleToggleAttendance}
                   >
                     {event.attending ? (
@@ -372,49 +363,10 @@ const EventDetail = () => {
             
             <Card>
               <CardContent className="pt-6">
-                <h3 className="font-semibold text-lg mb-4">Event Details</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Date</p>
-                      <p className="text-muted-foreground">{event.date}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Time</p>
-                      <p className="text-muted-foreground">{event.time}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Location</p>
-                      <p className="text-muted-foreground">{event.location}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <Users className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-medium">Attendees</p>
-                      <p className="text-muted-foreground">{event.attendees} people attending</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardContent className="pt-6">
                 <h3 className="font-semibold text-lg mb-4">Who's Going</h3>
                 <div className="flex flex-wrap mb-3">
                   {Array.from({ length: Math.min(8, event.attendees) }).map((_, i) => (
-                    <Avatar key={i} className="h-8 w-8 border-2 border-background -ml-2 first:ml-0 hover:translate-y-[-2px] transition-transform">
+                    <Avatar key={i} className="h-8 w-8 border-2 border-background -ml-2 first:ml-0">
                       <AvatarFallback>{["S", "A", "M", "J", "L", "R", "P", "D"][i % 8]}</AvatarFallback>
                     </Avatar>
                   ))}

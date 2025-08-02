@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { 
   Calendar, Clock, MapPin, Users, ArrowRight, Star, 
-  Utensils, Hotel, Coffee, ImageIcon 
+  Utensils, Hotel, Coffee 
 } from "lucide-react";
 import { EventType } from "../types";
 
@@ -44,40 +44,17 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
     }
   };
 
-  // Image error handling function
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    // Use more relevant Sri Lanka tourism images as fallbacks
-    const fallbackImages = [
-      'https://images.unsplash.com/photo-1586041828039-b8d193d6d1dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80', // Sigiriya
-      'https://images.unsplash.com/photo-1546708770-599a3abdf230?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80', // Kandy
-      'https://images.unsplash.com/photo-1580674684029-9947ef442203?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80', // Ella
-      'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80', // Sri Lanka Beach
-      'https://images.unsplash.com/photo-1590611936760-eeb9bc598548?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'  // Tea Plantation
-    ];
-    
-    // Choose a random fallback image
-    const randomIndex = Math.floor(Math.random() * fallbackImages.length);
-    e.currentTarget.src = fallbackImages[randomIndex];
-  };
-
   // Display differently based on whether it's a promotion or regular event
   if (event.isPromotion) {
     return (
-      <Card className="overflow-hidden hover:shadow-md transition-shadow">
+      <Card className="overflow-hidden hover:shadow-md transition-shadow" isClickable>
         <Link to={`/events/${event.id}`} className="block">
-          <div className="relative h-48 bg-gray-100">
-            {event.imageUrl ? (
-              <img 
-                src={event.imageUrl}
-                alt={event.title}
-                className="w-full h-full object-cover"
-                onError={handleImageError}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                <ImageIcon className="w-12 h-12 text-gray-400" />
-              </div>
-            )}
+          <div className="relative h-48">
+            <img 
+              src={event.imageUrl}
+              alt={event.title}
+              className="w-full h-full object-cover"
+            />
             <Badge 
               className="absolute top-2 right-2 capitalize"
               variant="secondary"
@@ -92,7 +69,6 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
             )}
           </div>
         </Link>
-        
         <CardContent className="p-4">
           <Link to={`/events/${event.id}`} className="block">
             <div className="flex items-center justify-between mb-2">
@@ -159,21 +135,14 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
     );
   } else {
     return (
-      <Card className="overflow-hidden hover:shadow-md transition-shadow">
+      <Card className="overflow-hidden hover:shadow-md transition-shadow" isClickable>
         <Link to={`/events/${event.id}`} className="block">
-          <div className="relative h-48 bg-gray-100">
-            {event.imageUrl ? (
-              <img 
-                src={event.imageUrl}
-                alt={event.title}
-                className="w-full h-full object-cover"
-                onError={handleImageError}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                <ImageIcon className="w-12 h-12 text-gray-400" />
-              </div>
-            )}
+          <div className="relative h-48">
+            <img 
+              src={event.imageUrl}
+              alt={event.title}
+              className="w-full h-full object-cover"
+            />
             <Badge 
               className="absolute top-2 right-2 capitalize"
               variant={event.attending ? "default" : "secondary"}
@@ -182,7 +151,6 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
             </Badge>
           </div>
         </Link>
-        
         <CardContent className="p-4">
           <Link to={`/events/${event.id}`} className="block">
             <h3 className="font-semibold text-lg mb-2">{event.title}</h3>

@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Calculator, PiggyBank, MapPin } from "lucide-react";
+import { Download, Calculator, PiggyBank } from "lucide-react";
 import { EventType } from "../types";
 import { useToast } from "@/hooks/use-toast";
 
@@ -24,9 +24,6 @@ const budgetFormSchema = z.object({
   comfortLevel: z.string().min(1, { message: "Comfort level is required" }),
   days: z.string().min(1, { message: "Duration is required" }),
   travelers: z.string().min(1, { message: "Number of travelers is required" }),
-  startingLocation: z.string().min(1, { message: "Starting location is required" }),
-  destination: z.string().min(1, { message: "Destination is required" }),
-  scope: z.string().optional(),
 });
 
 type BudgetFormValues = z.infer<typeof budgetFormSchema>;
@@ -42,9 +39,6 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
     comfortLevel: "standard",
     days: "1",
     travelers: "1",
-    startingLocation: "",
-    destination: event?.location || "",
-    scope: "local",
   };
   
   const form = useForm<BudgetFormValues>({
@@ -56,10 +50,12 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
     setIsGenerating(true);
     
     try {
+      // In a real app, this would be an API call to a backend service
+      // that would generate the budget plan using AI
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const destinationName = data.destination;
-      const startingLocationName = data.startingLocation;
+      // Mock AI-generated plan
+      const destinationName = event ? event.location.split(',')[0].trim() : "your destination";
       const budgetNum = parseFloat(data.budget);
       const travelersNum = parseInt(data.travelers);
       const daysNum = parseInt(data.days);
@@ -78,8 +74,6 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
 - Duration: ${daysNum} day${daysNum > 1 ? 's' : ''}
 - Travel Mode: ${data.travelMode.charAt(0).toUpperCase() + data.travelMode.slice(1)}
 - Comfort Level: ${data.comfortLevel.charAt(0).toUpperCase() + data.comfortLevel.slice(1)}
-- From: ${startingLocationName}
-- To: ${destinationName}
 
 ## Budget Breakdown
 - Accommodation: $${(budgetNum * accommodation).toFixed(2)} (${(accommodation * 100).toFixed(0)}%)
@@ -89,13 +83,6 @@ const BudgetPlanner = ({ event }: BudgetPlannerProps) => {
 
 ## Daily Budget
 - Per person: $${perPersonPerDay.toFixed(2)}/day
-
-## Transportation from ${startingLocationName} to ${destinationName}
-${data.travelMode === "public" 
-  ? "- Public transportation options between these locations\n- Estimated travel time and cost" 
-  : data.travelMode === "rental" 
-  ? "- Car/scooter rental options and routes\n- Fuel costs and tolls estimation" 
-  : "- Private transfer options\n- Taxi or car service pricing"}
 
 ## Recommendations for ${destinationName}
 
@@ -168,16 +155,16 @@ ${data.comfortLevel === "budget"
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="flex items-center text-2xl">
-          <Calculator className="w-6 h-6 mr-2 text-primary" />
-          AI Travel Budget Planner
+        <CardTitle className="flex items-center">
+          <Calculator className="w-5 h-5 mr-2" />
+          AI Budget Planner
         </CardTitle>
-        <CardDescription className="text-base">
-          Get a personalized travel budget and itinerary for your next adventure
+        <CardDescription>
+          Generate a personalized travel budget for {event ? event.title : "your trip"}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="form" className="w-full">
+        <Tabs defaultValue="form">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="form">Create Plan</TabsTrigger>
             <TabsTrigger value="result" disabled={!budgetPlan}>View Plan</TabsTrigger>
@@ -186,67 +173,6 @@ ${data.comfortLevel === "budget"
           <TabsContent value="form" className="mt-4">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="startingLocation"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Starting Location</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Your current location" 
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="destination"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Destination</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Enter destination" 
-                            {...field} 
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                <FormField
-                  control={form.control}
-                  name="scope"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Event Scope</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select scope" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="local">Local Events</SelectItem>
-                          <SelectItem value="worldwide">Worldwide Events</SelectItem>
-                          <SelectItem value="trending">Trending Events</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
                 <FormField
                   control={form.control}
                   name="budget"
@@ -340,7 +266,7 @@ ${data.comfortLevel === "budget"
                   )}
                 />
                 
-                <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" disabled={isGenerating}>
+                <Button type="submit" className="w-full" disabled={isGenerating}>
                   {isGenerating ? (
                     <>Generating Plan...</>
                   ) : (
