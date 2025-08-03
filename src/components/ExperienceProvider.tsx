@@ -29,9 +29,6 @@ const ExperienceProvider = ({ children }: ExperienceProviderProps) => {
     return <div className="h-screen w-screen flex items-center justify-center">Loading...</div>;
   }
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
 
   return (
     <div className="female-experience-mode">
