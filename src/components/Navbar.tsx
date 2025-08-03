@@ -1,8 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { Menu, X, Calendar, Users, User, LogOut } from "lucide-react";
+import { Menu, X, Calendar, Users, User, LogOut, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
@@ -87,22 +89,44 @@ const Navbar = () => {
             })}
             
             {isLoggedIn ? (
-              <Button 
-                variant="outline" 
-                onClick={handleLogout} 
-                className={`flex items-center gap-2 bg-white/70 backdrop-blur-sm hover:bg-white/90 border-white/50 text-gray-800 shadow-md`}
-              >
-                <LogOut className="w-4 h-4" />
-                Logout
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-2 bg-white/70 backdrop-blur-sm hover:bg-white/90 border border-white/50 text-gray-800 shadow-md rounded-full p-1 transition-colors">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src="/placeholder.svg" alt={username} />
+                    <AvatarFallback className="bg-primary-feminine text-white text-sm">
+                      {username.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <ChevronDown className="w-4 h-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-md border border-white/20 shadow-lg">
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+                      <User className="w-4 h-4" />
+                      View Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 cursor-pointer">
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
-              <Button 
-                onClick={() => navigate("/login")} 
-                className={`flex items-center gap-2 bg-white/70 backdrop-blur-sm hover:bg-white/90 text-gray-800 shadow-md`}
-              >
-                <User className="w-4 h-4" />
-                Login
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-2 bg-white/70 backdrop-blur-sm hover:bg-white/90 border border-white/50 text-gray-800 shadow-md rounded-full p-2 transition-colors">
+                  <User className="w-6 h-6" />
+                  <ChevronDown className="w-4 h-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-md border border-white/20 shadow-lg">
+                  <DropdownMenuItem asChild>
+                    <Link to="/login" className="flex items-center gap-2 cursor-pointer">
+                      <User className="w-4 h-4" />
+                      Sign Up
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
 
@@ -137,16 +161,26 @@ const Navbar = () => {
               })}
               
               {isLoggedIn ? (
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex items-center gap-2 px-3 py-2 w-full text-left text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </button>
+                <>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 px-3 py-2 text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="w-4 h-4" />
+                    View Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 w-full text-left text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <Link
                   to="/login"
@@ -154,7 +188,7 @@ const Navbar = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <User className="w-4 h-4" />
-                  Login
+                  Sign Up
                 </Link>
               )}
             </div>

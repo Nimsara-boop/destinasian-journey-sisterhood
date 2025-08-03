@@ -29,6 +29,7 @@ export default {
           DEFAULT: "#C2A87D",
           foreground: "#ffffff",
           feminine: "#E8819E",
+          signup: "#f0849c",
         },
         secondary: {
           DEFAULT: "#E8D3D1",
