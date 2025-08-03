@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Events from "./pages/events";
 import EventDetail from "./pages/events/EventDetail";
+import Tours from "./pages/Tours";
 import Community from "./pages/Community";
 import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
@@ -47,6 +48,11 @@ const App = () => {
             <Route path="/events/:id" element={
               <ExperienceProvider>
                 <EventDetail />
+              </ExperienceProvider>
+            } />
+            <Route path="/tours" element={
+              <ExperienceProvider>
+                <Tours />
               </ExperienceProvider>
             } />
             <Route path="/community" element={

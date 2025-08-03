@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Menu, X, Calendar, Users, User, LogOut, ChevronDown } from "lucide-react";
+import { Menu, X, Calendar, Users, User, LogOut, ChevronDown, MapPin, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -49,9 +49,10 @@ const Navbar = () => {
 
 
   const navItems = [
+    { label: "Home", href: "/", icon: Home },
     { label: "Events", href: "/events", icon: Calendar },
+    { label: "Tours", href: "/tours", icon: MapPin },
     { label: "Community", href: "/community", icon: Users },
-    { label: "Profile", href: "/profile", icon: User },
   ];
 
   return (
