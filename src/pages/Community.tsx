@@ -49,6 +49,12 @@ const Community = () => {
     setIsLoggedIn(loggedInStatus);
   }, []);
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, activeChatRoom]);
+
   // If not logged in, show login required message
   if (!isLoggedIn) {
     return (
@@ -252,11 +258,6 @@ const Community = () => {
     },
   ];
 
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, activeChatRoom]);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
