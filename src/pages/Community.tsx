@@ -23,6 +23,26 @@ import { cn } from "@/lib/utils";
 const Community = () => {
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeTab, setActiveTab] = useState<'chat' | 'swipe'>('chat');
+  const [activeChatRoom, setActiveChatRoom] = useState<number | null>(null);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([
+    { id: 1, sender: "Sarah", text: "Hi everyone! I just arrived in Colombo. Anyone want to meet up?", time: "10:25 AM", isSelf: false },
+    { id: 2, sender: "Maya", text: "I'll be there next week! Let's plan something", time: "10:28 AM", isSelf: false },
+    { id: 3, sender: "You", text: "I know a great place in Colombo Fort we could try", time: "10:30 AM", isSelf: true },
+    { id: 4, sender: "Sarah", text: "That sounds perfect! I'm staying near Galle Face Green", time: "10:32 AM", isSelf: false },
+    { id: 5, sender: "Maya", text: "Could you share the location?", time: "10:35 AM", isSelf: false },
+  ]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [showLocationShare, setShowLocationShare] = useState(false);
+  const [locationShared, setLocationShared] = useState(false);
+  const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [startX, setStartX] = useState(0);
+  const [offsetX, setOffsetX] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  // Current location of the user (normally would come from geolocation)
+  const [userLocation, setUserLocation] = useState("Sri Lanka");
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
@@ -54,27 +74,6 @@ const Community = () => {
       </div>
     );
   }
-  
-  const [activeTab, setActiveTab] = useState<'chat' | 'swipe'>('chat');
-  const [activeChatRoom, setActiveChatRoom] = useState<number | null>(null);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([
-    { id: 1, sender: "Sarah", text: "Hi everyone! I just arrived in Colombo. Anyone want to meet up?", time: "10:25 AM", isSelf: false },
-    { id: 2, sender: "Maya", text: "I'll be there next week! Let's plan something", time: "10:28 AM", isSelf: false },
-    { id: 3, sender: "You", text: "I know a great place in Colombo Fort we could try", time: "10:30 AM", isSelf: true },
-    { id: 4, sender: "Sarah", text: "That sounds perfect! I'm staying near Galle Face Green", time: "10:32 AM", isSelf: false },
-    { id: 5, sender: "Maya", text: "Could you share the location?", time: "10:35 AM", isSelf: false },
-  ]);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [showLocationShare, setShowLocationShare] = useState(false);
-  const [locationShared, setLocationShared] = useState(false);
-  const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
-  const [startX, setStartX] = useState(0);
-  const [offsetX, setOffsetX] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  // Current location of the user (normally would come from geolocation)
-  const [userLocation, setUserLocation] = useState("Sri Lanka");
 
   // Chat rooms organized by country and city/region
   const chatRoomsByLocation = {
