@@ -1,11 +1,12 @@
 
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Search, MessageSquare, Users, Send, Phone, Video, Check, Image as ImageIcon, X, Heart, User } from "lucide-react";
+import { MapPin, Search, MessageSquare, Users, Send, Phone, Video, Check, Image as ImageIcon, X, Heart, User, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Dialog,
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils";
 
 const Community = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState<'chat' | 'swipe'>('chat');
   const [activeChatRoom, setActiveChatRoom] = useState<number | null>(null);
@@ -68,12 +70,22 @@ const Community = () => {
               <p className="text-gray-600 mb-6">
                 Please sign in to access the community features and connect with other female travelers.
               </p>
-              <Button 
-                onClick={() => window.location.href = '/login'}
-                className="bg-primary-feminine hover:bg-primary-feminine/90 text-white px-8 py-2"
-              >
-                Sign In
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => navigate('/login')}
+                  className="bg-primary-feminine hover:bg-primary-feminine/90 text-white px-8 py-2"
+                >
+                  Sign In / Sign Up
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => navigate(-1)}
+                  className="px-8 py-2 flex items-center gap-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Go Back
+                </Button>
+              </div>
             </div>
           </div>
         </div>
