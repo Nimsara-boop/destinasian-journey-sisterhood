@@ -157,6 +157,8 @@ const Index = () => {
 
       {isFemaleExperience ? (
         <>
+          <FeatureSection />
+          
           <PodcastSection 
             podcasts={podcasts}
             currentAudio={currentAudio}
