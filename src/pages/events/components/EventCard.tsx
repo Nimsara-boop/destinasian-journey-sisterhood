@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Link } from "react-router-dom";
-import { 
+import { Link, useNavigate } from "react-router-dom";
+import {
   Calendar, Clock, MapPin, Users, ArrowRight, Star, 
   Utensils, Hotel, Coffee 
 } from "lucide-react";
@@ -13,9 +13,11 @@ import { EventType } from "../types";
 interface EventCardProps {
   event: EventType;
   toggleAttendance: (eventId: number) => void;
+  isLoggedIn: boolean;
 }
 
-const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
+const EventCard = ({ event, toggleAttendance, isLoggedIn }: EventCardProps) => {
+  const navigate = useNavigate();
   // Helper function to render rating stars
   const renderRating = (rating: number = 0) => {
     return (
@@ -122,6 +124,10 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (!isLoggedIn) {
+                  navigate('/login');
+                  return;
+                }
                 toggleAttendance(event.id);
               }}
               className="gap-1"
@@ -186,6 +192,10 @@ const EventCard = ({ event, toggleAttendance }: EventCardProps) => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (!isLoggedIn) {
+                  navigate('/login');
+                  return;
+                }
                 toggleAttendance(event.id);
               }}
             >

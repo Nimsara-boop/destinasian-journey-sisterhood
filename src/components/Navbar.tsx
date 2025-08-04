@@ -74,7 +74,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            {isLoggedIn && navItems.map((item) => {
+            {navItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link
@@ -145,7 +145,7 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 animate-fade-in bg-white/90 backdrop-blur-md rounded-lg shadow-lg mt-2">
-              {isLoggedIn && navItems.map((item) => {
+              {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link

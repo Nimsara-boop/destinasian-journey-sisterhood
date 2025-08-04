@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Search, Filter, ChevronDown, Menu, MapPin, Calendar, Users, Plus, Utensils } from "lucide-react";
@@ -23,7 +23,13 @@ export default function Events() {
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const [activeTab, setActiveTab] = useState("events");
   const [displayView, setDisplayView] = useState<"list" | "calendar" | "planner">("list");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedInStatus);
+  }, []);
   
   const { events, toggleAttendance } = useEvents();
   
@@ -91,7 +97,16 @@ export default function Events() {
             
             <Dialog open={isCreateEventOpen} onOpenChange={setIsCreateEventOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                <Button 
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                  onClick={(e) => {
+                    if (!isLoggedIn) {
+                      e.preventDefault();
+                      navigate('/login');
+                      return;
+                    }
+                  }}
+                >
                   <Plus className="mr-2 h-4 w-4" />
                   Create Event
                 </Button>
@@ -177,6 +192,7 @@ export default function Events() {
                   events={filteredEvents} 
                   activeTab={activeTab}
                   toggleAttendance={toggleAttendance}
+                  isLoggedIn={isLoggedIn}
                 />
               ) : (
                 <MapView 

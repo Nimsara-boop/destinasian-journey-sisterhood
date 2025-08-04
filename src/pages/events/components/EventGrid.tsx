@@ -9,9 +9,10 @@ interface EventGridProps {
   events: EventType[];
   activeTab: string;
   toggleAttendance: (eventId: number) => void;
+  isLoggedIn: boolean;
 }
 
-const EventGrid = ({ events, activeTab, toggleAttendance }: EventGridProps) => {
+const EventGrid = ({ events, activeTab, toggleAttendance, isLoggedIn }: EventGridProps) => {
   if (events.length === 0) {
     return (
       <>
@@ -62,7 +63,7 @@ const EventGrid = ({ events, activeTab, toggleAttendance }: EventGridProps) => {
       <TabsContent value="events" className="mt-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.filter(event => !event.isPromotion).map((event) => (
-            <EventCard key={event.id} event={event} toggleAttendance={toggleAttendance} />
+            <EventCard key={event.id} event={event} toggleAttendance={toggleAttendance} isLoggedIn={isLoggedIn} />
           ))}
         </div>
       </TabsContent>
@@ -70,7 +71,7 @@ const EventGrid = ({ events, activeTab, toggleAttendance }: EventGridProps) => {
       <TabsContent value="promotions" className="mt-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.filter(event => event.isPromotion).map((promotion) => (
-            <EventCard key={promotion.id} event={promotion} toggleAttendance={toggleAttendance} />
+            <EventCard key={promotion.id} event={promotion} toggleAttendance={toggleAttendance} isLoggedIn={isLoggedIn} />
           ))}
         </div>
       </TabsContent>
@@ -88,7 +89,7 @@ const EventGrid = ({ events, activeTab, toggleAttendance }: EventGridProps) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.filter(event => event.isPromotion).slice(0, 3).map((promotion) => (
-                <EventCard key={promotion.id} event={promotion} toggleAttendance={toggleAttendance} />
+                <EventCard key={promotion.id} event={promotion} toggleAttendance={toggleAttendance} isLoggedIn={isLoggedIn} />
               ))}
             </div>
           </div>
@@ -104,7 +105,7 @@ const EventGrid = ({ events, activeTab, toggleAttendance }: EventGridProps) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.filter(event => !event.isPromotion).slice(0, 3).map((event) => (
-                <EventCard key={event.id} event={event} toggleAttendance={toggleAttendance} />
+                <EventCard key={event.id} event={event} toggleAttendance={toggleAttendance} isLoggedIn={isLoggedIn} />
               ))}
             </div>
           </div>

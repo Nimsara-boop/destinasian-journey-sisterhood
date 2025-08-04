@@ -22,6 +22,38 @@ import { cn } from "@/lib/utils";
 
 const Community = () => {
   const { toast } = useToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedInStatus);
+  }, []);
+
+  // If not logged in, show login required message
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto pt-24 px-4 pb-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <User className="w-16 h-16 mx-auto mb-4 text-primary-feminine" />
+              <h2 className="text-2xl font-bold mb-4">Sign in Required</h2>
+              <p className="text-gray-600 mb-6">
+                Please sign in to access the community features and connect with other female travelers.
+              </p>
+              <Button 
+                onClick={() => window.location.href = '/login'}
+                className="bg-primary-feminine hover:bg-primary-feminine/90 text-white px-8 py-2"
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   const [activeTab, setActiveTab] = useState<'chat' | 'swipe'>('chat');
   const [activeChatRoom, setActiveChatRoom] = useState<number | null>(null);

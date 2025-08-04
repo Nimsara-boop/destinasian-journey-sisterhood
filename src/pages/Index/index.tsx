@@ -155,10 +155,10 @@ const Index = () => {
         currentQuoteIndex={currentQuoteIndex}
       />
 
-      {isFemaleExperience ? (
+      <FeatureSection />
+      
+      {isFemaleExperience && (
         <>
-          <FeatureSection />
-          
           <PodcastSection 
             podcasts={podcasts}
             currentAudio={currentAudio}
@@ -170,12 +170,11 @@ const Index = () => {
           
           <CommunitySection />
         </>
-      ) : (
+      )}
+      
+      {!isFemaleExperience && (
         <>
-          <FeatureSection />
-
           <Newsletter />
-
           <AboutSection />
         </>
       )}
