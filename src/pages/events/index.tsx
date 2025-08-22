@@ -208,7 +208,7 @@ export default function Events() {
           <div className="mt-6">
             <EventCalendar 
               events={events} 
-              location="Sri Lanka" 
+              location="Asia" 
               onEventSelect={handleEventSelect}
             />
           </div>

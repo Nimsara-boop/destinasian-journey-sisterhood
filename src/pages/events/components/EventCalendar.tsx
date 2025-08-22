@@ -60,13 +60,17 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
   
   // Further filter events based on calendar view
   const filteredEvents = calendarView === "local" 
-    ? eventsOnSelectedDate.filter(event => event.location.includes(location))
+    ? eventsOnSelectedDate.filter(event => {
+        // For Asia region, include various Asian countries
+        const asianCountries = ['Japan', 'Thailand', 'Indonesia', 'China', 'South Korea', 'Singapore', 'Sri Lanka', 'India', 'Malaysia', 'Philippines', 'Vietnam'];
+        return asianCountries.some(country => event.location.includes(country));
+      })
     : eventsOnSelectedDate;
   
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Cultural & National Events</h2>
+        <h2 className="text-2xl font-bold">Events Across Asia</h2>
         <div className="flex space-x-2">
           <Button 
             variant={calendarView === "local" ? "default" : "outline"}
@@ -74,7 +78,7 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
             onClick={() => setCalendarView("local")}
           >
             <MapPin className="w-4 h-4 mr-2" />
-            Local Events
+            Asian Events
           </Button>
           <Button 
             variant={calendarView === "worldwide" ? "default" : "outline"}
@@ -149,7 +153,7 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
                 <CalendarIcon className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-1">No events found</h3>
                 <p className="text-muted-foreground">
-                  There are no {calendarView === "local" ? "local" : "worldwide"} events scheduled for this date.
+                  There are no {calendarView === "local" ? "Asian" : "worldwide"} events scheduled for this date.
                 </p>
               </div>
             )}
