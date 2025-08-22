@@ -79,34 +79,6 @@ const Index = () => {
     }
   };
 
-  {/*
-  const handlePackageClick = (id: string) => {
-    navigate(`/package/${id}`);
-  };
-
-  const featuredDestinations = [
-    {
-      id: '1',
-      title: "Women's Retreat in Ella",
-      description: "A peaceful mountain hideaway with yoga and wellness activities",
-      image: "https://images.unsplash.com/photo-1580674684029-9947ef442203",
-      tags: ["Wellness", "Mountain", "Yoga"]
-    },
-    {
-      id: '2',
-      title: "Beach Getaway in Mirissa",
-      description: "Enjoy the pristine beaches with women-only guided tours",
-      image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-      tags: ["Beach", "Tours", "Relaxation"]
-    },
-    {
-      id: '3',
-      title: "Cultural Immersion in Kandy",
-      description: "Connect with local female artisans and learn traditional crafts",
-      image: "https://images.unsplash.com/photo-1546708770-599a3abdf230",
-      tags: ["Culture", "Workshops", "Heritage"]
-    },
-  ]; */}
 
   const podcasts = [
     {
@@ -198,36 +170,8 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {featuredDestinations.map((destination, index) => (
-                  <Card 
-                    key={index} 
-                    className="overflow-hidden interactive-slide"
-                    isClickable
-                    onClick={() => handlePackageClick(destination.id)}
-                  >
-                    <div className="relative h-64 w-full">
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center" 
-                        style={{ backgroundImage: `url(${destination.image})` }}
-                      />
-                    </div>
-                    <CardContent className="p-6">
-                      <CardTitle className="font-serif mb-2">{destination.title}</CardTitle>
-                      <CardDescription className="mb-4">{destination.description}</CardDescription>
-                      <div className="flex flex-wrap gap-2">
-                        {destination.tags.map((tag, i) => (
-                          <span key={i} className="px-3 py-1 bg-secondary-feminine rounded-full text-xs">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              
-              <div className="text-center mt-10">
+              <div className="text-center">
+                <p className="text-gray-500 mb-6">Featured packages coming soon...</p>
                 <Button 
                   variant="outline" 
                   className="border-primary-feminine text-primary-feminine hover:bg-primary-feminine hover:text-white"
