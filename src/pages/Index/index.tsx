@@ -12,7 +12,7 @@ import CommunitySection from "./components/CommunitySection";
 import FeatureSection from "./components/FeatureSection";
 import AboutSection from "./components/AboutSection";
 import MapButton from "./components/MapButton";
-import RecentEventHighlights from "./components/RecentEventHighlights";
+import RecentEventHighlights from "../events/components/RecentEventHighlights";
 
 const Index = () => {
   const navigate = useNavigate();
