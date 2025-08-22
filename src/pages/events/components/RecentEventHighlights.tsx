@@ -12,28 +12,28 @@ const RecentEventHighlights = () => {
   const recentEventHighlights = [
     {
       id: 1,
-      image: "/public/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png",
+      image: "/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png",
       title: "Tokyo Tech Meetup",
       attendees: 150,
       location: "Tokyo, Japan"
     },
     {
       id: 2,
-      image: "/public/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png",
+      image: "/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png",
       title: "Singapore Startup Weekend",
       attendees: 200,
       location: "Singapore"
     },
     {
       id: 3,
-      image: "/public/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png",
+      image: "/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png",
       title: "Bangkok Digital Nomads",
       attendees: 120,
       location: "Bangkok, Thailand"
     },
     {
       id: 4,
-      image: "/public/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png",
+      image: "/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png",
       title: "Seoul Innovation Summit",
       attendees: 300,
       location: "Seoul, South Korea"
@@ -61,13 +61,18 @@ const RecentEventHighlights = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Only show to authenticated users
+  // Show loading state
   if (isLoading) {
-    return null; // Or a loading spinner
-  }
-
-  if (!user) {
-    return null; // Don't show to unauthenticated users
+    return (
+      <section className="py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div className="h-40 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
