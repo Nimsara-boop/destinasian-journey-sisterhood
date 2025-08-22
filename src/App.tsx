@@ -10,7 +10,7 @@ import Profile from "./pages/Profile";
 import Events from "./pages/events";
 import EventDetail from "./pages/events/EventDetail";
 import Tours from "./pages/Tours";
-import Community from "./pages/Community";
+import Community from "./pages/community";
 import Login from "./pages/Login";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
