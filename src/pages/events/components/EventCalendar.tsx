@@ -15,7 +15,7 @@ interface EventCalendarProps {
 }
 
 const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [calendarView, setCalendarView] = useState<"worldwide" | "local">("local");
   
   // Convert event dates to Date objects for comparison
@@ -42,7 +42,7 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
     );
   };
   
-  // Filter events for the selected date
+  // Filter events for the selected date or show hottest events if no date selected
   const eventsOnSelectedDate = selectedDate ? events.filter(event => {
     if (event.date.includes("Every")) return true; // Include recurring events
     
@@ -56,7 +56,14 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
     return eventDate.getDate() === selectedDate.getDate() && 
       eventDate.getMonth() === selectedDate.getMonth() && 
       eventDate.getFullYear() === selectedDate.getFullYear();
-  }) : [];
+  }) : events
+      .filter(event => {
+        // For Asia region, include various Asian countries
+        const asianCountries = ['Japan', 'Thailand', 'Indonesia', 'China', 'South Korea', 'Singapore', 'Sri Lanka', 'India', 'Malaysia', 'Philippines', 'Vietnam'];
+        return asianCountries.some(country => event.location.includes(country));
+      })
+      .sort((a, b) => b.attendees - a.attendees) // Sort by attendees (hottest events first)
+      .slice(0, 6); // Show top 6 hottest events
   
   // Further filter events based on calendar view
   const filteredEvents = calendarView === "local" 
@@ -118,11 +125,14 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
         <Card className="col-span-1 lg:col-span-2">
           <CardHeader>
             <CardTitle>
-              Events on {selectedDate?.toLocaleDateString('en-US', { 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric' 
-              })}
+              {selectedDate 
+                ? `Events on ${selectedDate.toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                  })}`
+                : "🔥 Hottest Events in Asia"
+              }
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -153,7 +163,10 @@ const EventCalendar = ({ events, location, onEventSelect }: EventCalendarProps) 
                 <CalendarIcon className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-1">No events found</h3>
                 <p className="text-muted-foreground">
-                  There are no {calendarView === "local" ? "Asian" : "worldwide"} events scheduled for this date.
+                  {selectedDate 
+                    ? `There are no ${calendarView === "local" ? "Asian" : "worldwide"} events scheduled for this date.`
+                    : "No events available to display."
+                  }
                 </p>
               </div>
             )}
