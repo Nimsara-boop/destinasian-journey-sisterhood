@@ -6,7 +6,6 @@ import Newsletter from "@/components/Newsletter";
 import EmergencyContact from "@/components/EmergencyContact";
 import MapModal from "@/components/MapModal";
 import HeroSection from "./components/HeroSection";
-import FeaturedPackages from "./components/FeaturedPackages";
 import PodcastSection from "./components/PodcastSection";
 import SafetySection from "./components/SafetySection";
 import CommunitySection from "./components/CommunitySection";
@@ -14,7 +13,6 @@ import FeatureSection from "./components/FeatureSection";
 import AboutSection from "./components/AboutSection";
 import MapButton from "./components/MapButton";
 import RecentEventHighlights from "./components/RecentEventHighlights";
-import { DestinationType } from "./components/FeaturedPackages";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -47,29 +45,6 @@ const Index = () => {
     }
   };
 
-  const featuredDestinations: DestinationType[] = [
-    {
-      id: '1',
-      title: "Women's Retreat in Ella",
-      description: "A peaceful mountain hideaway with yoga and wellness activities",
-      image: "https://images.unsplash.com/photo-1580674684029-9947ef442203",
-      tags: ["Wellness", "Mountain", "Yoga"]
-    },
-    {
-      id: '2',
-      title: "Beach Getaway in Mirissa",
-      description: "Enjoy the pristine beaches with women-only guided tours",
-      image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-      tags: ["Beach", "Tours", "Relaxation"]
-    },
-    {
-      id: '3',
-      title: "Cultural Immersion in Kandy",
-      description: "Connect with local female artisans and learn traditional crafts",
-      image: "https://images.unsplash.com/photo-1546708770-599a3abdf230",
-      tags: ["Culture", "Workshops", "Heritage"]
-    },
-  ];
 
   const podcasts = [
     {
