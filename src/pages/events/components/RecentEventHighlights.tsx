@@ -80,7 +80,7 @@ const RecentEventHighlights = () => {
       <div className="max-w-7xl mx-auto">
         <Card className="overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Recent Event Highlights</CardTitle>
+            <CardTitle className="text-2xl text-center font-bold">Recent Event Highlights</CardTitle>
             <p className="text-muted-foreground">
               See what our community members have been up to at recent events across Asia
             </p>
