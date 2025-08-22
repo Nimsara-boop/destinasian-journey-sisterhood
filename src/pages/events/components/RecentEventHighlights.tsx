@@ -81,7 +81,7 @@ const RecentEventHighlights = () => {
         <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle className="text-2xl text-center font-bold">Recent Event Highlights</CardTitle>
-            <p className="text-muted-foreground text-center">
+            <p className="text-muted-foreground">
               See what our community members have been up to at recent events across Asia
             </p>
           </CardHeader>
