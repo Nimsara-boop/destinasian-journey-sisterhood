@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { PhoneCall, AlertCircle, X, ChevronUp, Hospital, Shield } from "lucide-react";
+import { PhoneCall, AlertCircle, X, ChevronUp, Building2, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -20,25 +20,25 @@ interface Location {
 const emergencyContactsByCountry: Record<string, EmergencyContact[]> = {
   "Sri Lanka": [
     { name: "Police Emergency", number: "119", icon: Shield },
-    { name: "Ambulance Service", number: "1990", icon: Hospital },
+    { name: "Ambulance Service", number: "1990", icon: Building2 },
     { name: "Tourist Police", number: "1912", icon: Shield },
     { name: "Disaster Management", number: "117", icon: AlertCircle },
   ],
   "India": [
     { name: "Police Emergency", number: "100", icon: Shield },
-    { name: "Ambulance", number: "108", icon: Hospital },
+    { name: "Ambulance", number: "108", icon: Building2 },
     { name: "Women's Helpline", number: "1091", icon: AlertCircle },
     { name: "Tourist Helpline", number: "1363", icon: AlertCircle },
   ],
   "Thailand": [
     { name: "Tourist Police", number: "1155", icon: Shield },
-    { name: "Emergency Medical", number: "1669", icon: Hospital },
+    { name: "Emergency Medical", number: "1669", icon: Building2 },
     { name: "Police", number: "191", icon: Shield },
   ],
   "default": [
     { name: "International Emergency", number: "112", icon: AlertCircle },
     { name: "Local Police", number: "Check local information", icon: Shield },
-    { name: "Medical Emergency", number: "Check local information", icon: Hospital },
+    { name: "Medical Emergency", number: "Check local information", icon: Building2 },
   ]
 };
 
