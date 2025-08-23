@@ -135,6 +135,7 @@ const RecentEventHighlights = () => {
             }}
           >
             <Button
+              variant="pink"
               onClick={() => navigate('/events')}
               className="px-8 py-3"
             >
