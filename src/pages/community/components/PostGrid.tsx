@@ -18,9 +18,10 @@ interface Post {
 interface PostGridProps {
   posts: Post[];
   onPostClick: (postId: number) => void;
+  onAuthorClick?: (authorName: string) => void;
 }
 
-const PostGrid = ({ posts, onPostClick }: PostGridProps) => {
+const PostGrid = ({ posts, onPostClick, onAuthorClick }: PostGridProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {posts.map((post) => (
@@ -55,7 +56,13 @@ const PostGrid = ({ posts, onPostClick }: PostGridProps) => {
           
           {/* Author info at bottom */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-            <div className="flex items-center gap-2">
+            <div 
+              className="flex items-center gap-2 cursor-pointer hover:bg-white/10 rounded p-1 -m-1 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onAuthorClick?.(post.author.name);
+              }}
+            >
               <img
                 src={post.author.avatar}
                 alt={post.author.name}

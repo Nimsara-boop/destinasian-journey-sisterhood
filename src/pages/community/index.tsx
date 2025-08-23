@@ -7,12 +7,15 @@ import PostGrid from "./components/PostGrid";
 import PostViewer from "./components/PostViewer";
 import CommunityNavbar from "./components/CommunityNavbar";
 import MessagesPage from "./components/MessagesPage";
+import ProfileCardModal from "./components/ProfileCardModal";
 
 const Community = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState<'grid' | 'post-viewer' | 'messages'>('grid');
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<{ name: string } | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
@@ -126,6 +129,16 @@ const Community = () => {
     setCurrentView('grid');
   };
 
+  const handleAuthorClick = (authorName: string) => {
+    setSelectedProfile({ name: authorName });
+    setIsProfileModalOpen(true);
+  };
+
+  const handleCloseProfileModal = () => {
+    setIsProfileModalOpen(false);
+    setSelectedProfile(null);
+  };
+
   // If not logged in, show login required message
   if (!isLoggedIn) {
     return (
@@ -185,9 +198,19 @@ const Community = () => {
       
       <div className="container mx-auto px-4 py-10">
         <div className="max-w-6xl mx-auto my-10">
-          <PostGrid posts={posts} onPostClick={handlePostClick} />
+          <PostGrid 
+            posts={posts} 
+            onPostClick={handlePostClick}
+            onAuthorClick={handleAuthorClick}
+          />
         </div>
       </div>
+      
+      <ProfileCardModal
+        isOpen={isProfileModalOpen}
+        onClose={handleCloseProfileModal}
+        profile={selectedProfile}
+      />
     </div>
   );
 };

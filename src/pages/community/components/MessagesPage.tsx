@@ -4,6 +4,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import PeopleTab from "./PeopleTab";
 import GroupsMessagesTab from "./GroupsMessagesTab";
+import ChatInterface from "./ChatInterface";
+
+interface Group {
+  id: number;
+  name: string;
+  location: string;
+  members: number;
+  lastActive: string;
+  image: string;
+  isOwner?: boolean;
+  unreadCount?: number;
+}
+
+interface Message {
+  id: number;
+  sender: {
+    name: string;
+    avatar: string;
+  };
+  preview: string;
+  timestamp: string;
+  unreadCount: number;
+  online: boolean;
+}
 
 interface MessagesPageProps {
   onBack: () => void;
@@ -11,6 +35,46 @@ interface MessagesPageProps {
 
 const MessagesPage = ({ onBack }: MessagesPageProps) => {
   const [activeTab, setActiveTab] = useState("people");
+  const [currentView, setCurrentView] = useState<'tabs' | 'chat'>('tabs');
+  const [selectedChat, setSelectedChat] = useState<{
+    type: 'group' | 'dm';
+    data: Group | Message;
+  } | null>(null);
+
+  const handleGroupClick = (group: Group) => {
+    setSelectedChat({
+      type: 'group',
+      data: group
+    });
+    setCurrentView('chat');
+  };
+
+  const handleMessageClick = (message: Message) => {
+    setSelectedChat({
+      type: 'dm',
+      data: {
+        ...message,
+        name: message.sender.name,
+        avatar: message.sender.avatar
+      } as any
+    });
+    setCurrentView('chat');
+  };
+
+  const handleBackToTabs = () => {
+    setCurrentView('tabs');
+    setSelectedChat(null);
+  };
+
+  if (currentView === 'chat' && selectedChat) {
+    return (
+      <ChatInterface
+        onBack={handleBackToTabs}
+        chatType={selectedChat.type}
+        chatData={selectedChat.data as any}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,7 +109,10 @@ const MessagesPage = ({ onBack }: MessagesPageProps) => {
           </TabsContent>
 
           <TabsContent value="groups" className="mt-0">
-            <GroupsMessagesTab />
+            <GroupsMessagesTab 
+              onGroupClick={handleGroupClick}
+              onMessageClick={handleMessageClick}
+            />
           </TabsContent>
         </Tabs>
       </div>

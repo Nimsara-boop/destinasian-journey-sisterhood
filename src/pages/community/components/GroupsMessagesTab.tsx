@@ -28,7 +28,12 @@ interface Message {
   online: boolean;
 }
 
-const GroupsMessagesTab = () => {
+interface GroupsMessagesTabProps {
+  onGroupClick?: (group: Group) => void;
+  onMessageClick?: (message: Message) => void;
+}
+
+const GroupsMessagesTab = ({ onGroupClick, onMessageClick }: GroupsMessagesTabProps) => {
   const [activeSection, setActiveSection] = useState<'groups' | 'messages'>('groups');
 
   const groups: Group[] = [
@@ -126,7 +131,11 @@ const GroupsMessagesTab = () => {
           <h3 className="text-lg font-semibold">My Groups</h3>
           <div className="grid gap-3">
             {groups.map((group) => (
-              <Card key={group.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+              <Card 
+                key={group.id} 
+                className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => onGroupClick?.(group)}
+              >
                 <div className="flex items-center gap-4">
                   <div className="relative">
                     <img
@@ -180,7 +189,11 @@ const GroupsMessagesTab = () => {
           <h3 className="text-lg font-semibold">Direct Messages</h3>
           <div className="grid gap-3">
             {messages.map((message) => (
-              <Card key={message.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+              <Card 
+                key={message.id} 
+                className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => onMessageClick?.(message)}
+              >
                 <div className="flex items-center gap-4">
                   <div className="relative">
                     <Avatar className="w-12 h-12">
