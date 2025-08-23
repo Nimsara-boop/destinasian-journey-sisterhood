@@ -12,6 +12,25 @@ const RecentEventHighlights = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  const ViewMoreButton = () => (
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.4,
+        scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+      }}
+    >
+      <Button
+        variant="pink"
+        onClick={() => navigate('/events')}
+        className="px-8 py-3"
+      >
+        View All Events
+      </Button>
+    </motion.div>
+  );
+
   // Mock data for recent event highlights
   const recentEventHighlights = [
     {
@@ -125,23 +144,7 @@ const RecentEventHighlights = () => {
           </CardContent>
         </Card>
         <div className="mt-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.6,
-              type: "spring",
-              bounce: 0.3,
-            }}
-          >
-            <Button
-              variant="pink"
-              onClick={() => navigate('/events')}
-              className="px-8 py-3"
-            >
-              View All Events
-            </Button>
-          </motion.div>
+          <ViewMoreButton />
         </div>
       </div>
     </section>
