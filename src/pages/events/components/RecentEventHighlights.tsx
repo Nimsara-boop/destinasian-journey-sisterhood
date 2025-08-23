@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Button } from "@/components/ui/button";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import Autoplay from "embla-carousel-autoplay";
@@ -64,6 +64,17 @@ const RecentEventHighlights = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const ViewMoreButton = {
+  <Button
+    onClick={() => navigate('/community')}
+    variant="outline"
+    className="px-8"
+  >
+    View More
+  </Button>
+    
+  }
+
   // Show loading state
   if (isLoading) {
     return (
@@ -124,13 +135,19 @@ const RecentEventHighlights = () => {
           </CardContent>
         </Card>
         <div className="mt-6 text-center">
-          <Button 
-            onClick={() => navigate('/community')}
-            variant="outline"
-            className="px-8"
-          >
-            View More
-          </Button>
+                  <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+                duration: 0.4,
+                scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+            }}
+            style={ViewMoreButton}
+        />
+    )
+}
+
+
         </div>
       </div>
     </section>
