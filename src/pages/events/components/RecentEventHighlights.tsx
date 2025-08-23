@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import Autoplay from "embla-carousel-autoplay";
 
 const RecentEventHighlights = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Mock data for recent event highlights
   const recentEventHighlights = [
@@ -120,6 +123,15 @@ const RecentEventHighlights = () => {
             </Carousel>
           </CardContent>
         </Card>
+        <div className="mt-6 text-center">
+          <Button 
+            onClick={() => navigate('/community')}
+            variant="outline"
+            className="px-8"
+          >
+            View More
+          </Button>
+        </div>
       </div>
     </section>
   );
