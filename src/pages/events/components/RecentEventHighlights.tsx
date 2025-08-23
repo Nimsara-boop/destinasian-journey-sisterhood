@@ -126,22 +126,13 @@ const RecentEventHighlights = () => {
         </Card>
         <div className="mt-6 text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
-              duration: 0.6,
-              type: "spring",
-              bounce: 0.5,
+              duration: 0.4,
+              scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
             }}
-          >
-            <Button
-              onClick={() => navigate('/community')}
-              variant="outline"
-              className="px-8"
-            >
-              View More
-            </Button>
-          </motion.div>
+
         </div>
       </div>
     </section>
