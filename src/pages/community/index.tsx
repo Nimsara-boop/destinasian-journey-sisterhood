@@ -184,7 +184,7 @@ const Community = () => {
       <CommunityNavbar onMessagesClick={handleMessagesClick} />
       
       <div className="container mx-auto px-4 py-6">
-        <div className="max-w-6xl mx-auto my-15">
+        <div className="max-w-6xl mx-auto my-0">
           <PostGrid posts={posts} onPostClick={handlePostClick} />
         </div>
       </div>
