@@ -67,7 +67,7 @@ const HeroSection = ({ isFemaleExperience, currentQuoteIndex }: HeroSectionProps
       <div className="relative z-10 text-center text-white px-4 animate-fade-in max-w-4xl mx-auto">
         <h1 className={`text-4xl md:text-6xl ${isFemaleExperience ? 'font-serif' : 'font-semibold'} mb-6`}>
           
-             "Women Like To Travel" 
+             Women Like To Travel 
            
         </h1>
         <p className="text-xl md:text-2xl mb-8 italic">
