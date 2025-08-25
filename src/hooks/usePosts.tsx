@@ -29,13 +29,22 @@ export function usePosts() {
   const fetchPosts = async () => {
     try {
       setLoading(true);
+      console.log('Fetching posts...');
+      
+      // Check current user
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user?.id);
+      
       const { data, error } = await supabase
         .from('posts')
         .select(`
           *,
-          profiles!posts_user_id_fkey(display_name, avatar_url, is_private)
+          profiles(display_name, avatar_url, is_private, user_id)
         `)
         .order('created_at', { ascending: false });
+
+      console.log('Posts query result:', { data, error });
+      console.log('Number of posts found:', data?.length || 0);
 
       if (error) throw error;
 
