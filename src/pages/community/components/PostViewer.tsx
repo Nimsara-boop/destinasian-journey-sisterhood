@@ -73,11 +73,11 @@ const PostViewer = ({ posts, initialPostId, onBack }: PostViewerProps) => {
         {posts.map((post, index) => (
           <div key={post.id} className="h-screen snap-start relative flex flex-col">
             {/* Post Image */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative flex items-center justify-center bg-black">
               <img
                 src={post.image}
                 alt={post.caption}
-                className="w-full h-full object-cover"
+                className="max-w-full max-h-full object-contain"
               />
               
               {/* Navigation hints */}
