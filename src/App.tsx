@@ -11,7 +11,7 @@ import Events from "./pages/events";
 import EventDetail from "./pages/events/EventDetail";
 import Tours from "./pages/Tours";
 import Community from "./pages/community";
-import Login from "./pages/Login";
+import Auth from "./pages/Auth";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
 
@@ -27,7 +27,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/auth" element={<Auth />} />
             
             {/* Protected routes */}
             <Route path="/" element={

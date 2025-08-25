@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -20,31 +22,60 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
-    // Check login status
-    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
-    const storedUsername = localStorage.getItem("username") || "";
-    
-    setIsLoggedIn(loggedInStatus);
-    setUsername(storedUsername);
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          // Get username from user metadata or profile
+          const userUsername = session.user.user_metadata?.username || 
+                              session.user.email?.split('@')[0] || 
+                              'User';
+          setUsername(userUsername);
+        } else {
+          setUsername("");
+        }
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        const userUsername = session.user.user_metadata?.username || 
+                            session.user.email?.split('@')[0] || 
+                            'User';
+        setUsername(userUsername);
+      }
+    });
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const handleLogout = () => {
-    // Clear user data from localStorage
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("username");
-    localStorage.removeItem("femaleExperience");
-    
-    setIsLoggedIn(false);
-    
-    toast({
-      title: "Logged Out",
-      description: "You have been successfully logged out",
-    });
-    
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      setUsername("");
+      
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+      
+      navigate("/auth");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log out",
+        variant: "destructive",
+      });
+    }
   };
 
 
@@ -88,7 +119,7 @@ const Navbar = () => {
               );
             })}
             
-            {isLoggedIn ? (
+            {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-2 bg-white/70 backdrop-blur-sm hover:bg-white/90 border border-white/50 text-gray-800 shadow-md rounded-full p-1 transition-colors">
                   <Avatar className="w-8 h-8">
@@ -120,7 +151,7 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-white/95 backdrop-blur-md border border-white/20 shadow-lg">
                   <DropdownMenuItem asChild>
-                    <Link to="/login" className="flex items-center gap-2 cursor-pointer">
+                    <Link to="/auth" className="flex items-center gap-2 cursor-pointer">
                       <User className="w-4 h-4" />
                       Sign Up
                     </Link>
@@ -160,7 +191,7 @@ const Navbar = () => {
                 );
               })}
               
-              {isLoggedIn ? (
+              {user ? (
                 <>
                   <Link
                     to="/profile"
@@ -183,7 +214,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <Link
-                  to="/login"
+                  to="/auth"
                   className="flex items-center gap-2 px-3 py-2 text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
