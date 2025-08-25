@@ -8,31 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Star, Phone, MapPin, Filter, Search } from "lucide-react";
-
-export interface TourPackage {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-  price: number;
-  duration: string;
-  location: string;
-}
-
-export interface TourGuide {
-  id: string;
-  name: string;
-  image: string;
-  rating: number;
-  reviews: number;
-  languages: string[];
-  specialties: string[];
-  price: number;
-  phone: string;
-  location: string;
-  bio: string;
-}
+import { useTourPackages, useTourGuides, TourPackage, TourGuide } from "@/hooks/useTours";
 
 const Tours = () => {
   const navigate = useNavigate();
@@ -40,7 +16,11 @@ const Tours = () => {
   const [priceFilter, setPriceFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("all");
 
-  const tourPackages: TourPackage[] = [
+  const { packages: tourPackages, loading: packagesLoading } = useTourPackages();
+  const { guides: tourGuides, loading: guidesLoading } = useTourGuides();
+
+  // Fallback data if empty
+  const fallbackPackages: TourPackage[] = [
     {
       id: '1',
       title: "Women's Retreat in Ella",
@@ -103,7 +83,7 @@ const Tours = () => {
     }
   ];
 
-  const tourGuides: TourGuide[] = [
+  const fallbackGuides: TourGuide[] = [
     {
       id: '1',
       name: "Amara Perera",
@@ -197,7 +177,8 @@ const Tours = () => {
   };
 
   const getSortedPackages = () => {
-    let filtered = filterItems(tourPackages);
+    const packagesToUse = tourPackages.length > 0 ? tourPackages : fallbackPackages;
+    let filtered = filterItems(packagesToUse);
     if (priceFilter === "low-to-high") {
       filtered = sortByPrice(filtered, true);
     } else if (priceFilter === "high-to-low") {
@@ -207,7 +188,8 @@ const Tours = () => {
   };
 
   const getSortedGuides = () => {
-    let filtered = filterItems(tourGuides);
+    const guidesToUse = tourGuides.length > 0 ? tourGuides : fallbackGuides;
+    let filtered = filterItems(guidesToUse);
     if (priceFilter === "low-to-high") {
       filtered = sortByPrice(filtered, true);
     } else if (priceFilter === "high-to-low") {
@@ -216,7 +198,22 @@ const Tours = () => {
     return filtered;
   };
 
-  const locations = [...new Set([...tourPackages.map(p => p.location), ...tourGuides.map(g => g.location)])];
+  const allPackages = tourPackages.length > 0 ? tourPackages : fallbackPackages;
+  const allGuides = tourGuides.length > 0 ? tourGuides : fallbackGuides;
+  const locations = [...new Set([...allPackages.map(p => p.location), ...allGuides.map(g => g.location)])];
+
+  if (packagesLoading || guidesLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <div className="pt-20 px-4 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-lg">Loading tours...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
