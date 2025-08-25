@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,11 +11,9 @@ import { supabase } from "@/integrations/supabase/client";
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [searchParams] = useSearchParams();
   
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [isResetMode, setIsResetMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,19 +22,6 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // Check for password reset tokens in URL
-  useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
-    const type = searchParams.get('type');
-
-    if (accessToken && refreshToken && type === 'recovery') {
-      setIsResetMode(true);
-      setIsLogin(false);
-      setIsForgotPassword(false);
-    }
-  }, [searchParams]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +115,7 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const redirectUrl = `${window.location.origin}/auth`;
+      const redirectUrl = `${window.location.origin}/reset-password`;
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl,
@@ -161,54 +146,6 @@ const Auth = () => {
     setLoading(false);
   };
 
-  const handlePasswordReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    if (password !== confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive",
-      });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: password
-      });
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Password Updated Successfully",
-          description: "Your password has been reset. You can now sign in with your new password.",
-        });
-        // Clear URL parameters and redirect to login
-        window.history.replaceState({}, document.title, "/auth");
-        setIsResetMode(false);
-        setIsLogin(true);
-        setPassword("");
-        setConfirmPassword("");
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
-    }
-    
-    setLoading(false);
-  };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -222,29 +159,25 @@ const Auth = () => {
       <Card className="w-full max-w-md p-6 space-y-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold">
-            {isResetMode
-              ? "Create New Password"
-              : isForgotPassword 
-                ? "Reset Your Password" 
-                : isLogin 
-                  ? "Welcome Back" 
-                  : "Create Your Account"
+            {isForgotPassword 
+              ? "Reset Your Password" 
+              : isLogin 
+                ? "Welcome Back" 
+                : "Create Your Account"
             }
           </h1>
           <p className="text-muted-foreground mt-2">
-            {isResetMode
-              ? "Enter your new password below"
-              : isForgotPassword
-                ? "Enter your email address and we'll send you a link to reset your password"
-                : isLogin 
-                  ? "Sign in to your account" 
-                  : "Join our community of confident female travelers"
+            {isForgotPassword
+              ? "Enter your email address and we'll send you a link to reset your password"
+              : isLogin 
+                ? "Sign in to your account" 
+                : "Join our community of confident female travelers"
             }
           </p>
         </div>
 
-        <form onSubmit={isResetMode ? handlePasswordReset : isForgotPassword ? handleForgotPassword : isLogin ? handleSignIn : handleSignUp} className="space-y-4">
-          {!isLogin && !isForgotPassword && !isResetMode && (
+        <form onSubmit={isForgotPassword ? handleForgotPassword : isLogin ? handleSignIn : handleSignUp} className="space-y-4">
+          {!isLogin && !isForgotPassword && (
             <>
               <div className="space-y-2">
                 <Label htmlFor="displayName">Display Name</Label>
@@ -278,27 +211,25 @@ const Auth = () => {
             </>
           )}
 
-          {!isResetMode && (
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  id="email" 
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
-                  placeholder="Enter your email address"
-                  required
-                />
-              </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email Address</Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input 
+                id="email" 
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="pl-10"
+                placeholder="Enter your email address"
+                required
+              />
             </div>
-          )}
+          </div>
           
           {!isForgotPassword && (
             <div className="space-y-2">
-              <Label htmlFor="password">{isResetMode ? "New Password" : "Password"}</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input 
@@ -307,7 +238,7 @@ const Auth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 pr-10"
-                  placeholder={isResetMode ? "Enter your new password" : "Enter your password"}
+                  placeholder="Enter your password"
                   required
                 />
                 <button 
@@ -322,7 +253,7 @@ const Auth = () => {
             </div>
           )}
           
-          {(!isLogin && !isForgotPassword) || isResetMode ? (
+          {!isLogin && !isForgotPassword && (
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <div className="relative">
@@ -333,7 +264,7 @@ const Auth = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="pl-10 pr-10"
-                  placeholder={isResetMode ? "Confirm your new password" : "Confirm your password"}
+                  placeholder="Confirm your password"
                   required={!isLogin}
                 />
                 <button 
@@ -346,16 +277,11 @@ const Auth = () => {
                 </button>
               </div>
             </div>
-          ) : null}
+          )}
 
           <Button type="submit" variant="pink" className="w-full" disabled={loading}>
             {loading ? (
               "Loading..."
-            ) : isResetMode ? (
-              <>
-                <Lock className="w-4 h-4 mr-2" />
-                Update Password
-              </>
             ) : isForgotPassword ? (
               <>
                 <Mail className="w-4 h-4 mr-2" />
@@ -375,7 +301,7 @@ const Auth = () => {
           </Button>
         </form>
 
-        {isLogin && !isForgotPassword && !isResetMode && (
+        {isLogin && !isForgotPassword && (
           <div className="text-center">
             <button
               type="button"
@@ -399,7 +325,7 @@ const Auth = () => {
             >
               Back to sign in
             </button>
-          ) : !isResetMode ? (
+          ) : (
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
@@ -410,7 +336,7 @@ const Auth = () => {
                 : "Already have an account? Sign in"
               }
             </button>
-          ) : null}
+          )}
         </div>
       </Card>
     </div>

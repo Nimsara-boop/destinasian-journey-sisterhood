@@ -12,6 +12,7 @@ import EventDetail from "./pages/events/EventDetail";
 import Tours from "./pages/Tours";
 import Community from "./pages/community";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
 
@@ -28,6 +29,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             
             {/* Protected routes */}
             <Route path="/" element={
