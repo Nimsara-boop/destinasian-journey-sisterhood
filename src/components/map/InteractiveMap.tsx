@@ -1,15 +1,22 @@
 
 import React, { useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import LocationMarker from "./LocationMarker";
 import MapControls from "./MapControls";
 import LocationInfoPanel from "./LocationInfoPanel";
 import { Location } from "./types";
+import { useFriendLocations } from "@/hooks/useFriendLocations";
 
 interface InteractiveMapProps {
   locations: Location[];
 }
 
-const InteractiveMap = ({ locations }: InteractiveMapProps) => {
+const InteractiveMap = ({ locations: propLocations }: InteractiveMapProps) => {
+  const { searchQuery, setSearchQuery } = useFriendLocations();
+  const filteredLocations = propLocations.filter(location =>
+    location.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const mapRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
@@ -45,6 +52,13 @@ const InteractiveMap = ({ locations }: InteractiveMapProps) => {
     setSelectedLocation(location);
   };
 
+  const handleMessage = (location: Location) => {
+    // This could open a message modal or navigate to chat
+    console.log('Message user:', location.name);
+    // For now, we'll just show the location info panel
+    setSelectedLocation(location);
+  };
+
   // Calculate marker positions based on coordinates
   const getMarkerPosition = (coordinates: [number, number]) => {
     // These are approximate mappings for Sri Lanka's coordinates to the map image
@@ -64,6 +78,20 @@ const InteractiveMap = ({ locations }: InteractiveMapProps) => {
 
   return (
     <div className="relative h-[500px] overflow-hidden border rounded-md bg-gray-50">
+      {/* Search Bar */}
+      <div className="absolute top-4 left-4 z-10 w-80">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search friends by name or city..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 bg-background/95 backdrop-blur-sm"
+          />
+        </div>
+      </div>
+
       {/* Map container */}
       <div
         ref={mapRef}
@@ -87,7 +115,7 @@ const InteractiveMap = ({ locations }: InteractiveMapProps) => {
         />
         
         {/* Location markers */}
-        {locations.map((location) => {
+        {filteredLocations.map((location) => {
           const position = getMarkerPosition(location.coordinates);
           return (
             <LocationMarker
@@ -95,6 +123,7 @@ const InteractiveMap = ({ locations }: InteractiveMapProps) => {
               location={location}
               position={position}
               onClick={showLocationInfo}
+              onMessage={handleMessage}
             />
           );
         })}
@@ -107,7 +136,8 @@ const InteractiveMap = ({ locations }: InteractiveMapProps) => {
       {selectedLocation && (
         <LocationInfoPanel 
           location={selectedLocation} 
-          onClose={() => setSelectedLocation(null)} 
+          onClose={() => setSelectedLocation(null)}
+          onMessage={handleMessage}
         />
       )}
     </div>

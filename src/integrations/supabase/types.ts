@@ -354,6 +354,27 @@ export type Database = {
           },
         ]
       }
+      location_sharing_preferences: {
+        Row: {
+          created_at: string
+          id: string
+          shared_with_user_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          shared_with_user_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          shared_with_user_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           content: string
@@ -470,6 +491,8 @@ export type Database = {
           display_name: string | null
           id: string
           is_private: boolean
+          location_sharing_enabled: boolean | null
+          location_visible_to_followers: boolean | null
           updated_at: string
           user_id: string
           username: string
@@ -481,6 +504,8 @@ export type Database = {
           display_name?: string | null
           id?: string
           is_private?: boolean
+          location_sharing_enabled?: boolean | null
+          location_visible_to_followers?: boolean | null
           updated_at?: string
           user_id: string
           username: string
@@ -492,6 +517,8 @@ export type Database = {
           display_name?: string | null
           id?: string
           is_private?: boolean
+          location_sharing_enabled?: boolean | null
+          location_visible_to_followers?: boolean | null
           updated_at?: string
           user_id?: string
           username?: string

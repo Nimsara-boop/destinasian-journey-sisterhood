@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Globe, Camera, Award, Grid, Heart, MessageCircle, Plus, UserPlus, UserMinus } from "lucide-react";
+import { MapPin, Globe, Camera, Award, Grid, Heart, MessageCircle, Plus, UserPlus, UserMinus, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { PostUploadModal } from "@/components/PostUploadModal";
@@ -17,6 +17,7 @@ import { useProfileStats } from "@/hooks/useProfileStats";
 import { useUserPosts } from "@/hooks/useUserPosts";
 import { useFollowStatus } from "@/hooks/useFollowStatus";
 import { supabase } from "@/integrations/supabase/client";
+import LocationSettingsModal from "@/components/LocationSettingsModal";
 
 const Profile = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -24,6 +25,7 @@ const Profile = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [isOwnProfile, setIsOwnProfile] = useState(true);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const { toast } = useToast();
   
   const { stats, loading: statsLoading, refetch: refetchStats } = useProfileStats(currentUser?.id);
@@ -137,6 +139,14 @@ const Profile = () => {
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       New Post
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSettingsModalOpen(true)}
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
                     </Button>
                   </div>
                 ) : (
@@ -285,6 +295,12 @@ const Profile = () => {
           isOpen={uploadModalOpen}
           onClose={() => setUploadModalOpen(false)}
           onPostUploaded={handlePostUploaded}
+        />
+
+        {/* Location Settings Modal */}
+        <LocationSettingsModal
+          open={settingsModalOpen}
+          onOpenChange={setSettingsModalOpen}
         />
       </div>
     </div>
