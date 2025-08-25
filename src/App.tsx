@@ -31,12 +31,10 @@ const App = () => {
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             
+            {/* Public landing page */}
+            <Route path="/" element={<Index />} />
+            
             {/* Protected routes */}
-            <Route path="/" element={
-              <ExperienceProvider>
-                <Index />
-              </ExperienceProvider>
-            } />
             <Route path="/profile" element={
               <ExperienceProvider>
                 <Profile />
