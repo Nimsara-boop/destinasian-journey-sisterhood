@@ -1,124 +1,130 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-
-export interface Follower {
-  id: string;
-  user_id: string;
-  display_name: string;
-  username: string;
-  avatar_url?: string;
-  is_sharing_enabled: boolean;
-}
 
 export function useLocationSharingPreferences() {
-  const [followers, setFollowers] = useState<Follower[]>([]);
+  const [locationSharingEnabled, setLocationSharingEnabled] = useState(false);
+  const [locationVisibleToFollowers, setLocationVisibleToFollowers] = useState(false);
+  const [sharedWithUsers, setSharedWithUsers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
 
   useEffect(() => {
-    fetchFollowersWithPreferences();
+    fetchLocationSettings();
   }, []);
 
-  const fetchFollowersWithPreferences = async () => {
+  const fetchLocationSettings = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Get all followers with their profile info and current sharing preferences
-      const { data: followersData, error } = await supabase
-        .from('profile_followers')
-        .select(`
-          follower_id,
-          profiles!profile_followers_follower_id_fkey (
-            user_id,
-            display_name,
-            username,
-            avatar_url
-          )
-        `)
-        .eq('following_id', user.id);
+      // Fetch profile settings
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('location_sharing_enabled, location_visible_to_followers')
+        .eq('user_id', user.id)
+        .single();
 
-      if (error) throw error;
+      if (profileError) throw profileError;
 
-      // Get current location sharing preferences
-      const { data: preferencesData, error: preferencesError } = await supabase
+      if (profileData) {
+        setLocationSharingEnabled(profileData.location_sharing_enabled || false);
+        setLocationVisibleToFollowers(profileData.location_visible_to_followers || false);
+      }
+
+      // Fetch specific sharing preferences
+      const { data: sharingData, error: sharingError } = await supabase
         .from('location_sharing_preferences')
         .select('shared_with_user_id')
         .eq('user_id', user.id);
 
-      if (preferencesError) throw preferencesError;
+      if (sharingError) throw sharingError;
 
-      const sharedWithUserIds = new Set(preferencesData?.map(p => p.shared_with_user_id) || []);
-
-      const formattedFollowers = followersData?.map((follower: any) => ({
-        id: follower.profiles.user_id,
-        user_id: follower.profiles.user_id,
-        display_name: follower.profiles.display_name || follower.profiles.username,
-        username: follower.profiles.username,
-        avatar_url: follower.profiles.avatar_url,
-        is_sharing_enabled: sharedWithUserIds.has(follower.profiles.user_id)
-      })) || [];
-
-      setFollowers(formattedFollowers);
+      setSharedWithUsers(sharingData?.map(item => item.shared_with_user_id) || []);
     } catch (error: any) {
-      console.error('Error fetching followers with preferences:', error);
+      console.error('Error fetching location settings:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleFollowerSharing = async (followerId: string, enabled: boolean) => {
+  const updateLocationSettings = async (settings: {
+    locationSharingEnabled?: boolean;
+    locationVisibleToFollowers?: boolean;
+  }) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) throw new Error('Not authenticated');
 
-      if (enabled) {
-        // Add sharing preference
-        const { error } = await supabase
-          .from('location_sharing_preferences')
-          .insert({
-            user_id: user.id,
-            shared_with_user_id: followerId
-          });
-
-        if (error) throw error;
-      } else {
-        // Remove sharing preference
-        const { error } = await supabase
-          .from('location_sharing_preferences')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('shared_with_user_id', followerId);
-
-        if (error) throw error;
+      const updateData: any = {};
+      if (settings.locationSharingEnabled !== undefined) {
+        updateData.location_sharing_enabled = settings.locationSharingEnabled;
+        setLocationSharingEnabled(settings.locationSharingEnabled);
+      }
+      if (settings.locationVisibleToFollowers !== undefined) {
+        updateData.location_visible_to_followers = settings.locationVisibleToFollowers;
+        setLocationVisibleToFollowers(settings.locationVisibleToFollowers);
       }
 
-      // Update local state
-      setFollowers(prev => prev.map(follower => 
-        follower.id === followerId 
-          ? { ...follower, is_sharing_enabled: enabled }
-          : follower
-      ));
+      const { error } = await supabase
+        .from('profiles')
+        .update(updateData)
+        .eq('user_id', user.id);
 
-      const followerName = followers.find(f => f.id === followerId)?.display_name;
-      toast({
-        title: enabled ? "Location sharing enabled" : "Location sharing disabled",
-        description: `${followerName} can ${enabled ? 'now' : 'no longer'} see your location`,
-      });
+      if (error) throw error;
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      console.error('Error updating location settings:', error);
+      throw error;
+    }
+  };
+
+  const addLocationShare = async (sharedWithUserId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      const { error } = await supabase
+        .from('location_sharing_preferences')
+        .insert({
+          user_id: user.id,
+          shared_with_user_id: sharedWithUserId
+        });
+
+      if (error) throw error;
+
+      setSharedWithUsers(prev => [...prev, sharedWithUserId]);
+    } catch (error: any) {
+      console.error('Error adding location share:', error);
+      throw error;
+    }
+  };
+
+  const removeLocationShare = async (sharedWithUserId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      const { error } = await supabase
+        .from('location_sharing_preferences')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('shared_with_user_id', sharedWithUserId);
+
+      if (error) throw error;
+
+      setSharedWithUsers(prev => prev.filter(id => id !== sharedWithUserId));
+    } catch (error: any) {
+      console.error('Error removing location share:', error);
+      throw error;
     }
   };
 
   return {
-    followers,
+    locationSharingEnabled,
+    locationVisibleToFollowers,
+    sharedWithUsers,
     loading,
-    toggleFollowerSharing,
-    refetch: fetchFollowersWithPreferences
+    updateLocationSettings,
+    addLocationShare,
+    removeLocationShare,
+    refetch: fetchLocationSettings
   };
 }

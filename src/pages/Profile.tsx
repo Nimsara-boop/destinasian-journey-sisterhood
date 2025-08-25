@@ -30,7 +30,7 @@ const Profile = () => {
   
   const { stats, loading: statsLoading, refetch: refetchStats } = useProfileStats(currentUser?.id);
   const { posts, loading: postsLoading, refetch: refetchPosts } = useUserPosts(currentUser?.id);
-  const { isFollowing, loading: followLoading, toggleFollow } = useFollowStatus(currentUser?.id);
+  // Removed useFollowStatus since we need target user ID which we don't have in this context
   
   useEffect(() => {
     fetchCurrentUser();
@@ -149,26 +149,11 @@ const Profile = () => {
                       Settings
                     </Button>
                   </div>
-                ) : (
-                  <Button
-                    variant={isFollowing ? "outline" : "default"}
-                    size="sm"
-                    onClick={toggleFollow}
-                    disabled={followLoading}
-                  >
-                    {isFollowing ? (
-                      <>
-                        <UserMinus className="w-4 h-4 mr-2" />
-                        Unfollow
-                      </>
-                    ) : (
-                      <>
-                        <UserPlus className="w-4 h-4 mr-2" />
-                        Follow
-                      </>
-                    )}
-                  </Button>
-                )}
+                 ) : (
+                   <div className="text-muted-foreground">
+                     {/* Follow button would go here when viewing other profiles */}
+                   </div>
+                 )}
               </div>
 
               {/* Stats */}

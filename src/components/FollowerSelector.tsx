@@ -4,14 +4,14 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Users } from "lucide-react";
-import { useLocationSharingPreferences, Follower } from "@/hooks/useLocationSharingPreferences";
+import { useFollowStatus } from "@/hooks/useFollowStatus";
 
 interface FollowerSelectorProps {
   disabled?: boolean;
 }
 
 const FollowerSelector = ({ disabled = false }: FollowerSelectorProps) => {
-  const { followers, loading, toggleFollowerSharing } = useLocationSharingPreferences();
+  const { followers, loading } = useFollowStatus();
 
   if (loading) {
     return (
@@ -45,25 +45,25 @@ const FollowerSelector = ({ disabled = false }: FollowerSelectorProps) => {
       
       <ScrollArea className="h-48 border rounded-md">
         <div className="p-3 space-y-3">
-          {followers.map((follower: Follower) => (
-            <div key={follower.id} className="flex items-center justify-between">
+          {followers.map((follower) => (
+            <div key={follower.user_id} className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={follower.avatar_url} />
+                  <AvatarImage src={follower.avatar_url || ""} />
                   <AvatarFallback>
-                    {follower.display_name.charAt(0).toUpperCase()}
+                    {(follower.display_name || follower.username).charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <Label className="text-sm font-medium cursor-pointer">
-                    {follower.display_name}
+                    {follower.display_name || follower.username}
                   </Label>
                   <p className="text-xs text-muted-foreground">@{follower.username}</p>
                 </div>
               </div>
               <Switch
-                checked={follower.is_sharing_enabled}
-                onCheckedChange={(checked) => toggleFollowerSharing(follower.id, checked)}
+                checked={false}
+                onCheckedChange={() => {}}
                 disabled={disabled}
               />
             </div>

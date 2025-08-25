@@ -1,22 +1,17 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export interface Traveler {
-  id: string;
-  name: string;
-  age?: number;
-  job?: string;
-  location: string;
-  interests: string[];
-  avatar: string;
-  bio: string;
-  verified: boolean;
-  photos: string[];
-  badges: { name: string; icon: string }[];
+export interface Profile {
+  user_id: string;
+  username: string;
+  display_name: string | null;
+  avatar_url: string | null;
+  is_private: boolean;
+  bio: string | null;
 }
 
 export function useProfiles() {
-  const [profiles, setProfiles] = useState<Traveler[]>([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,32 +26,12 @@ export function useProfiles() {
       
       const { data, error } = await supabase
         .from('profiles')
-        .select(`
-          *,
-          user_photos(photo_url)
-        `)
+        .select('user_id, username, display_name, avatar_url, is_private, bio')
         .neq('user_id', user?.id); // Exclude current user
 
       if (error) throw error;
 
-      const formattedProfiles = data?.map((profile: any) => ({
-        id: profile.id,
-        name: profile.display_name || profile.username,
-        age: null, // Could be added to profiles table
-        job: null, // Could be added to profiles table
-        location: "Sri Lanka", // Default location
-        interests: [], // Could be added to profiles table
-        avatar: profile.avatar_url || "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-        bio: profile.bio || "Travel enthusiast exploring the world.",
-        verified: true, // Could be added to profiles table
-        photos: profile.user_photos?.map((photo: any) => photo.photo_url) || [],
-        badges: [
-          { name: "Explorer", icon: "🌏" },
-          { name: "Verified", icon: "✓" }
-        ]
-      })) || [];
-
-      setProfiles(formattedProfiles);
+      setProfiles(data || []);
     } catch (error: any) {
       setError(error.message);
       console.error('Error fetching profiles:', error);
