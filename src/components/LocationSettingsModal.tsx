@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { MapPin, Users, Shield, Settings } from "lucide-react";
 import { useLocationSettings } from "@/hooks/useLocationSettings";
 import { useLocationTracking } from "@/hooks/useLocationTracking";
+import FollowerSelector from "./FollowerSelector";
 
 interface LocationSettingsModalProps {
   open: boolean;
@@ -100,6 +101,13 @@ const LocationSettingsModal = ({ open, onOpenChange }: LocationSettingsModalProp
                 disabled={loading || !locationSharingEnabled}
               />
             </div>
+            
+            {/* Follower Selection - only show when not visible to all followers */}
+            {locationSharingEnabled && !locationVisibleToFollowers && (
+              <div className="mt-4">
+                <FollowerSelector disabled={loading} />
+              </div>
+            )}
           </div>
 
           <Separator />
