@@ -348,7 +348,7 @@ const Auth = () => {
             </div>
           ) : null}
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" variant="pink" className="w-full" disabled={loading}>
             {loading ? (
               "Loading..."
             ) : isResetMode ? (
