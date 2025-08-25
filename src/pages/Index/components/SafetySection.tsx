@@ -1,11 +1,15 @@
 
-import { Shield, MapPin, Globe } from "lucide-react";
+import { Shield, MapPin } from "lucide-react";
+import { useState } from "react";
+import { LocationPhotosGallery } from "./LocationPhotosGallery";
 
 interface SafetySectionProps {
   safetyTips: string[];
 }
 
 const SafetySection = ({ safetyTips }: SafetySectionProps) => {
+  const [showLocationPhotos, setShowLocationPhotos] = useState(false);
+
   return (
     <section className="py-20 px-4 bg-muted-feminine">
       <div className="max-w-7xl mx-auto">
@@ -32,17 +36,24 @@ const SafetySection = ({ safetyTips }: SafetySectionProps) => {
             </ul>
           </div>
           
-          <div className="location-advice">
-            <div className="flex items-center gap-3 mb-6">
-              <MapPin className="w-8 h-8 text-primary-feminine" />
-              <h3 className="text-xl font-serif">Interactive Destination Guide</h3>
+          {showLocationPhotos ? (
+            <LocationPhotosGallery onBack={() => setShowLocationPhotos(false)} />
+          ) : (
+            <div className="location-advice">
+              <div className="flex items-center gap-3 mb-6">
+                <MapPin className="w-8 h-8 text-primary-feminine" />
+                <h3 className="text-xl font-serif">Local Travel Photos</h3>
+              </div>
+              <p className="mb-4">Discover photos from travelers in your current location.</p>
+              <div 
+                className="aspect-video bg-white rounded-lg flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors border-2 border-dashed border-muted-foreground/25"
+                onClick={() => setShowLocationPhotos(true)}
+              >
+                <MapPin className="w-16 h-16 text-primary-feminine animate-soft-bounce" />
+                <span className="ml-4 text-muted-foreground">Click to explore local photos</span>
+              </div>
             </div>
-            <p className="mb-4">Explore our interactive map with location-specific advice for women travelers.</p>
-            <div className="aspect-video bg-white rounded-lg flex items-center justify-center">
-              <Globe className="w-16 h-16 text-gray-300 animate-soft-bounce" />
-              <span className="ml-4 text-gray-500">Interactive map loading...</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
