@@ -6,11 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import Autoplay from "embla-carousel-autoplay";
 import * as motion from "motion/react-client";
+import { useEventHighlights } from "@/hooks/useEventHighlights";
 
 const RecentEventHighlights = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  
+  const { highlights: recentEventHighlights, loading: highlightsLoading } = useEventHighlights();
 
   const ViewMoreButton = () => (
     <motion.div
@@ -41,38 +44,6 @@ const RecentEventHighlights = () => {
     </motion.div>
   );
 
-  // Mock data for recent event highlights
-  const recentEventHighlights = [
-    {
-      id: 1,
-      image: "/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png",
-      title: "Tokyo Tech Meetup",
-      attendees: 150,
-      location: "Tokyo, Japan"
-    },
-    {
-      id: 2,
-      image: "/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png",
-      title: "Singapore Startup Weekend",
-      attendees: 200,
-      location: "Singapore"
-    },
-    {
-      id: 3,
-      image: "/lovable-uploads/47ee11ca-db78-4616-baed-fafacf5986a8.png",
-      title: "Bangkok Digital Nomads",
-      attendees: 120,
-      location: "Bangkok, Thailand"
-    },
-    {
-      id: 4,
-      image: "/lovable-uploads/ab6e39c4-5a77-4f4c-a047-6d81cbc3aaeb.png",
-      title: "Seoul Innovation Summit",
-      attendees: 300,
-      location: "Seoul, South Korea"
-    }
-  ];
-
   useEffect(() => {
     // Check current auth session
     const checkUser = async () => {
@@ -95,7 +66,7 @@ const RecentEventHighlights = () => {
   }, []);
 
   // Show loading state
-  if (isLoading) {
+  if (isLoading || highlightsLoading) {
     return (
       <section className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
@@ -106,6 +77,11 @@ const RecentEventHighlights = () => {
         </div>
       </section>
     );
+  }
+
+  // Don't render if no events
+  if (recentEventHighlights.length === 0) {
+    return null;
   }
 
   return (

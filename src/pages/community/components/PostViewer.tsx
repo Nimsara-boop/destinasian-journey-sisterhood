@@ -5,7 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Heart, MessageSquare, Share, BookmarkPlus, MoreHorizontal } from "lucide-react";
 
 interface Post {
-  id: number;
+  id: string;
   image: string;
   author: {
     name: string;
@@ -21,15 +21,15 @@ interface Post {
 }
 
 interface PostViewerProps {
-  posts: Post[];
-  initialPostId: number;
+  posts: any[];
+  initialPostId: string;
   onBack: () => void;
 }
 
 const PostViewer = ({ posts, initialPostId, onBack }: PostViewerProps) => {
   const initialIndex = posts.findIndex(post => post.id === initialPostId);
   const [currentIndex, setCurrentIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
-  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
 
   const currentPost = posts[currentIndex];
 
