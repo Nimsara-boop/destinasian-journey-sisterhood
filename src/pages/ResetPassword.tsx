@@ -22,19 +22,37 @@ const ResetPassword = () => {
   // Check for password reset tokens in URL
   useEffect(() => {
     const validateAndSetSession = async () => {
-      // Supabase sends tokens in URL hash, not search params
+      // Check both hash params and search params for tokens
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = hashParams.get('access_token');
-      const refreshToken = hashParams.get('refresh_token');
-      const type = hashParams.get('type');
+      const searchParams = new URLSearchParams(window.location.search);
+      
+      const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
+      const type = hashParams.get('type') || searchParams.get('type');
 
-      if (accessToken && refreshToken && type === 'recovery') {
+      // Also check for older token formats
+      const token = hashParams.get('token') || searchParams.get('token');
+      const tokenHash = hashParams.get('token_hash') || searchParams.get('token_hash');
+
+      if ((accessToken && refreshToken && type === 'recovery') || (token && type === 'recovery')) {
         try {
-          // Set the session with the tokens from the URL
-          const { data, error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
+          let sessionResult;
+          
+          if (accessToken && refreshToken) {
+            // Modern token format
+            sessionResult = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+          } else if (token) {
+            // Legacy token format - verify the token
+            sessionResult = await supabase.auth.verifyOtp({
+              token_hash: tokenHash || token,
+              type: 'recovery',
+            });
+          }
+
+          const { data, error } = sessionResult || {};
 
           if (error) {
             throw error;
