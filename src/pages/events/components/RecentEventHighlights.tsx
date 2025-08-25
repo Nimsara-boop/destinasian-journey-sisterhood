@@ -79,10 +79,8 @@ const RecentEventHighlights = () => {
     );
   }
 
-  // Don't render if no events
-  if (recentEventHighlights.length === 0) {
-    return null;
-  }
+  // Don't render if no events - show empty state instead
+  const showEmptyState = recentEventHighlights.length === 0;
 
   return (
     <section className="py-12 px-4">
@@ -95,38 +93,45 @@ const RecentEventHighlights = () => {
             </p>
           </CardHeader>
           <CardContent className="p-0">
-            <Carousel
-              plugins={[
-                Autoplay({
-                  delay: 3000,
-                }),
-              ]}
-              className="w-full"
-            >
-              <CarouselContent>
-                {recentEventHighlights.map((highlight) => (
-                  <CarouselItem key={highlight.id} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="relative group cursor-pointer m-4">
-                      <div className="aspect-video overflow-hidden rounded-lg">
-                        <img
-                          src={highlight.image}
-                          alt={highlight.title}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
+            {showEmptyState ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground text-lg">No recent events yet.</p>
+                <p className="text-sm text-muted-foreground mt-2">Check back soon for exciting events from our community!</p>
+              </div>
+            ) : (
+              <Carousel
+                plugins={[
+                  Autoplay({
+                    delay: 3000,
+                  }),
+                ]}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {recentEventHighlights.map((highlight) => (
+                    <CarouselItem key={highlight.id} className="md:basis-1/2 lg:basis-1/3">
+                      <div className="relative group cursor-pointer m-4">
+                        <div className="aspect-video overflow-hidden rounded-lg">
+                          <img
+                            src={highlight.image}
+                            alt={highlight.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-lg" />
+                        <div className="absolute bottom-4 left-4 right-4 text-white">
+                          <h3 className="font-semibold text-lg mb-1">{highlight.title}</h3>
+                          <p className="text-sm text-white/80">{highlight.location}</p>
+                          <p className="text-xs text-white/70 mt-1">{highlight.attendees} attendees</p>
+                        </div>
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-lg" />
-                      <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <h3 className="font-semibold text-lg mb-1">{highlight.title}</h3>
-                        <p className="text-sm text-white/80">{highlight.location}</p>
-                        <p className="text-xs text-white/70 mt-1">{highlight.attendees} attendees</p>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-4" />
-              <CarouselNext className="right-4" />
-            </Carousel>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-4" />
+                <CarouselNext className="right-4" />
+              </Carousel>
+            )}
           </CardContent>
         </Card>
         <div className="mt-6 text-center">
