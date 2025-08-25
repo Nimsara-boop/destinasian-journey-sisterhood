@@ -77,7 +77,7 @@ const PostViewer = ({ posts, initialPostId, onBack }: PostViewerProps) => {
               <img
                 src={post.image}
                 alt={post.caption}
-                className="max-w-full max-h-full object-contain"
+                className="max-w-[100vw] max-h-[70vh] w-auto h-auto object-contain"
               />
               
               {/* Navigation hints */}
