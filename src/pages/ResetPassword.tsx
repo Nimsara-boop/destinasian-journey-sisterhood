@@ -22,26 +22,49 @@ const ResetPassword = () => {
 
   // Check for password reset tokens in URL
   useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
-    const type = searchParams.get('type');
+    const validateAndSetSession = async () => {
+      const accessToken = searchParams.get('access_token');
+      const refreshToken = searchParams.get('refresh_token');
+      const type = searchParams.get('type');
 
-    if (accessToken && refreshToken && type === 'recovery') {
-      setIsValidToken(true);
-      // Set the session with the tokens from the URL
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    } else {
-      // No valid reset token, redirect to auth page
-      toast({
-        title: "Invalid Reset Link",
-        description: "This password reset link is invalid or has expired. Please request a new one.",
-        variant: "destructive",
-      });
-      navigate("/auth");
-    }
+      if (accessToken && refreshToken && type === 'recovery') {
+        try {
+          // Set the session with the tokens from the URL
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+
+          if (error) {
+            throw error;
+          }
+
+          if (data.session) {
+            setIsValidToken(true);
+          } else {
+            throw new Error('No session established');
+          }
+        } catch (error) {
+          console.error('Token validation error:', error);
+          toast({
+            title: "Expired Reset Link",
+            description: "This password reset link has expired. Please request a new one.",
+            variant: "destructive",
+          });
+          navigate("/auth");
+        }
+      } else {
+        // No valid reset token, redirect to auth page
+        toast({
+          title: "Invalid Reset Link",
+          description: "This password reset link is invalid or has expired. Please request a new one.",
+          variant: "destructive",
+        });
+        navigate("/auth");
+      }
+    };
+
+    validateAndSetSession();
   }, [searchParams, navigate, toast]);
 
   const handlePasswordReset = async (e: React.FormEvent) => {
