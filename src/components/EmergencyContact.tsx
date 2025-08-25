@@ -1,8 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { PhoneCall, AlertCircle, X, ChevronUp, Building2, Shield } from "lucide-react";
+import { PhoneCall, AlertCircle, X, ChevronUp, Building2, Shield, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useLocationTracking } from "@/hooks/useLocationTracking";
+import { useToast } from "@/hooks/use-toast";
 
 interface EmergencyContact {
   name: string;
@@ -46,37 +48,95 @@ const EmergencyContact = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useState<Location>({ country: "default" });
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
+  const [showPermissionNotice, setShowPermissionNotice] = useState(false);
+  const { startTracking, lastLocation } = useLocationTracking();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    // Simulate getting user's location
-    // In a real app, you would use the Geolocation API and a reverse geocoding service
-    const getUserLocation = async () => {
+  const getCountryFromCoordinates = async (lat: number, lng: number): Promise<string> => {
+    try {
+      // Simple coordinate-based country detection
+      // Sri Lanka: 5.9-9.8 lat, 79.5-82 lng
+      if (lat >= 5.9 && lat <= 9.8 && lng >= 79.5 && lng <= 82) {
+        return "Sri Lanka";
+      }
+      // India: 8-37 lat, 68-97 lng
+      if (lat >= 8 && lat <= 37 && lng >= 68 && lng <= 97) {
+        return "India";
+      }
+      // Thailand: 5.6-20.4 lat, 97.3-105.6 lng
+      if (lat >= 5.6 && lat <= 20.4 && lng >= 97.3 && lng <= 105.6) {
+        return "Thailand";
+      }
+      return "default";
+    } catch (error) {
+      console.error("Error determining country:", error);
+      return "default";
+    }
+  };
+
+  const requestLocationPermission = async () => {
+    if (!navigator.geolocation) {
+      toast({
+        title: "Location not supported",
+        description: "Your browser doesn't support location tracking.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    setShowPermissionNotice(false);
+
+    const success = async (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
+      
       try {
-        setIsLoading(true);
+        const country = await getCountryFromCoordinates(latitude, longitude);
+        setLocation({ 
+          country,
+          city: country === "Sri Lanka" ? "Colombo" : undefined 
+        });
+        setHasLocationPermission(true);
         
-        // For demo purposes, we'll just set Sri Lanka as the location
-        // In a real app, you'd use APIs like:
-        // 1. navigator.geolocation.getCurrentPosition()
-        // 2. A reverse geocoding service like Google Maps or Mapbox
+        // Start location tracking to save to database
+        await startTracking();
         
-        // Simulating API delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        setLocation({
-          country: "Sri Lanka",
-          city: "Colombo"
+        toast({
+          title: "Location access granted",
+          description: "Emergency contacts updated for your location",
         });
       } catch (error) {
-        console.error("Error getting location:", error);
-        // Fallback to default emergency numbers
+        console.error('Error processing location:', error);
         setLocation({ country: "default" });
       } finally {
         setIsLoading(false);
       }
     };
 
-    getUserLocation();
-  }, []);
+    const error = (err: GeolocationPositionError) => {
+      setIsLoading(false);
+      setLocation({ country: "default" });
+      toast({
+        title: "Location access denied",
+        description: "Using default emergency contacts. Grant permission for location-specific contacts.",
+        variant: "destructive",
+      });
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 300000 // 5 minutes
+    });
+  };
+
+  useEffect(() => {
+    if (!hasLocationPermission) {
+      setShowPermissionNotice(true);
+      setIsLoading(false);
+    }
+  }, [hasLocationPermission]);
 
   const emergencyContacts = location.country && emergencyContactsByCountry[location.country] 
     ? emergencyContactsByCountry[location.country] 
@@ -102,7 +162,38 @@ const EmergencyContact = () => {
               </Button>
             </div>
             
-            {isLoading ? (
+            {showPermissionNotice ? (
+              <div className="space-y-3">
+                <div className="flex items-center text-sm text-amber-600">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  <span className="font-medium">Location Access Needed</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  We need your location to show relevant emergency contacts and share your location with chosen friends on the map.
+                </p>
+                <div className="flex flex-col gap-2">
+                  <Button 
+                    onClick={requestLocationPermission}
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  >
+                    <MapPin className="h-3 w-3 mr-1" />
+                    Allow Location Access
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      setShowPermissionNotice(false);
+                      setLocation({ country: "default" });
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    Use Default Contacts
+                  </Button>
+                </div>
+              </div>
+            ) : isLoading ? (
               <div className="flex justify-center py-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
               </div>

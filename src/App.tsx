@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
+import EmergencyContact from "./components/EmergencyContact";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => {
             
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <EmergencyContact />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
