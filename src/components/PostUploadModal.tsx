@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Upload, X, MapPin } from "lucide-react";
+import { Upload, X } from "lucide-react";
 import { usePostUpload } from "@/hooks/usePostUpload";
+import LocationSelector from "./LocationSelector";
+import { LocationResult } from "@/hooks/useLocationSearch";
 
 interface PostUploadModalProps {
   isOpen: boolean;
@@ -16,7 +18,7 @@ interface PostUploadModalProps {
 export function PostUploadModal({ isOpen, onClose, onPostUploaded }: PostUploadModalProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [caption, setCaption] = useState("");
-  const [location, setLocation] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState<LocationResult | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { uploadPost, uploading } = usePostUpload();
 
@@ -33,11 +35,11 @@ export function PostUploadModal({ isOpen, onClose, onPostUploaded }: PostUploadM
     if (!selectedFile) return;
 
     try {
-      await uploadPost(selectedFile, caption, location);
+      await uploadPost(selectedFile, caption, selectedLocation?.place_name || undefined);
       // Reset form
       setSelectedFile(null);
       setCaption("");
-      setLocation("");
+      setSelectedLocation(null);
       setPreviewUrl(null);
       onPostUploaded?.();
       onClose();
@@ -49,7 +51,7 @@ export function PostUploadModal({ isOpen, onClose, onPostUploaded }: PostUploadM
   const handleClose = () => {
     setSelectedFile(null);
     setCaption("");
-    setLocation("");
+    setSelectedLocation(null);
     setPreviewUrl(null);
     onClose();
   };
@@ -116,18 +118,11 @@ export function PostUploadModal({ isOpen, onClose, onPostUploaded }: PostUploadM
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="location" className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  Location
-                </Label>
-                <Input
-                  id="location"
-                  placeholder="Add location..."
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
-              </div>
+              <LocationSelector
+                selectedLocation={selectedLocation}
+                onLocationSelect={setSelectedLocation}
+                placeholder="Where was this photo taken?"
+              />
 
               <div className="flex gap-2">
                 <Button variant="outline" onClick={handleClose} className="flex-1">
