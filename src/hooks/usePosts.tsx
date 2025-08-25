@@ -33,7 +33,7 @@ export function usePosts() {
         .from('posts')
         .select(`
           *,
-          profiles!posts_user_id_fkey(display_name, avatar_url)
+          profiles!posts_user_id_fkey(display_name, avatar_url, is_private)
         `)
         .order('created_at', { ascending: false });
 

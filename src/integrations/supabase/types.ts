@@ -409,6 +409,7 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          is_featured: boolean
           likes_count: number
           location: string | null
           updated_at: string
@@ -420,6 +421,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          is_featured?: boolean
           likes_count?: number
           location?: string | null
           updated_at?: string
@@ -431,10 +433,32 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          is_featured?: boolean
           likes_count?: number
           location?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      profile_followers: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
         }
         Relationships: []
       }
@@ -445,6 +469,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          is_private: boolean
           updated_at: string
           user_id: string
           username: string
@@ -455,6 +480,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_private?: boolean
           updated_at?: string
           user_id: string
           username: string
@@ -465,6 +491,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_private?: boolean
           updated_at?: string
           user_id?: string
           username?: string

@@ -9,361 +9,283 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Globe, Camera, Award, Grid, Image as ImageIcon, Check, Video, Upload, LinkIcon, Users } from "lucide-react";
+import { MapPin, Globe, Camera, Award, Grid, Heart, MessageCircle, Plus, UserPlus, UserMinus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { PostUploadModal } from "@/components/PostUploadModal";
+import { useProfileStats } from "@/hooks/useProfileStats";
+import { useUserPosts } from "@/hooks/useUserPosts";
+import { useFollowStatus } from "@/hooks/useFollowStatus";
+import { supabase } from "@/integrations/supabase/client";
 
 const Profile = () => {
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [isPublic, setIsPublic] = useState(true);
-  const [isVerified, setIsVerified] = useState(false);
-  const [isFemale, setIsFemale] = useState(false);
-  const [usingFemaleExperience, setUsingFemaleExperience] = useState(false);
-  const [showVerification, setShowVerification] = useState(false);
+  const [isOwnProfile, setIsOwnProfile] = useState(true);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const { toast } = useToast();
   
-  useEffect(() => {
-    // Check if user is female and whether they're verified
-    const gender = localStorage.getItem("gender");
-    const femaleExperience = localStorage.getItem("femaleExperience") === "true";
-    const verified = localStorage.getItem("verifiedFemale") === "true";
-    
-    setIsFemale(gender === "female");
-    setUsingFemaleExperience(femaleExperience);
-    setIsVerified(verified);
-    
-    // Show verification section if user is female but not verified and not using female experience
-    setShowVerification(gender === "female" && !verified && !femaleExperience);
-  }, []);
+  const { stats, loading: statsLoading, refetch: refetchStats } = useProfileStats(currentUser?.id);
+  const { posts, loading: postsLoading, refetch: refetchPosts } = useUserPosts(currentUser?.id);
+  const { isFollowing, loading: followLoading, toggleFollow } = useFollowStatus(currentUser?.id);
   
-  // Mock data for photos and rewards
-  const [photos] = useState([
-    "https://images.unsplash.com/photo-1501555088652-021faa106b9b",
-    "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
-    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800",
-  ]);
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
 
-  const [rewards] = useState([
-    { id: 1, title: "Adventure Seeker", description: "Visited 5 different cities", icon: "🌟" },
-    { id: 2, title: "Culture Explorer", description: "Attended 3 cultural events", icon: "🏛️" },
-    { id: 3, title: "Social Butterfly", description: "Connected with 10 travelers", icon: "🦋" },
-  ]);
-
-  const handlePhotoUpload = () => {
-    toast({
-      title: "Photo Upload",
-      description: "This feature will be implemented soon!",
-    });
+  const fetchCurrentUser = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUser(user);
+        // Fetch profile data
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (profileData) {
+          setProfile(profileData);
+          setIsPublic(!profileData.is_private);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
   };
+  
+  const handlePrivacyToggle = async (isPrivate: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ is_private: isPrivate })
+        .eq('user_id', currentUser?.id);
 
-  const handleVerificationMethod = (method: string) => {
-    toast({
-      title: "Verification Started",
-      description: `${method} verification process has been initiated. Our team will contact you shortly.`,
-    });
-    
-    // In a real app, this would trigger the appropriate verification flow
-    // For demo purposes, we'll simulate verification after a delay
-    setTimeout(() => {
-      localStorage.setItem("verifiedFemale", "true");
-      setIsVerified(true);
+      if (error) throw error;
+      setIsPublic(!isPrivate);
       toast({
-        title: "Verification Complete",
-        description: "You've been verified! You can now access the female experience.",
+        title: isPrivate ? "Account is now private" : "Account is now public",
+        description: isPrivate 
+          ? "Only your followers can see your posts" 
+          : "Everyone can see your posts",
       });
-    }, 3000);
-  };
-
-  const handleEnableFemaleExperience = () => {
-    if (!isVerified) {
+    } catch (error: any) {
       toast({
-        title: "Verification Required",
-        description: "Please complete verification before enabling the female experience.",
+        title: "Error",
+        description: error.message,
         variant: "destructive",
       });
-      return;
     }
-    
-    localStorage.setItem("femaleExperience", "true");
-    toast({
-      title: "Female Experience Enabled",
-      description: "You'll now see content tailored for women travelers",
-    });
-    
-    // In a real app, this would trigger a re-render or state change in the parent component
-    // For now, we'll just reload the page to simulate the experience change
-    window.location.reload();
   };
+
+  const handlePostUploaded = () => {
+    refetchPosts();
+    refetchStats();
+  };
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container max-w-4xl mx-auto pt-24 px-4 pb-12">
-        <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-          <div className="flex flex-col items-center mb-8">
-            <Avatar className="w-24 h-24 mb-4">
-              <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" />
-              <AvatarFallback>JP</AvatarFallback>
-            </Avatar>
-            <Button variant="outline" size="sm" className="mb-4" onClick={handlePhotoUpload}>
-              <Camera className="w-4 h-4 mr-2" />
-              Change Photo
-            </Button>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="w-4 h-4" />
-              <span>Currently in Tokyo, Japan</span>
-            </div>
-            
-            {/* Verification Badge - Only shown if the user is a verified female */}
-            {isFemale && isVerified && (
-              <Badge className="mt-2 bg-primary-feminine/80 text-white">
-                <Check className="w-3 h-3 mr-1" /> Verified Female Traveler
-              </Badge>
-            )}
-          </div>
-
-          <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid grid-cols-2 md:grid-cols-3">
-              <TabsTrigger value="profile">Profile Settings</TabsTrigger>
-              <TabsTrigger value="photos">Travel Photos</TabsTrigger>
-              {isFemale && <TabsTrigger value="verification">Verification</TabsTrigger>}
-            </TabsList>
-            
-            <TabsContent value="profile" className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold">Profile Settings</h1>
-                <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4" />
-                  <Label htmlFor="public-profile">Public Profile</Label>
-                  <Switch
-                    id="public-profile"
-                    checked={isPublic}
-                    onCheckedChange={setIsPublic}
-                  />
-                </div>
-              </div>
-
-              {/* Basic Information */}
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" placeholder="Jane Doe" />
-                </div>
-
-                <div>
-                  <Label htmlFor="bio">Bio</Label>
-                  <Textarea
-                    id="bio"
-                    placeholder="Tell us about yourself and your travel experiences..."
-                    className="h-32"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="interests">Travel Interests</Label>
-                  <Input id="interests" placeholder="Culture, Food, Adventure..." />
-                </div>
-
-                <div>
-                  <Label htmlFor="languages">Languages Spoken</Label>
-                  <Input id="languages" placeholder="English, Japanese..." />
-                </div>
-              </div>
-
-              {/* Rewards Section */}
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <Award className="w-5 h-5 text-primary" />
-                  Travel Rewards
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {rewards.map((reward) => (
-                    <div key={reward.id} className="p-4 border rounded-lg text-center">
-                      <div className="text-2xl mb-2">{reward.icon}</div>
-                      <h3 className="font-semibold">{reward.title}</h3>
-                      <p className="text-sm text-muted-foreground">{reward.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-4">
-                <Button variant="outline">Cancel</Button>
-                <Button>Save Changes</Button>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="photos" className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <Grid className="w-5 h-5" />
-                  Travel Photos
-                </h2>
-                <Button variant="outline" size="sm" onClick={handlePhotoUpload}>
-                  <ImageIcon className="w-4 h-4 mr-2" />
-                  Add Photos
+        {/* Profile Header */}
+        <div className="bg-card rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+            {/* Profile Picture */}
+            <div className="flex flex-col items-center">
+              <Avatar className="w-32 h-32 md:w-40 md:h-40">
+                <AvatarImage src={profile?.avatar_url || "https://images.unsplash.com/photo-1494790108377-be9c29b29330"} />
+                <AvatarFallback className="text-xl">
+                  {profile?.display_name?.charAt(0) || currentUser?.email?.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              {isOwnProfile && (
+                <Button variant="outline" size="sm" className="mt-3">
+                  <Camera className="w-4 h-4 mr-2" />
+                  Change Photo
                 </Button>
+              )}
+            </div>
+
+            {/* Profile Info */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+                <h1 className="text-2xl font-bold">
+                  {profile?.display_name || profile?.username || 'User'}
+                </h1>
+                
+                {isOwnProfile ? (
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      Edit Profile
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setUploadModalOpen(true)}
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      New Post
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant={isFollowing ? "outline" : "default"}
+                    size="sm"
+                    onClick={toggleFollow}
+                    disabled={followLoading}
+                  >
+                    {isFollowing ? (
+                      <>
+                        <UserMinus className="w-4 h-4 mr-2" />
+                        Unfollow
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Follow
+                      </>
+                    )}
+                  </Button>
+                )}
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                {photos.map((photo, index) => (
+
+              {/* Stats */}
+              <div className="flex justify-center md:justify-start gap-8 mb-4">
+                <div className="text-center">
+                  <div className="font-bold text-lg">{statsLoading ? '...' : stats.posts}</div>
+                  <div className="text-sm text-muted-foreground">posts</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-bold text-lg">{statsLoading ? '...' : stats.followers}</div>
+                  <div className="text-sm text-muted-foreground">followers</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-bold text-lg">{statsLoading ? '...' : stats.following}</div>
+                  <div className="text-sm text-muted-foreground">following</div>
+                </div>
+              </div>
+
+              {/* Bio */}
+              <div className="space-y-2">
+                {profile?.bio && (
+                  <p className="text-sm">{profile.bio}</p>
+                )}
+                <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground">
+                  <MapPin className="w-4 h-4" />
+                  <span>Traveler</span>
+                </div>
+                {!isPublic && (
+                  <Badge variant="secondary" className="text-xs">
+                    Private Account
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Posts Grid */}
+        <div className="bg-card rounded-lg shadow-sm">
+          <div className="border-b border-border">
+            <div className="flex items-center justify-center p-4">
+              <Grid className="w-5 h-5 mr-2" />
+              <span className="font-medium">Posts</span>
+            </div>
+          </div>
+          
+          <div className="p-6">
+            {postsLoading ? (
+              <div className="grid grid-cols-3 gap-1">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="aspect-square bg-muted animate-pulse rounded" />
+                ))}
+              </div>
+            ) : posts.length === 0 ? (
+              <div className="text-center py-12">
+                <Grid className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="font-medium mb-2">No posts yet</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {isOwnProfile ? "Share your first travel memory!" : "This user hasn't shared any posts yet."}
+                </p>
+                {isOwnProfile && (
+                  <Button onClick={() => setUploadModalOpen(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Share your first post
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-1">
+                {posts.map((post) => (
                   <div
-                    key={index}
-                    className="aspect-square rounded-lg overflow-hidden"
+                    key={post.id}
+                    className="aspect-square relative group cursor-pointer overflow-hidden rounded"
                   >
                     <img
-                      src={photo}
-                      alt={`Travel photo ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      src={post.image_url}
+                      alt="Post"
+                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <div className="flex items-center gap-4 text-white">
+                        <span className="flex items-center gap-1">
+                          <Heart className="w-4 h-4" />
+                          {post.likes_count}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MessageCircle className="w-4 h-4" />
+                          {post.comments_count}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-            </TabsContent>
-            
-            {/* Verification Tab - Only shown for female users */}
-            {isFemale && (
-              <TabsContent value="verification" className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <Check className="w-5 h-5 text-primary" />
-                    Female Traveler Verification
-                  </h2>
-                  
-                  {isVerified && (
-                    <Badge className="bg-green-500 text-white">Verified</Badge>
-                  )}
-                </div>
-                
-                <p className="text-muted-foreground">
-                  To access our exclusive female experience, we require verification to ensure the safety and comfort of all women in our community.
-                </p>
-                
-                {isVerified ? (
-                  <div className="space-y-4">
-                    <Card className="bg-green-50 border-green-200">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <Check className="w-5 h-5 text-green-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold">Verification Complete</h3>
-                            <p className="text-sm text-muted-foreground">You're a verified female traveler</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    {!usingFemaleExperience && (
-                      <Button 
-                        className="w-full bg-primary-feminine hover:bg-primary-feminine/90 text-white"
-                        onClick={handleEnableFemaleExperience}
-                      >
-                        Enable Female Experience
-                      </Button>
-                    )}
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <h3 className="font-semibold">Select a verification method:</h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Card className="cursor-pointer hover:border-primary-feminine transition-colors">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Video className="w-5 h-5 text-primary-feminine" />
-                            Video Verification
-                          </CardTitle>
-                          <CardDescription>
-                            Schedule a brief video call with our team to verify your identity
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <Button 
-                            variant="outline" 
-                            className="w-full border-primary-feminine text-primary-feminine hover:bg-primary-feminine hover:text-white"
-                            onClick={() => handleVerificationMethod("Video call")}
-                          >
-                            Schedule Video Call
-                          </Button>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card className="cursor-pointer hover:border-primary-feminine transition-colors">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Upload className="w-5 h-5 text-primary-feminine" />
-                            ID Verification
-                          </CardTitle>
-                          <CardDescription>
-                            Upload a government-issued ID with your photo and gender marker
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <Button 
-                            variant="outline" 
-                            className="w-full border-primary-feminine text-primary-feminine hover:bg-primary-feminine hover:text-white"
-                            onClick={() => handleVerificationMethod("ID")}
-                          >
-                            Upload ID
-                          </Button>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card className="cursor-pointer hover:border-primary-feminine transition-colors">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <LinkIcon className="w-5 h-5 text-primary-feminine" />
-                            Social Media Verification
-                          </CardTitle>
-                          <CardDescription>
-                            Provide links to your social media profiles for cross-checking
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <Button 
-                            variant="outline" 
-                            className="w-full border-primary-feminine text-primary-feminine hover:bg-primary-feminine hover:text-white"
-                            onClick={() => handleVerificationMethod("Social media")}
-                          >
-                            Connect Profiles
-                          </Button>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card className="cursor-pointer hover:border-primary-feminine transition-colors">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Users className="w-5 h-5 text-primary-feminine" />
-                            Referral Verification
-                          </CardTitle>
-                          <CardDescription>
-                            Get verified through a referral from an existing female member
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <Button 
-                            variant="outline" 
-                            className="w-full border-primary-feminine text-primary-feminine hover:bg-primary-feminine hover:text-white"
-                            onClick={() => handleVerificationMethod("Referral")}
-                          >
-                            Enter Referral Code
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </div>
-                    
-                    <div className="mt-6 p-4 bg-muted rounded-lg">
-                      <h4 className="font-semibold mb-2">Your Privacy Matters</h4>
-                      <p className="text-sm text-muted-foreground">
-                        We take your privacy seriously. All verification data is encrypted, stored securely, and deleted after verification is complete. We never share your personal information with third parties.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
             )}
-          </Tabs>
+          </div>
         </div>
+
+        {/* Settings for own profile */}
+        {isOwnProfile && (
+          <div className="bg-card rounded-lg shadow-sm p-6 mt-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Privacy Settings</h2>
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4" />
+                <Label htmlFor="public-profile">Public Profile</Label>
+                <Switch
+                  id="public-profile"
+                  checked={isPublic}
+                  onCheckedChange={handlePrivacyToggle}
+                />
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground mt-2">
+              {isPublic 
+                ? "Everyone can see your posts and profile" 
+                : "Only your followers can see your posts"}
+            </p>
+          </div>
+        )}
+
+        {/* Post Upload Modal */}
+        <PostUploadModal
+          isOpen={uploadModalOpen}
+          onClose={() => setUploadModalOpen(false)}
+          onPostUploaded={handlePostUploaded}
+        />
       </div>
     </div>
   );
