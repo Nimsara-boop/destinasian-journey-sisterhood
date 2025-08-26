@@ -769,7 +769,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      tour_guides_public: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          id: string | null
+          image_url: string | null
+          is_active: boolean | null
+          languages: string[] | null
+          location: string | null
+          name: string | null
+          phone: string | null
+          price_per_day: number | null
+          rating: number | null
+          reviews_count: number | null
+          specialties: string[] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_active?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          name?: string | null
+          phone?: never
+          price_per_day?: number | null
+          rating?: number | null
+          reviews_count?: number | null
+          specialties?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_active?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          name?: string | null
+          phone?: never
+          price_per_day?: number | null
+          rating?: number | null
+          reviews_count?: number | null
+          specialties?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
