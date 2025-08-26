@@ -111,7 +111,7 @@ const Navbar = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors bg-primary-feminine/30 hover:bg-primary-feminine/50 text-white shadow-md border border-primary-feminine/30"
+                  className="flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors bg-primary-feminine/50 hover:bg-primary-feminine/80 text-white shadow-md border border-primary-feminine/30"
                 >
                   <Icon className="w-4 h-4" />
                   {item.label}
