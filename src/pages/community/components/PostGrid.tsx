@@ -2,22 +2,23 @@ import { Card } from "@/components/ui/card";
 import { Heart, MessageSquare, Eye } from "lucide-react";
 
 interface Post {
-  id: number;
+  id: string;
   image: string;
   author: {
     name: string;
     avatar: string;
+    verified?: boolean;
   };
   likes: number;
   comments: number;
-  views: number;
+  views?: number;
   caption: string;
   location: string;
 }
 
 interface PostGridProps {
-  posts: Post[];
-  onPostClick: (postId: number) => void;
+  posts: any[];
+  onPostClick: (postId: string) => void;
   onAuthorClick?: (authorName: string) => void;
 }
 

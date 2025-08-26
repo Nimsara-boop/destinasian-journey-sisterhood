@@ -8,110 +8,24 @@ import PostViewer from "./components/PostViewer";
 import CommunityNavbar from "./components/CommunityNavbar";
 import MessagesPage from "./components/MessagesPage";
 import ProfileCardModal from "./components/ProfileCardModal";
+import { usePosts } from "@/hooks/usePosts";
 
 const Community = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState<'grid' | 'post-viewer' | 'messages'>('grid');
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [selectedProfile, setSelectedProfile] = useState<{ name: string } | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const { posts, loading: postsLoading } = usePosts();
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedInStatus);
   }, []);
 
-  // Mock data for posts
-  const posts = [
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1589308155743-4ad772863eae",
-      author: {
-        name: "Sarah Chen",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-        verified: true
-      },
-      likes: 124,
-      comments: 18,
-      views: 892,
-      caption: "Just discovered this amazing hidden beach in Mirissa! The sunrise here is absolutely breathtaking 🌅 Perfect spot for morning yoga and meditation.",
-      location: "Mirissa, Sri Lanka",
-      timestamp: "2 hours ago"
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1580394693539-2111f706eaad",
-      author: {
-        name: "Maya Patel",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
-      },
-      likes: 89,
-      comments: 12,
-      views: 543,
-      caption: "Temple hopping in Kandy today! The architecture and history here never fails to amaze me. Feeling so grateful for this journey ✨",
-      location: "Kandy, Sri Lanka",
-      timestamp: "4 hours ago"
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800",
-      author: {
-        name: "Emma Wilson",
-        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2"
-      },
-      likes: 156,
-      comments: 23,
-      views: 1205,
-      caption: "Solo female travelers unite! 💪 Just finished an incredible trek through Ella Rock. The views were worth every step!",
-      location: "Ella, Sri Lanka",
-      timestamp: "6 hours ago"
-    },
-    {
-      id: 4,
-      image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
-      author: {
-        name: "Zara Ahmed",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
-      },
-      likes: 203,
-      comments: 31,
-      views: 1567,
-      caption: "Street food adventures in Colombo! This kottu roti is life-changing 🍜 Who else is obsessed with Sri Lankan cuisine?",
-      location: "Colombo, Sri Lanka",
-      timestamp: "8 hours ago"
-    },
-    {
-      id: 5,
-      image: "https://images.unsplash.com/photo-1546556874-8964792e36fa",
-      author: {
-        name: "Lily Thompson",
-        avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9"
-      },
-      likes: 78,
-      comments: 9,
-      views: 423,
-      caption: "Sunset vibes at Galle Fort 🌇 There's something magical about this place. Perfect end to a perfect day!",
-      location: "Galle, Sri Lanka", 
-      timestamp: "1 day ago"
-    },
-    {
-      id: 6,
-      image: "https://images.unsplash.com/photo-1584552539816-caf637eff5a3",
-      author: {
-        name: "Priya Singh",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
-      },
-      likes: 145,
-      comments: 16,
-      views: 743,
-      caption: "Whale watching in Trincomalee was incredible! 🐋 Nature never stops surprising me. So grateful for these magical moments.",
-      location: "Trincomalee, Sri Lanka",
-      timestamp: "1 day ago"
-    }
-  ];
-
-  const handlePostClick = (postId: number) => {
+  const handlePostClick = (postId: string) => {
     setSelectedPostId(postId);
     setCurrentView('post-viewer');
   };
@@ -190,6 +104,21 @@ const Community = () => {
     return <MessagesPage onBack={handleBackFromMessages} />;
   }
 
+  // Show loading state
+  if (postsLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <CommunityNavbar onMessagesClick={handleMessagesClick} />
+        <div className="container mx-auto px-4 py-10">
+          <div className="text-center">
+            <p className="text-lg">Loading posts...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Default grid view
   return (
     <div className="min-h-screen bg-background">
@@ -198,11 +127,18 @@ const Community = () => {
       
       <div className="container mx-auto px-4 py-10">
         <div className="max-w-6xl mx-auto my-10">
-          <PostGrid 
-            posts={posts} 
-            onPostClick={handlePostClick}
-            onAuthorClick={handleAuthorClick}
-          />
+          {posts.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No posts found.</p>
+              <p className="text-sm text-muted-foreground mt-2">Be the first to share your travel experiences!</p>
+            </div>
+          ) : (
+            <PostGrid 
+              posts={posts} 
+              onPostClick={handlePostClick}
+              onAuthorClick={handleAuthorClick}
+            />
+          )}
         </div>
       </div>
       

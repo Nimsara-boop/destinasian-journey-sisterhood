@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import ExperienceProvider from "./components/ExperienceProvider";
 import PackageDetail from "./pages/PackageDetail";
+import EmergencyContact from "./components/EmergencyContact";
 
 const queryClient = new QueryClient();
 
@@ -31,12 +32,10 @@ const App = () => {
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             
+            {/* Public landing page */}
+            <Route path="/" element={<Index />} />
+            
             {/* Protected routes */}
-            <Route path="/" element={
-              <ExperienceProvider>
-                <Index />
-              </ExperienceProvider>
-            } />
             <Route path="/profile" element={
               <ExperienceProvider>
                 <Profile />
@@ -66,6 +65,7 @@ const App = () => {
             
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <EmergencyContact />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

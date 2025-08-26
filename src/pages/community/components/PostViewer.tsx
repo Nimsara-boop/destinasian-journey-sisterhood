@@ -5,7 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Heart, MessageSquare, Share, BookmarkPlus, MoreHorizontal } from "lucide-react";
 
 interface Post {
-  id: number;
+  id: string;
   image: string;
   author: {
     name: string;
@@ -21,15 +21,15 @@ interface Post {
 }
 
 interface PostViewerProps {
-  posts: Post[];
-  initialPostId: number;
+  posts: any[];
+  initialPostId: string;
   onBack: () => void;
 }
 
 const PostViewer = ({ posts, initialPostId, onBack }: PostViewerProps) => {
   const initialIndex = posts.findIndex(post => post.id === initialPostId);
   const [currentIndex, setCurrentIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
-  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
 
   const currentPost = posts[currentIndex];
 
@@ -73,11 +73,11 @@ const PostViewer = ({ posts, initialPostId, onBack }: PostViewerProps) => {
         {posts.map((post, index) => (
           <div key={post.id} className="h-screen snap-start relative flex flex-col">
             {/* Post Image */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative flex items-center justify-center bg-black">
               <img
                 src={post.image}
                 alt={post.caption}
-                className="w-full h-full object-cover"
+                className="max-w-[100vw] max-h-[70vh] w-auto h-auto object-contain"
               />
               
               {/* Navigation hints */}
