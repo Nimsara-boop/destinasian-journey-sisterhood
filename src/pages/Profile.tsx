@@ -13,6 +13,7 @@ import { MapPin, Globe, Camera, Award, Grid, Heart, MessageCircle, Plus, UserPlu
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { PostUploadModal } from "@/components/PostUploadModal";
+import { ProfilePictureModal } from "@/components/ProfilePictureModal";
 import { useProfileStats } from "@/hooks/useProfileStats";
 import { useUserPosts } from "@/hooks/useUserPosts";
 import { useFollowStatus } from "@/hooks/useFollowStatus";
@@ -26,6 +27,7 @@ const Profile = () => {
   const [isOwnProfile, setIsOwnProfile] = useState(true);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [profilePictureModalOpen, setProfilePictureModalOpen] = useState(false);
   const { toast } = useToast();
   
   const { stats, loading: statsLoading, refetch: refetchStats } = useProfileStats(currentUser?.id);
@@ -87,6 +89,10 @@ const Profile = () => {
     refetchStats();
   };
 
+  const handleProfilePictureSuccess = (url: string | null) => {
+    setProfile(prev => ({ ...prev, avatar_url: url }));
+  };
+
   if (!currentUser) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -113,7 +119,12 @@ const Profile = () => {
                 </AvatarFallback>
               </Avatar>
               {isOwnProfile && (
-                <Button variant="outline" size="sm" className="mt-3">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-3"
+                  onClick={() => setProfilePictureModalOpen(true)}
+                >
                   <Camera className="w-4 h-4 mr-2" />
                   Change Photo
                 </Button>
@@ -280,6 +291,14 @@ const Profile = () => {
           isOpen={uploadModalOpen}
           onClose={() => setUploadModalOpen(false)}
           onPostUploaded={handlePostUploaded}
+        />
+
+        {/* Profile Picture Modal */}
+        <ProfilePictureModal
+          isOpen={profilePictureModalOpen}
+          onClose={() => setProfilePictureModalOpen(false)}
+          userId={currentUser?.id}
+          onSuccess={handleProfilePictureSuccess}
         />
 
         {/* Location Settings Modal */}
