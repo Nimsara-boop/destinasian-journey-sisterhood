@@ -6,14 +6,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import Autoplay from "embla-carousel-autoplay";
 import * as motion from "motion/react-client";
-import { useEventHighlights } from "@/hooks/useEventHighlights";
+import { usePosts } from "@/hooks/usePosts";
 
 const RecentEventHighlights = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   
-  const { highlights: recentEventHighlights, loading: highlightsLoading } = useEventHighlights();
+  const { posts: recentPosts, loading: postsLoading } = usePosts();
+  
+  // Transform posts into highlights format
+  const recentEventHighlights = recentPosts.slice(0, 6).map(post => ({
+    id: post.id,
+    image: post.image,
+    title: post.caption || 'Community Post',
+    location: post.location,
+    attendees: post.likes
+  }));
 
   const ViewMoreButton = () => (
     <motion.div
@@ -66,7 +75,7 @@ const RecentEventHighlights = () => {
   }, []);
 
   // Show loading state
-  if (isLoading || highlightsLoading) {
+  if (isLoading || postsLoading) {
     return (
       <section className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
@@ -87,16 +96,16 @@ const RecentEventHighlights = () => {
       <div className="max-w-7xl mx-auto">
         <Card className="overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-2xl text-center font-bold">Recent Event Highlights</CardTitle>
+            <CardTitle className="text-2xl text-center font-bold">Recent Community Highlights</CardTitle>
             <p className="text-muted-foreground">
-              See what our community members have been up to at recent events across Asia
+              See the latest posts and experiences shared by our community members
             </p>
           </CardHeader>
           <CardContent className="p-0">
             {showEmptyState ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">No recent events yet.</p>
-                <p className="text-sm text-muted-foreground mt-2">Check back soon for exciting events from our community!</p>
+                <p className="text-muted-foreground text-lg">No recent posts yet.</p>
+                <p className="text-sm text-muted-foreground mt-2">Check back soon for exciting posts from our community!</p>
               </div>
             ) : (
               <Carousel
@@ -122,7 +131,7 @@ const RecentEventHighlights = () => {
                         <div className="absolute bottom-4 left-4 right-4 text-white">
                           <h3 className="font-semibold text-lg mb-1">{highlight.title}</h3>
                           <p className="text-sm text-white/80">{highlight.location}</p>
-                          <p className="text-xs text-white/70 mt-1">{highlight.attendees} attendees</p>
+                          <p className="text-xs text-white/70 mt-1">{highlight.attendees} likes</p>
                         </div>
                       </div>
                     </CarouselItem>
