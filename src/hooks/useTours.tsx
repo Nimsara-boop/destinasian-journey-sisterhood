@@ -72,14 +72,20 @@ export function useTourGuides() {
   const [guides, setGuides] = useState<TourGuide[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetchGuides();
+    checkAuthAndFetchGuides();
   }, []);
 
-  const fetchGuides = async () => {
+  const checkAuthAndFetchGuides = async () => {
     try {
       setLoading(true);
+      
+      // Check authentication status
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+
       const { data, error } = await supabase
         .from('tour_guides')
         .select('*')
@@ -96,7 +102,8 @@ export function useTourGuides() {
         languages: guide.languages || [],
         specialties: guide.specialties || [],
         price: guide.price_per_day || 50,
-        phone: guide.phone || "",
+        // Only include phone number if user is authenticated
+        phone: session ? (guide.phone || "") : "",
         location: guide.location || "",
         bio: guide.bio || ""
       })) || [];
@@ -110,5 +117,5 @@ export function useTourGuides() {
     }
   };
 
-  return { guides, loading, error };
+  return { guides, loading, error, isAuthenticated };
 }

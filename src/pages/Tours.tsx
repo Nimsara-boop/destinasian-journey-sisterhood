@@ -17,7 +17,7 @@ const Tours = () => {
   const [locationFilter, setLocationFilter] = useState("all");
 
   const { packages: tourPackages, loading: packagesLoading, error: packagesError } = useTourPackages();
-  const { guides: tourGuides, loading: guidesLoading, error: guidesError } = useTourGuides();
+  const { guides: tourGuides, loading: guidesLoading, error: guidesError, isAuthenticated } = useTourGuides();
 
   const handlePackageClick = (id: string) => {
     navigate(`/package/${id}`);
@@ -263,13 +263,23 @@ const Tours = () => {
                           </div>
                         </div>
 
-                        <Button 
-                          onClick={() => handleContactGuide(guide.phone)}
-                          className="w-full bg-primary-feminine hover:bg-primary-feminine/90"
-                        >
-                          <Phone className="h-4 w-4 mr-2" />
-                          Contact Guide
-                        </Button>
+                        {isAuthenticated && guide.phone ? (
+                          <Button 
+                            onClick={() => handleContactGuide(guide.phone)}
+                            className="w-full bg-primary-feminine hover:bg-primary-feminine/90"
+                          >
+                            <Phone className="h-4 w-4 mr-2" />
+                            Contact Guide
+                          </Button>
+                        ) : (
+                          <Button 
+                            onClick={() => window.location.href = '/auth'}
+                            variant="outline"
+                            className="w-full"
+                          >
+                            Sign In to Contact Guide
+                          </Button>
+                        )}
                       </CardContent>
                     </Card>
                   ))}
