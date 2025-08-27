@@ -23,6 +23,28 @@ const Auth = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const validatePassword = (password: string) => {
+    const errors = [];
+    
+    if (password.length < 8) {
+      errors.push("Password must be at least eight characters long");
+    }
+    
+    if (!/[a-z]/.test(password)) {
+      errors.push("Password must have a lowercase letter");
+    }
+    
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must have an uppercase letter");
+    }
+    
+    if (!/[.!@#$%^&*()\+\-=,]/.test(password)) {
+      errors.push("Password must have a special character like \".!@#$%^&*()+-=,\"");
+    }
+    
+    return errors;
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -31,6 +53,17 @@ const Auth = () => {
       toast({
         title: "Error",
         description: "Passwords do not match",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    const passwordErrors = validatePassword(password);
+    if (passwordErrors.length > 0) {
+      toast({
+        title: "Password Requirements Not Met",
+        description: passwordErrors.join(". "),
         variant: "destructive",
       });
       setLoading(false);
@@ -253,30 +286,42 @@ const Auth = () => {
             </div>
           )}
           
-          {!isLogin && !isForgotPassword && (
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  id="confirmPassword" 
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="pl-10 pr-10"
-                  placeholder="Confirm your password"
-                  required={!isLogin}
-                />
-                <button 
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  onClick={toggleConfirmPasswordVisibility}
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                >
-                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+           {!isLogin && !isForgotPassword && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Input 
+                    id="confirmPassword" 
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-10 pr-10"
+                    placeholder="Confirm your password"
+                    required={!isLogin}
+                  />
+                  <button 
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    onClick={toggleConfirmPasswordVisibility}
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
-            </div>
+              
+              <div className="text-xs text-muted-foreground space-y-1">
+                <p className="font-medium">Password Requirements:</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>At least eight characters long</li>
+                  <li>Must have a lowercase letter</li>
+                  <li>Must have an uppercase letter</li>
+                  <li>Must have a special character like ".!@#$%^&*()+-=,"</li>
+                </ul>
+              </div>
+            </>
           )}
 
           <Button type="submit" variant="pink" className="w-full" disabled={loading}>

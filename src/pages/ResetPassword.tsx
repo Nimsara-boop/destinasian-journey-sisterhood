@@ -86,6 +86,28 @@ const ResetPassword = () => {
     validateAndSetSession();
   }, [navigate, toast]);
 
+  const validatePassword = (password: string) => {
+    const errors = [];
+    
+    if (password.length < 8) {
+      errors.push("Password must be at least eight characters long");
+    }
+    
+    if (!/[a-z]/.test(password)) {
+      errors.push("Password must have a lowercase letter");
+    }
+    
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must have an uppercase letter");
+    }
+    
+    if (!/[.!@#$%^&*()\+\-=,]/.test(password)) {
+      errors.push("Password must have a special character like \".!@#$%^&*()+-=,\"");
+    }
+    
+    return errors;
+  };
+
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -100,10 +122,11 @@ const ResetPassword = () => {
       return;
     }
 
-    if (password.length < 6) {
+    const passwordErrors = validatePassword(password);
+    if (passwordErrors.length > 0) {
       toast({
-        title: "Error",
-        description: "Password must be at least 6 characters long",
+        title: "Password Requirements Not Met",
+        description: passwordErrors.join(". "),
         variant: "destructive",
       });
       setLoading(false);
@@ -190,7 +213,7 @@ const ResetPassword = () => {
                 className="pl-10 pr-10"
                 placeholder="Enter your new password"
                 required
-                minLength={6}
+                minLength={8}
               />
               <button 
                 type="button"
@@ -215,7 +238,7 @@ const ResetPassword = () => {
                 className="pl-10 pr-10"
                 placeholder="Confirm your new password"
                 required
-                minLength={6}
+                minLength={8}
               />
               <button 
                 type="button"
@@ -226,6 +249,16 @@ const ResetPassword = () => {
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+          </div>
+
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p className="font-medium">Password Requirements:</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>At least eight characters long</li>
+              <li>Must have a lowercase letter</li>
+              <li>Must have an uppercase letter</li>
+              <li>Must have a special character like ".!@#$%^&*()+-=,"</li>
+            </ul>
           </div>
 
           <Button type="submit" variant="pink" className="w-full" disabled={loading}>
