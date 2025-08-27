@@ -1,1 +1,10 @@
 project_id = "mocvlvjlhtvnxtjhctin"
+
+[functions.reverse-geocode]
+verify_jwt = false
+
+[functions.search-locations]
+verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = true

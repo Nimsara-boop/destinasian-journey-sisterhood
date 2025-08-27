@@ -19,6 +19,7 @@ import { useUserPosts } from "@/hooks/useUserPosts";
 import { useFollowStatus } from "@/hooks/useFollowStatus";
 import { supabase } from "@/integrations/supabase/client";
 import LocationSettingsModal from "@/components/LocationSettingsModal";
+import AccountSettingsModal from "@/components/AccountSettingsModal";
 
 const Profile = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -26,7 +27,8 @@ const Profile = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [isOwnProfile, setIsOwnProfile] = useState(true);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [locationSettingsModalOpen, setLocationSettingsModalOpen] = useState(false);
+  const [accountSettingsModalOpen, setAccountSettingsModalOpen] = useState(false);
   const [profilePictureModalOpen, setProfilePictureModalOpen] = useState(false);
   const { toast } = useToast();
   
@@ -154,7 +156,7 @@ const Profile = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setSettingsModalOpen(true)}
+                      onClick={() => setAccountSettingsModalOpen(true)}
                     >
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
@@ -303,8 +305,15 @@ const Profile = () => {
 
         {/* Location Settings Modal */}
         <LocationSettingsModal
-          open={settingsModalOpen}
-          onOpenChange={setSettingsModalOpen}
+          open={locationSettingsModalOpen}
+          onOpenChange={setLocationSettingsModalOpen}
+        />
+
+        {/* Account Settings Modal */}
+        <AccountSettingsModal
+          open={accountSettingsModalOpen}
+          onOpenChange={setAccountSettingsModalOpen}
+          userId={currentUser?.id}
         />
       </div>
     </div>
